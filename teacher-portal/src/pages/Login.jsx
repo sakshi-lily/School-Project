@@ -37,11 +37,11 @@ const Login = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">Work Email Address</label>
+            <label className="form-label">Username or Email</label>
             <input
-              type="email"
+              type="text"
               className="form-input"
-              placeholder="teacher@school.com"
+              placeholder="teacher username or email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

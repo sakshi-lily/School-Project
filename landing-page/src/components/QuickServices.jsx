@@ -1,7 +1,7 @@
 import React from 'react';
 import { UserPlus, Award, FileSpreadsheet, FileBadge, CalendarDays, DownloadCloud, BookOpen, Contact, LogIn, UserCheck } from 'lucide-react';
 
-const QuickServices = () => {
+const QuickServices = ({ onOpenResults }) => {
   const services = [
     {
       icon: <UserPlus size={28} />,
@@ -99,6 +99,12 @@ const QuickServices = () => {
               href={svc.link}
               target={svc.link.startsWith("http") ? "_blank" : "_self"}
               rel={svc.link.startsWith("http") ? "noopener noreferrer" : ""}
+              onClick={(e) => {
+                if (svc.title === "Student Result") {
+                  e.preventDefault();
+                  onOpenResults();
+                }
+              }}
               className="group flex flex-col items-center text-center p-6 bg-slate-50 border border-slate-100 rounded-2xl shadow-sm transition-all duration-300 hover:bg-white hover:border-white hover:shadow-premium-hover transform hover:-translate-y-1.5 cursor-pointer"
             >
               {/* Icon Container */}

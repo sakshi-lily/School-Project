@@ -3,6 +3,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth.routes');
 const adminRoutes = require('./routes/admin.routes');
 const teacherRoutes = require('./routes/teacher.routes');
+const publicRoutes = require('./routes/public.routes');
 const errorMiddleware = require('./middleware/error.middleware');
 
 const app = express();
@@ -25,6 +26,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/teacher', teacherRoutes);
+app.use('/api/public', publicRoutes);
 
 // Error Handling Middleware
 app.use(errorMiddleware);

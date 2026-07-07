@@ -11,109 +11,399 @@ import {
   Mail,
   UserCheck,
   Award,
-  BookOpen
+  BookOpen,
+  FolderOpen,
+  Megaphone,
+  Activity,
+  Trash2,
+  Edit2,
+  Lock,
+  Eye,
+  EyeOff,
+  UserPlus
 } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
-  const [stats, setStats] = useState({ totalTeachers: 0, totalAdmins: 0, academicYear: '2026-2027' });
+  const [activeTab, setActiveTab] = useState('overview');
+  const [stats, setStats] = useState({ 
+    totalTeachers: 0, 
+    totalStudents: 0, 
+    totalClasses: 0, 
+    totalResultsPublished: 0, 
+    totalAdmins: 0, 
+    academicYear: '2026-2027' 
+  });
+  
   const [teachers, setTeachers] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
+  const [results, setResults] = useState([]);
+  const [auditLogs, setAuditLogs] = useState([]);
+  
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
 
-  // Form State for new teacher
-  const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    subjects: '',
-    qualification: '',
-    experienceYears: 0,
+  // Modals / Form states
+  const [showTeacherForm, setShowTeacherForm] = useState(false);
+  const [editingTeacher, setEditingTeacher] = useState(null);
+  const [teacherFormData, setTeacherFormData] = useState({
+    name: '', email: '', password: '', subjects: '', qualification: '', experienceYears: 0, classesAssigned: ''
   });
 
-  const fetchDashboardData = async () => {
-    try {
-      setLoading(true);
-      const [statsRes, teachersRes] = await Promise.all([
-        api.get('/admin/stats'),
-        api.get('/admin/teachers')
-      ]);
+  const [showStudentForm, setShowStudentForm] = useState(false);
+  const [editingStudent, setEditingStudent] = useState(null);
+  const [studentFormData, setStudentFormData] = useState({
+    name: '', rollNumber: '', class: '', academicYear: '2026-2027', parentEmail: '', status: 'Active'
+  });
 
-      if (statsRes.data.success) {
-        setStats(statsRes.data.stats);
-      }
-      if (teachersRes.data.success) {
-        setTeachers(teachersRes.data.data);
-      }
-    } catch (error) {
-      console.error('Error fetching dashboard content:', error);
-      // Fallback mocks if database is not active yet
-      setStats({ totalTeachers: 3, totalAdmins: 1, academicYear: '2026-2027 (Mock)' });
-      setTeachers([
-        {
-          _id: '1',
-          user: { name: 'Sarah Jenkins', email: 'sarah.j@school.com', isActive: true },
-          subjects: ['Mathematics', 'Physics'],
-          qualification: 'M.Sc. in Physics',
-          experienceYears: 8
-        },
-        {
-          _id: '2',
-          user: { name: 'David Miller', email: 'david.m@school.com', isActive: true },
-          subjects: ['English Literature'],
-          qualification: 'B.Ed. & MA in English',
-          experienceYears: 5
-        }
-      ]);
-    } finally {
-      setLoading(false);
+  const [showClassForm, setShowClassForm] = useState(false);
+  const [editingClass, setEditingClass] = useState(null);
+  const [classFormData, setClassFormData] = useState({
+    name: '', section: '', subjects: '', academicYear: '2026-2027'
+  });
+
+  const [showNoticeForm, setShowNoticeForm] = useState(false);
+  const [editingNotice, setEditingNotice] = useState(null);
+  const [noticeFormData, setNoticeFormData] = useState({
+    title: '', content: '', type: 'Announcement', targetAudience: 'all'
+  });
+
+  // Password reset state
+  const [resettingTeacherId, setResettingTeacherId] = useState(null);
+  const [newPasswordValue, setNewPasswordValue] = useState('');
+
+  const triggerNotification = (type, message) => {
+    setNotification({ type, message });
+    setTimeout(() => setNotification(null), 5000);
+  };
+
+  const fetchStats = async () => {
+    try {
+      const statsRes = await api.get('/admin/stats');
+      if (statsRes.data.success) setStats(statsRes.data.stats);
+    } catch (err) {
+      console.error(err);
     }
+  };
+
+  const fetchTeachers = async () => {
+    try {
+      const res = await api.get('/admin/teachers');
+      if (res.data.success) setTeachers(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchStudents = async () => {
+    try {
+      const res = await api.get('/admin/students');
+      if (res.data.success) setStudents(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchClasses = async () => {
+    try {
+      const res = await api.get('/admin/classes');
+      if (res.data.success) setClasses(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchAnnouncements = async () => {
+    try {
+      const res = await api.get('/admin/announcements');
+      if (res.data.success) setAnnouncements(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchResults = async () => {
+    try {
+      const res = await api.get('/admin/results');
+      if (res.data.success) setResults(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchAuditLogs = async () => {
+    try {
+      const res = await api.get('/admin/logs');
+      if (res.data.success) setAuditLogs(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const loadAllData = async () => {
+    setLoading(true);
+    await Promise.all([
+      fetchStats(),
+      fetchTeachers(),
+      fetchStudents(),
+      fetchClasses(),
+      fetchAnnouncements(),
+      fetchResults(),
+      fetchAuditLogs()
+    ]);
+    setLoading(false);
   };
 
   useEffect(() => {
-    fetchDashboardData();
+    loadAllData();
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleFormSubmit = async (e) => {
+  // ==========================================
+  // TEACHER HANDLERS
+  // ==========================================
+  const handleTeacherSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formattedData = {
-        ...formData,
-        subjects: formData.subjects.split(',').map((s) => s.trim()),
-        experienceYears: parseInt(formData.experienceYears, 10),
+      const payload = {
+        ...teacherFormData,
+        subjects: teacherFormData.subjects.split(',').map(s => s.trim()).filter(Boolean),
+        classesAssigned: teacherFormData.classesAssigned.split(',').map(c => c.trim()).filter(Boolean),
+        experienceYears: parseInt(teacherFormData.experienceYears || 0, 10)
       };
 
-      const response = await api.post('/admin/teachers', formattedData);
-      if (response.data.success) {
-        setNotification({ type: 'success', message: 'Teacher hired and onboarded successfully!' });
-        setShowForm(false);
-        setFormData({
-          name: '',
-          email: '',
-          password: '',
-          subjects: '',
-          qualification: '',
-          experienceYears: 0,
-        });
-        fetchDashboardData();
+      let res;
+      if (editingTeacher) {
+        res = await api.put(`/admin/teachers/${editingTeacher._id}`, payload);
+      } else {
+        res = await api.post('/admin/teachers', payload);
+      }
+
+      if (res.data.success) {
+        triggerNotification('success', editingTeacher ? 'Teacher updated successfully!' : 'Teacher onboarded successfully!');
+        
+        // If teacher is newly created, show username/password credentials popup
+        if (!editingTeacher) {
+          alert(`IMPORTANT: Credentials Generated!\nUsername: ${res.data.data.username}\nPassword: ${res.data.data.password}\nPlease share these credentials with the teacher.`);
+        }
+        
+        setShowTeacherForm(false);
+        setEditingTeacher(null);
+        setTeacherFormData({ name: '', email: '', password: '', subjects: '', qualification: '', experienceYears: 0, classesAssigned: '' });
+        fetchTeachers();
+        fetchStats();
+        fetchAuditLogs();
       }
     } catch (error) {
-      setNotification({
-        type: 'error',
-        message: error.response?.data?.message || 'Failed to register teacher profile',
-      });
+      triggerNotification('error', error.response?.data?.message || 'Failed to save teacher profiles');
     }
+  };
 
-    setTimeout(() => setNotification(null), 5000);
+  const handleToggleTeacherStatus = async (id) => {
+    try {
+      const res = await api.patch(`/admin/teachers/${id}/status`);
+      if (res.data.success) {
+        triggerNotification('success', res.data.message);
+        fetchTeachers();
+        fetchAuditLogs();
+      }
+    } catch (error) {
+      triggerNotification('error', 'Status toggle failed');
+    }
+  };
+
+  const handleResetPasswordSubmit = async (e) => {
+    e.preventDefault();
+    if (!newPasswordValue) return;
+    try {
+      const res = await api.post(`/admin/teachers/${resettingTeacherId}/reset-password`, { newPassword: newPasswordValue });
+      if (res.data.success) {
+        triggerNotification('success', 'Teacher password reset successfully!');
+        setResettingTeacherId(null);
+        setNewPasswordValue('');
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to reset password');
+    }
+  };
+
+  const handleDeleteTeacher = async (id) => {
+    if (!window.confirm('Are you sure you want to permanently delete this teacher account? All logs and records will be deleted.')) return;
+    try {
+      const res = await api.delete(`/admin/teachers/${id}`);
+      if (res.data.success) {
+        triggerNotification('success', 'Teacher account deleted successfully.');
+        fetchTeachers();
+        fetchStats();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to delete teacher account');
+    }
+  };
+
+  // ==========================================
+  // STUDENT HANDLERS
+  // ==========================================
+  const handleStudentSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      let res;
+      if (editingStudent) {
+        res = await api.put(`/admin/students/${editingStudent._id}`, studentFormData);
+      } else {
+        res = await api.post('/admin/students', studentFormData);
+      }
+
+      if (res.data.success) {
+        triggerNotification('success', editingStudent ? 'Student details updated' : 'Student registered successfully!');
+        setShowStudentForm(false);
+        setEditingStudent(null);
+        setStudentFormData({ name: '', rollNumber: '', class: '', academicYear: '2026-2027', parentEmail: '', status: 'Active' });
+        fetchStudents();
+        fetchStats();
+        fetchAuditLogs();
+      }
+    } catch (error) {
+      triggerNotification('error', error.response?.data?.message || 'Failed to save student profile');
+    }
+  };
+
+  const handleDeleteStudent = async (id) => {
+    if (!window.confirm('Delete student record permanently?')) return;
+    try {
+      const res = await api.delete(`/admin/students/${id}`);
+      if (res.data.success) {
+        triggerNotification('success', 'Student record deleted');
+        fetchStudents();
+        fetchStats();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to delete student');
+    }
+  };
+
+  // ==========================================
+  // CLASS HANDLERS
+  // ==========================================
+  const handleClassSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const payload = {
+        ...classFormData,
+        subjects: classFormData.subjects.split(',').map(s => s.trim()).filter(Boolean)
+      };
+
+      let res;
+      if (editingClass) {
+        res = await api.put(`/admin/classes/${editingClass._id}`, payload);
+      } else {
+        res = await api.post('/admin/classes', payload);
+      }
+
+      if (res.data.success) {
+        triggerNotification('success', 'Class details saved');
+        setShowClassForm(false);
+        setEditingClass(null);
+        setClassFormData({ name: '', section: '', subjects: '', academicYear: '2026-2027' });
+        fetchClasses();
+        fetchStats();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', err.response?.data?.message || 'Failed to save class configuration');
+    }
+  };
+
+  const handleDeleteClass = async (id) => {
+    if (!window.confirm('Delete class configuration?')) return;
+    try {
+      const res = await api.delete(`/admin/classes/${id}`);
+      if (res.data.success) {
+        triggerNotification('success', 'Class configuration deleted');
+        fetchClasses();
+        fetchStats();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to delete class');
+    }
+  };
+
+  // ==========================================
+  // ANNOUNCEMENT / NOTICE HANDLERS
+  // ==========================================
+  const handleNoticeSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      let res;
+      if (editingNotice) {
+        res = await api.put(`/admin/announcements/${editingNotice._id}`, noticeFormData);
+      } else {
+        res = await api.post('/admin/announcements', noticeFormData);
+      }
+
+      if (res.data.success) {
+        triggerNotification('success', 'Notice published successfully!');
+        setShowNoticeForm(false);
+        setEditingNotice(null);
+        setNoticeFormData({ title: '', content: '', type: 'Announcement', targetAudience: 'all' });
+        fetchAnnouncements();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to publish notice');
+    }
+  };
+
+  const handleDeleteNotice = async (id) => {
+    if (!window.confirm('Delete this announcement permanently?')) return;
+    try {
+      const res = await api.delete(`/admin/announcements/${id}`);
+      if (res.data.success) {
+        triggerNotification('success', 'Announcement deleted');
+        fetchAnnouncements();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to delete announcement');
+    }
+  };
+
+  // ==========================================
+  // RESULTS PUBLISHING HANDLERS
+  // ==========================================
+  const handleToggleResultStatus = async (resultCard) => {
+    try {
+      const newStatus = resultCard.status === 'Published' ? 'Unpublished' : 'Published';
+      const res = await api.put(`/admin/results/${resultCard._id}`, { status: newStatus });
+      if (res.data.success) {
+        triggerNotification('success', `Result set to ${newStatus}`);
+        fetchResults();
+        fetchStats();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to change result publication status');
+    }
+  };
+
+  const handleDeleteResult = async (id) => {
+    if (!window.confirm('Delete result sheet permanently?')) return;
+    try {
+      const res = await api.delete(`/admin/results/${id}`);
+      if (res.data.success) {
+        triggerNotification('success', 'Result sheet deleted');
+        fetchResults();
+        fetchStats();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to delete result');
+    }
   };
 
   return (
@@ -128,9 +418,33 @@ const Dashboard = () => {
         </div>
 
         <div className="nav-links">
-          <div className="nav-item active">
-            <Users size={20} />
+          <div className={`nav-item ${activeTab === 'overview' ? 'active' : ''}`} onClick={() => setActiveTab('overview')}>
+            <Activity size={20} />
             <span>Dashboard</span>
+          </div>
+          <div className={`nav-item ${activeTab === 'teachers' ? 'active' : ''}`} onClick={() => setActiveTab('teachers')}>
+            <Users size={20} />
+            <span>Teachers</span>
+          </div>
+          <div className={`nav-item ${activeTab === 'students' ? 'active' : ''}`} onClick={() => setActiveTab('students')}>
+            <UserPlus size={20} />
+            <span>Students</span>
+          </div>
+          <div className={`nav-item ${activeTab === 'classes' ? 'active' : ''}`} onClick={() => setActiveTab('classes')}>
+            <FolderOpen size={20} />
+            <span>Classes</span>
+          </div>
+          <div className={`nav-item ${activeTab === 'results' ? 'active' : ''}`} onClick={() => setActiveTab('results')}>
+            <Award size={20} />
+            <span>Results Portal</span>
+          </div>
+          <div className={`nav-item ${activeTab === 'notices' ? 'active' : ''}`} onClick={() => setActiveTab('notices')}>
+            <Megaphone size={20} />
+            <span>Notices Desk</span>
+          </div>
+          <div className={`nav-item ${activeTab === 'logs' ? 'active' : ''}`} onClick={() => setActiveTab('logs')}>
+            <BookOpen size={20} />
+            <span>Audit Trail</span>
           </div>
         </div>
 
@@ -140,216 +454,680 @@ const Dashboard = () => {
         </button>
       </div>
 
-      {/* Main Panel */}
+      {/* Main Content */}
       <div className="main-content">
+        {/* Top Navbar */}
         <div className="navbar">
           <div>
-            <h1 style={{ fontSize: '1.75rem', marginBottom: '0.25rem' }}>Control Panel</h1>
+            <h1 style={{ fontSize: '1.75rem', marginBottom: '0.25rem' }}>
+              {activeTab === 'overview' && 'System Analytics'}
+              {activeTab === 'teachers' && 'Faculty Management'}
+              {activeTab === 'students' && 'Student Registry'}
+              {activeTab === 'classes' && 'Academic Classes'}
+              {activeTab === 'results' && 'Results Publishing'}
+              {activeTab === 'notices' && 'Circular Board'}
+              {activeTab === 'logs' && 'Audit Logs Trails'}
+            </h1>
             <p style={{ color: 'var(--text-secondary)' }}>Welcome back, Administrative Owner</p>
           </div>
           <div className="user-profile-badge">
             <div className="avatar">A</div>
-            <span style={{ fontSize: '0.9rem', fontWeight: '500' }}>{user?.name || 'Administrator'}</span>
+            <span style={{ fontSize: '0.9rem', fontWeight: '500' }}>{user?.name || 'Super Admin'}</span>
           </div>
         </div>
 
         {notification && (
-          <div className={`alert-banner ${notification.type}`}>
+          <div className={`alert-banner ${notification.type}`} style={{ display: 'flex', gap: '8px', marginBottom: '1.5rem' }}>
             <CheckCircle size={20} />
             <span>{notification.message}</span>
           </div>
         )}
 
-        {/* Statistical Summary Cards */}
-        <div className="dashboard-grid">
-          <div className="stat-card">
-            <div className="stat-icon">
-              <Users size={24} />
-            </div>
-            <div>
-              <div className="stat-value">{stats.totalTeachers}</div>
-              <div className="stat-title">Active Teachers</div>
-            </div>
+        {/* LOADING SCREEN */}
+        {loading ? (
+          <div style={{ padding: '6rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+            Loading EduSphere dashboard components...
           </div>
+        ) : (
+          <>
+            {/* OVERVIEW TAB */}
+            {activeTab === 'overview' && (
+              <div>
+                <div className="dashboard-grid">
+                  <div className="stat-card">
+                    <div className="stat-icon"><Users size={24} /></div>
+                    <div>
+                      <div className="stat-value">{stats.totalTeachers}</div>
+                      <div className="stat-title">Registered Faculty</div>
+                    </div>
+                  </div>
+                  
+                  <div className="stat-card">
+                    <div className="stat-icon" style={{ color: 'var(--color-secondary)', background: 'rgba(139, 92, 246, 0.1)' }}><UserPlus size={24} /></div>
+                    <div>
+                      <div className="stat-value">{stats.totalStudents}</div>
+                      <div className="stat-title">Enrolled Students</div>
+                    </div>
+                  </div>
 
-          <div className="stat-card">
-            <div className="stat-icon" style={{ color: 'var(--color-secondary)', background: 'rgba(139, 92, 246, 0.1)' }}>
-              <UserCheck size={24} />
-            </div>
-            <div>
-              <div className="stat-value">{stats.totalAdmins}</div>
-              <div className="stat-title">Staff Administrators</div>
-            </div>
-          </div>
+                  <div className="stat-card">
+                    <div className="stat-icon" style={{ color: 'var(--color-accent)', background: 'rgba(6, 182, 212, 0.1)' }}><FolderOpen size={24} /></div>
+                    <div>
+                      <div className="stat-value">{stats.totalClasses}</div>
+                      <div className="stat-title">Classes Defined</div>
+                    </div>
+                  </div>
 
-          <div className="stat-card">
-            <div className="stat-icon" style={{ color: 'var(--color-accent)', background: 'rgba(6, 182, 212, 0.1)' }}>
-              <Calendar size={24} />
-            </div>
-            <div>
-              <div className="stat-value">{stats.academicYear}</div>
-              <div className="stat-title">Academic Session</div>
-            </div>
-          </div>
-        </div>
+                  <div className="stat-card">
+                    <div className="stat-icon" style={{ color: 'var(--color-success)', background: 'rgba(16, 185, 129, 0.1)' }}><Award size={24} /></div>
+                    <div>
+                      <div className="stat-value">{stats.totalResultsPublished}</div>
+                      <div className="stat-title">Results Published</div>
+                    </div>
+                  </div>
+                </div>
 
-        {/* Teachers Registration Panel & Table */}
-        <div className="table-container">
-          <div className="table-header">
-            <h3>Registered Faculty Members</h3>
-            <button className="table-action-btn" onClick={() => setShowForm(!showForm)} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <PlusCircle size={18} />
-              <span>Hire New Teacher</span>
-            </button>
-          </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '2rem', marginTop: '2rem' }}>
+                  <div className="table-container" style={{ margin: 0 }}>
+                    <div className="table-header"><h3>Recent System Activity Logs</h3></div>
+                    <div style={{ maxHeight: '350px', overflowY: 'auto' }}>
+                      <table className="data-table">
+                        <thead>
+                          <tr>
+                            <th>Action</th>
+                            <th>Admin</th>
+                            <th>Details</th>
+                            <th>Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {auditLogs.slice(0, 5).map((log) => (
+                            <tr key={log._id}>
+                              <td><span style={{ fontSize: '0.8rem', padding: '2px 6px', borderRadius: '4px', backgroundColor: 'rgba(255,255,255,0.05)', fontWeight: 'bold' }}>{log.action}</span></td>
+                              <td>{log.performedBy?.name || 'System'}</td>
+                              <td style={{ fontSize: '0.85rem' }}>{log.details}</td>
+                              <td style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>{new Date(log.timestamp).toLocaleTimeString()}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
 
-          {showForm && (
-            <div style={{ padding: '2rem', borderBottom: '1px solid var(--color-border)', backgroundColor: 'rgba(255,255,255,0.01)' }}>
-              <h4 style={{ marginBottom: '1.5rem', color: 'var(--color-primary)' }}>New Teacher Profile</h4>
-              <form onSubmit={handleFormSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
-                <div className="form-group">
-                  <label className="form-label">Full Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    className="form-input"
-                    placeholder="e.g. John Doe"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <div style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--border-radius)', padding: '2rem' }}>
+                    <h3>Portal Settings</h3>
+                    <div style={{ marginTop: '1.5rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                      <p><strong>Academic Session:</strong> 2026-2027 (Active)</p>
+                      <p><strong>System State:</strong> Normal operation</p>
+                      <p><strong>Database Connection:</strong> MongoDB Connected</p>
+                      <div style={{ height: '1px', backgroundColor: 'var(--color-border)', margin: '1rem 0' }}></div>
+                      <button className="btn-primary" onClick={loadAllData} style={{ width: '100%' }}>Refresh Statistics</button>
+                    </div>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Email Address</label>
-                  <input
-                    type="email"
-                    name="email"
-                    className="form-input"
-                    placeholder="e.g. john@school.com"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Password Credentials</label>
-                  <input
-                    type="password"
-                    name="password"
-                    className="form-input"
-                    placeholder="••••••••"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Qualifications</label>
-                  <input
-                    type="text"
-                    name="qualification"
-                    className="form-input"
-                    placeholder="e.g. M.Ed, B.Sc"
-                    value={formData.qualification}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Subjects (comma separated)</label>
-                  <input
-                    type="text"
-                    name="subjects"
-                    className="form-input"
-                    placeholder="e.g. Math, Chemistry"
-                    value={formData.subjects}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Experience (Years)</label>
-                  <input
-                    type="number"
-                    name="experienceYears"
-                    className="form-input"
-                    value={formData.experienceYears}
-                    onChange={handleInputChange}
-                    min="0"
-                    required
-                  />
-                </div>
-                <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
-                  <button type="button" className="form-input" style={{ width: 'auto', cursor: 'pointer' }} onClick={() => setShowForm(false)}>Cancel</button>
-                  <button type="submit" className="btn-primary" style={{ width: 'auto', padding: '0.85rem 2rem' }}>Save & Register</button>
-                </div>
-              </form>
-            </div>
-          )}
+              </div>
+            )}
 
-          {loading ? (
-            <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-              Loading faculty directory...
-            </div>
-          ) : teachers.length === 0 ? (
-            <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-              No teachers are registered yet.
-            </div>
-          ) : (
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Faculty Name</th>
-                  <th>Contact Email</th>
-                  <th>Credentials</th>
-                  <th>Core Subjects</th>
-                  <th>Experience</th>
-                </tr>
-              </thead>
-              <tbody>
-                {teachers.map((teacher) => (
-                  <tr key={teacher._id}>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: '500' }}>
-                        <div style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', border: '1px solid var(--color-border)' }}>
-                          {teacher.user?.name[0]}
+            {/* TEACHERS TAB */}
+            {activeTab === 'teachers' && (
+              <div className="table-container">
+                <div className="table-header">
+                  <h3>Faculty Directory</h3>
+                  <button className="table-action-btn" onClick={() => { setEditingTeacher(null); setTeacherFormData({ name: '', email: '', password: '', subjects: '', qualification: '', experienceYears: 0, classesAssigned: '' }); setShowTeacherForm(!showTeacherForm); }} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <PlusCircle size={18} />
+                    <span>Onboard Teacher</span>
+                  </button>
+                </div>
+
+                {/* Reset Password mini-form widget */}
+                {resettingTeacherId && (
+                  <div style={{ padding: '1.5rem', backgroundColor: 'rgba(239, 68, 68, 0.05)', borderBottom: '1px solid var(--color-border)' }}>
+                    <form onSubmit={handleResetPasswordSubmit} style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--color-danger)' }}>Resetting Faculty Password:</span>
+                      <input 
+                        type="text" 
+                        placeholder="Enter New Security Password" 
+                        value={newPasswordValue} 
+                        onChange={(e) => setNewPasswordValue(e.target.value)} 
+                        className="form-input" 
+                        style={{ flex: 1, margin: 0 }}
+                        required 
+                      />
+                      <button type="submit" className="btn-primary" style={{ width: 'auto', backgroundColor: 'var(--color-danger)', border: 'none' }}>Change Password</button>
+                      <button type="button" onClick={() => setResettingTeacherId(null)} className="form-input" style={{ width: 'auto', margin: 0, cursor: 'pointer' }}>Cancel</button>
+                    </form>
+                  </div>
+                )}
+
+                {showTeacherForm && (
+                  <div style={{ padding: '2rem', borderBottom: '1px solid var(--color-border)', backgroundColor: 'rgba(255,255,255,0.01)' }}>
+                    <h4 style={{ marginBottom: '1.5rem', color: 'var(--color-primary)' }}>{editingTeacher ? 'Modify Faculty details' : 'Register New Faculty'}</h4>
+                    <form onSubmit={handleTeacherSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                      <div className="form-group">
+                        <label className="form-label">Full Name</label>
+                        <input type="text" name="name" className="form-input" value={teacherFormData.name} onChange={(e) => setTeacherFormData({...teacherFormData, name: e.target.value})} required />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Email Address</label>
+                        <input type="email" name="email" className="form-input" value={teacherFormData.email} onChange={(e) => setTeacherFormData({...teacherFormData, email: e.target.value})} required />
+                      </div>
+                      {!editingTeacher && (
+                        <div className="form-group">
+                          <label className="form-label">Password Credentials (Optional - auto-generated if left blank)</label>
+                          <input type="password" name="password" className="form-input" value={teacherFormData.password} onChange={(e) => setTeacherFormData({...teacherFormData, password: e.target.value})} placeholder="Leave blank to auto-generate" />
                         </div>
-                        {teacher.user?.name}
+                      )}
+                      <div className="form-group">
+                        <label className="form-label">Qualifications</label>
+                        <input type="text" name="qualification" className="form-input" value={teacherFormData.qualification} onChange={(e) => setTeacherFormData({...teacherFormData, qualification: e.target.value})} required />
                       </div>
-                    </td>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                        <Mail size={14} />
-                        {teacher.user?.email}
+                      <div className="form-group">
+                        <label className="form-label">Subjects Taught (comma separated)</label>
+                        <input type="text" name="subjects" className="form-input" placeholder="e.g. Mathematics, Chemistry" value={teacherFormData.subjects} onChange={(e) => setTeacherFormData({...teacherFormData, subjects: e.target.value})} required />
                       </div>
-                    </td>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                        <Award size={14} style={{ color: 'var(--color-accent)' }} />
-                        {teacher.qualification}
+                      <div className="form-group">
+                        <label className="form-label">Classes Assigned (comma separated)</label>
+                        <input type="text" name="classesAssigned" className="form-input" placeholder="e.g. 10-A, 9-B" value={teacherFormData.classesAssigned} onChange={(e) => setTeacherFormData({...teacherFormData, classesAssigned: e.target.value})} />
                       </div>
-                    </td>
-                    <td>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                        {teacher.subjects.map((sub, i) => (
-                          <span key={i} style={{ padding: '2px 8px', borderRadius: '4px', backgroundColor: 'rgba(99, 102, 241, 0.1)', color: 'var(--color-primary)', fontSize: '0.75rem', fontWeight: '500' }}>
-                            {sub}
+                      <div className="form-group">
+                        <label className="form-label">Years of Experience</label>
+                        <input type="number" name="experienceYears" className="form-input" value={teacherFormData.experienceYears} onChange={(e) => setTeacherFormData({...teacherFormData, experienceYears: e.target.value})} min="0" required />
+                      </div>
+                      <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                        <button type="button" className="form-input" style={{ width: 'auto', cursor: 'pointer' }} onClick={() => setShowTeacherForm(false)}>Cancel</button>
+                        <button type="submit" className="btn-primary" style={{ width: 'auto', padding: '0.85rem 2rem' }}>{editingTeacher ? 'Update details' : 'Save & Register'}</button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Name / Username</th>
+                      <th>Email Address</th>
+                      <th>Qualifications</th>
+                      <th>Subjects</th>
+                      <th>Experience</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {teachers.map((teacher) => (
+                      <tr key={teacher._id}>
+                        <td>
+                          <div style={{ fontWeight: '600' }}>{teacher.user?.name}</div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>@{teacher.user?.username}</div>
+                        </td>
+                        <td>{teacher.user?.email}</td>
+                        <td>{teacher.qualification}</td>
+                        <td>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                            {teacher.subjects.map((sub, idx) => (
+                              <span key={idx} style={{ padding: '2px 6px', fontSize: '0.7rem', backgroundColor: 'rgba(99,102,241,0.1)', color: 'var(--color-primary)', borderRadius: '4px' }}>{sub}</span>
+                            ))}
+                          </div>
+                        </td>
+                        <td>{teacher.experienceYears} Years</td>
+                        <td>
+                          <span style={{ fontSize: '0.8rem', fontWeight: 'bold', padding: '4px 8px', borderRadius: '12px', backgroundColor: teacher.user?.isActive ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)', color: teacher.user?.isActive ? 'var(--color-success)' : 'var(--color-danger)' }}>
+                            {teacher.user?.isActive ? 'Active' : 'Suspended'}
                           </span>
-                        ))}
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button 
+                              onClick={() => {
+                                setEditingTeacher(teacher);
+                                setTeacherFormData({
+                                  name: teacher.user.name,
+                                  email: teacher.user.email,
+                                  subjects: teacher.subjects.join(', '),
+                                  qualification: teacher.qualification,
+                                  experienceYears: teacher.experienceYears,
+                                  classesAssigned: (teacher.classesAssigned || []).join(', ')
+                                });
+                                setShowTeacherForm(true);
+                              }}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer' }}
+                            >
+                              <Edit2 size={16} />
+                            </button>
+                            <button 
+                              onClick={() => { setResettingTeacherId(teacher._id); setNewPasswordValue(''); }}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--color-warning)', cursor: 'pointer' }}
+                              title="Reset Password"
+                            >
+                              <Lock size={16} />
+                            </button>
+                            <button 
+                              onClick={() => handleToggleTeacherStatus(teacher._id)}
+                              style={{ border: 'none', background: 'transparent', color: teacher.user?.isActive ? 'var(--color-warning)' : 'var(--color-success)', cursor: 'pointer' }}
+                              title={teacher.user?.isActive ? 'Suspend Teacher' : 'Activate Teacher'}
+                            >
+                              {teacher.user?.isActive ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteTeacher(teacher._id)}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--color-danger)', cursor: 'pointer' }}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* STUDENTS TAB */}
+            {activeTab === 'students' && (
+              <div className="table-container">
+                <div className="table-header">
+                  <h3>Enrolled Students</h3>
+                  <button className="table-action-btn" onClick={() => { setEditingStudent(null); setStudentFormData({ name: '', rollNumber: '', class: '', academicYear: '2026-2027', parentEmail: '', status: 'Active' }); setShowStudentForm(!showStudentForm); }} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <PlusCircle size={18} />
+                    <span>Register Student</span>
+                  </button>
+                </div>
+
+                {showStudentForm && (
+                  <div style={{ padding: '2rem', borderBottom: '1px solid var(--color-border)', backgroundColor: 'rgba(255,255,255,0.01)' }}>
+                    <h4 style={{ marginBottom: '1.5rem', color: 'var(--color-primary)' }}>{editingStudent ? 'Edit Student details' : 'Register New Student'}</h4>
+                    <form onSubmit={handleStudentSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                      <div className="form-group">
+                        <label className="form-label">Full Name</label>
+                        <input type="text" className="form-input" value={studentFormData.name} onChange={(e) => setStudentFormData({...studentFormData, name: e.target.value})} required />
                       </div>
-                    </td>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                        <BookOpen size={14} />
-                        {teacher.experienceYears} Years
+                      <div className="form-group">
+                        <label className="form-label">Roll Number</label>
+                        <input type="text" className="form-input" value={studentFormData.rollNumber} onChange={(e) => setStudentFormData({...studentFormData, rollNumber: e.target.value})} required />
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+                      <div className="form-group">
+                        <label className="form-label">Class Assigned</label>
+                        <input type="text" className="form-input" placeholder="e.g. 10-A" value={studentFormData.class} onChange={(e) => setStudentFormData({...studentFormData, class: e.target.value})} required />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Academic Year</label>
+                        <input type="text" className="form-input" value={studentFormData.academicYear} onChange={(e) => setStudentFormData({...studentFormData, academicYear: e.target.value})} required />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Parent / Contact Email</label>
+                        <input type="email" className="form-input" value={studentFormData.parentEmail} onChange={(e) => setStudentFormData({...studentFormData, parentEmail: e.target.value})} />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Registry Status</label>
+                        <select className="form-input" style={{ backgroundColor: 'var(--color-bg)', color: '#white' }} value={studentFormData.status} onChange={(e) => setStudentFormData({...studentFormData, status: e.target.value})}>
+                          <option value="Active">Active</option>
+                          <option value="Suspended">Suspended</option>
+                        </select>
+                      </div>
+                      <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                        <button type="button" className="form-input" style={{ width: 'auto', cursor: 'pointer' }} onClick={() => setShowStudentForm(false)}>Cancel</button>
+                        <button type="submit" className="btn-primary" style={{ width: 'auto', padding: '0.85rem 2rem' }}>{editingStudent ? 'Update Student' : 'Onboard Student'}</button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Roll Number</th>
+                      <th>Student Name</th>
+                      <th>Assigned Class</th>
+                      <th>Academic Year</th>
+                      <th>Parent Email</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {students.map((student) => (
+                      <tr key={student._id}>
+                        <td style={{ fontWeight: 'bold' }}>{student.rollNumber}</td>
+                        <td>{student.name}</td>
+                        <td>{student.class}</td>
+                        <td>{student.academicYear}</td>
+                        <td>{student.parentEmail || 'N/A'}</td>
+                        <td>
+                          <span style={{ fontSize: '0.8rem', fontWeight: 'bold', padding: '4px 8px', borderRadius: '12px', backgroundColor: student.status === 'Active' ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)', color: student.status === 'Active' ? 'var(--color-success)' : 'var(--color-danger)' }}>
+                            {student.status}
+                          </span>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button 
+                              onClick={() => {
+                                setEditingStudent(student);
+                                setStudentFormData({
+                                  name: student.name,
+                                  rollNumber: student.rollNumber,
+                                  class: student.class,
+                                  academicYear: student.academicYear,
+                                  parentEmail: student.parentEmail || '',
+                                  status: student.status
+                                });
+                                setShowStudentForm(true);
+                              }}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer' }}
+                            >
+                              <Edit2 size={16} />
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteStudent(student._id)}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--color-danger)', cursor: 'pointer' }}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* CLASSES TAB */}
+            {activeTab === 'classes' && (
+              <div className="table-container">
+                <div className="table-header">
+                  <h3>Academic Classes & Curriculums</h3>
+                  <button className="table-action-btn" onClick={() => { setEditingClass(null); setClassFormData({ name: '', section: '', subjects: '', academicYear: '2026-2027' }); setShowClassForm(!showClassForm); }} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <PlusCircle size={18} />
+                    <span>Create Class</span>
+                  </button>
+                </div>
+
+                {showClassForm && (
+                  <div style={{ padding: '2rem', borderBottom: '1px solid var(--color-border)', backgroundColor: 'rgba(255,255,255,0.01)' }}>
+                    <h4 style={{ marginBottom: '1.5rem', color: 'var(--color-primary)' }}>Configure Class</h4>
+                    <form onSubmit={handleClassSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                      <div className="form-group">
+                        <label className="form-label">Class Name</label>
+                        <input type="text" className="form-input" placeholder="e.g. 10" value={classFormData.name} onChange={(e) => setClassFormData({...classFormData, name: e.target.value})} required />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Section</label>
+                        <input type="text" className="form-input" placeholder="e.g. A" value={classFormData.section} onChange={(e) => setClassFormData({...classFormData, section: e.target.value})} required />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Subjects (comma separated)</label>
+                        <input type="text" className="form-input" placeholder="e.g. Physics, Math, English" value={classFormData.subjects} onChange={(e) => setClassFormData({...classFormData, subjects: e.target.value})} required />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Academic Year</label>
+                        <input type="text" className="form-input" value={classFormData.academicYear} onChange={(e) => setClassFormData({...classFormData, academicYear: e.target.value})} required />
+                      </div>
+                      <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                        <button type="button" className="form-input" style={{ width: 'auto', cursor: 'pointer' }} onClick={() => setShowClassForm(false)}>Cancel</button>
+                        <button type="submit" className="btn-primary" style={{ width: 'auto', padding: '0.85rem 2rem' }}>Save Configuration</button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Class Identifier</th>
+                      <th>Section</th>
+                      <th>Academic Year</th>
+                      <th>Syllabus Subjects</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {classes.map((cls) => (
+                      <tr key={cls._id}>
+                        <td style={{ fontWeight: 'bold' }}>Grade {cls.name}</td>
+                        <td>Section {cls.section}</td>
+                        <td>{cls.academicYear}</td>
+                        <td>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                            {cls.subjects.map((sub, i) => (
+                              <span key={i} style={{ padding: '2px 6px', fontSize: '0.7rem', backgroundColor: 'rgba(6,182,212,0.1)', color: 'var(--color-accent)', borderRadius: '4px' }}>{sub}</span>
+                            ))}
+                          </div>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button 
+                              onClick={() => {
+                                setEditingClass(cls);
+                                setClassFormData({
+                                  name: cls.name,
+                                  section: cls.section,
+                                  subjects: cls.subjects.join(', '),
+                                  academicYear: cls.academicYear
+                                });
+                                setShowClassForm(true);
+                              }}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer' }}
+                            >
+                              <Edit2 size={16} />
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteClass(cls._id)}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--color-danger)', cursor: 'pointer' }}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* RESULTS DESK */}
+            {activeTab === 'results' && (
+              <div className="table-container">
+                <div className="table-header">
+                  <h3>All Examination Marksheets</h3>
+                </div>
+
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Roll Number</th>
+                      <th>Student Name</th>
+                      <th>Class</th>
+                      <th>Exam Term</th>
+                      <th>Academic Year</th>
+                      <th>Score Info</th>
+                      <th>Publish Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {results.map((resCard) => (
+                      <tr key={resCard._id}>
+                        <td style={{ fontWeight: 'bold' }}>{resCard.rollNumber}</td>
+                        <td>{resCard.studentName}</td>
+                        <td>{resCard.class}</td>
+                        <td>{resCard.term}</td>
+                        <td>{resCard.academicYear}</td>
+                        <td>
+                          <div style={{ fontWeight: '600' }}>{resCard.totalMarks} / {resCard.maxTotalMarks} ({resCard.percentage}%)</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Grade secured: {resCard.grade}</div>
+                        </td>
+                        <td>
+                          <span style={{ fontSize: '0.8rem', fontWeight: 'bold', padding: '4px 8px', borderRadius: '12px', backgroundColor: resCard.status === 'Published' ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)', color: resCard.status === 'Published' ? 'var(--color-success)' : 'var(--color-warning)' }}>
+                            {resCard.status}
+                          </span>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button 
+                              onClick={() => handleToggleResultStatus(resCard)}
+                              style={{ border: 'none', background: 'transparent', color: resCard.status === 'Published' ? 'var(--color-warning)' : 'var(--color-success)', cursor: 'pointer' }}
+                              title={resCard.status === 'Published' ? 'Unpublish result card' : 'Publish result card'}
+                            >
+                              {resCard.status === 'Published' ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteResult(resCard._id)}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--color-danger)', cursor: 'pointer' }}
+                              title="Delete result card"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* NOTICES TAB */}
+            {activeTab === 'notices' && (
+              <div className="table-container">
+                <div className="table-header">
+                  <h3>Circular Announcements Board</h3>
+                  <button className="table-action-btn" onClick={() => { setEditingNotice(null); setNoticeFormData({ title: '', content: '', type: 'Announcement', targetAudience: 'all' }); setShowNoticeForm(!showNoticeForm); }} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <PlusCircle size={18} />
+                    <span>Create Notice</span>
+                  </button>
+                </div>
+
+                {showNoticeForm && (
+                  <div style={{ padding: '2rem', borderBottom: '1px solid var(--color-border)', backgroundColor: 'rgba(255,255,255,0.01)' }}>
+                    <h4 style={{ marginBottom: '1.5rem', color: 'var(--color-primary)' }}>Compose Notice Details</h4>
+                    <form onSubmit={handleNoticeSubmit}>
+                      <div className="form-group">
+                        <label className="form-label">Notice Title</label>
+                        <input type="text" className="form-input" value={noticeFormData.title} onChange={(e) => setNoticeFormData({...noticeFormData, title: e.target.value})} required />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Notice Type</label>
+                        <select className="form-input" style={{ backgroundColor: 'var(--color-bg)', color: '#white' }} value={noticeFormData.type} onChange={(e) => setNoticeFormData({...noticeFormData, type: e.target.value})}>
+                          <option value="Announcement">Announcement</option>
+                          <option value="Notice">Notice / Circular</option>
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Target Audience</label>
+                        <select className="form-input" style={{ backgroundColor: 'var(--color-bg)', color: '#white' }} value={noticeFormData.targetAudience} onChange={(e) => setNoticeFormData({...noticeFormData, targetAudience: e.target.value})}>
+                          <option value="all">Public (All)</option>
+                          <option value="teachers">Faculty Only</option>
+                          <option value="students">Students Only</option>
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Notice Content Body</label>
+                        <textarea className="form-input" rows="4" style={{ resize: 'none' }} value={noticeFormData.content} onChange={(e) => setNoticeFormData({...noticeFormData, content: e.target.value})} required></textarea>
+                      </div>
+                      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                        <button type="button" className="form-input" style={{ width: 'auto', cursor: 'pointer' }} onClick={() => setShowNoticeForm(false)}>Cancel</button>
+                        <button type="submit" className="btn-primary" style={{ width: 'auto', padding: '0.85rem 2rem' }}>Publish Bulletin</button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Notice Type</th>
+                      <th>Audience Scope</th>
+                      <th>Author</th>
+                      <th>Date Published</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {announcements.map((notice) => (
+                      <tr key={notice._id}>
+                        <td style={{ fontWeight: '600' }}>{notice.title}</td>
+                        <td>{notice.type}</td>
+                        <td>
+                          <span style={{ fontSize: '0.8rem', padding: '2px 6px', borderRadius: '4px', backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                            {notice.targetAudience.toUpperCase()}
+                          </span>
+                        </td>
+                        <td>{notice.author?.name || 'Admin'}</td>
+                        <td>{new Date(notice.date || notice.createdAt).toLocaleDateString()}</td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button 
+                              onClick={() => {
+                                setEditingNotice(notice);
+                                setNoticeFormData({
+                                  title: notice.title,
+                                  content: notice.content,
+                                  type: notice.type,
+                                  targetAudience: notice.targetAudience
+                                });
+                                setShowNoticeForm(true);
+                              }}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer' }}
+                            >
+                              <Edit2 size={16} />
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteNotice(notice._id)}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--color-danger)', cursor: 'pointer' }}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* AUDIT LOGS */}
+            {activeTab === 'logs' && (
+              <div className="table-container">
+                <div className="table-header">
+                  <h3>System Audit logs trails</h3>
+                </div>
+
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Timestamp</th>
+                      <th>Action Code</th>
+                      <th>Performed By</th>
+                      <th>User Role</th>
+                      <th>IP Address</th>
+                      <th>Operation Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {auditLogs.map((log) => (
+                      <tr key={log._id}>
+                        <td style={{ color: 'var(--text-secondary)' }}>{new Date(log.timestamp).toLocaleString()}</td>
+                        <td>
+                          <span style={{ fontSize: '0.8rem', padding: '4px 8px', borderRadius: '4px', backgroundColor: 'rgba(99,102,241,0.1)', color: 'var(--color-primary)', fontWeight: 'bold' }}>
+                            {log.action}
+                          </span>
+                        </td>
+                        <td style={{ fontWeight: '500' }}>{log.performedBy?.name}</td>
+                        <td style={{ textTransform: 'capitalize' }}>{log.performedBy?.role}</td>
+                        <td>{log.ipAddress || '127.0.0.1'}</td>
+                        <td style={{ fontSize: '0.85rem' }}>{log.details}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

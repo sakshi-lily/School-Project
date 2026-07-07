@@ -1,14 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Megaphone, BellRing } from 'lucide-react';
 
 const NoticeTicker = () => {
-  const notices = [
+  const defaultNotices = [
     { text: "📢 Admissions Open for Session 2026-27 (Classes IX to XII) - Apply Online now!", href: "#admission-banner" },
     { text: "📝 UPMSP Board Examinations 2026 Result declared - High school and Intermediate students check scores.", href: "#quick-services" },
     { text: "🎓 Pre-Matric and Post-Matric UP Scholarship 2026-27 registration portals are now active.", href: "#quick-services" },
     { text: "🏖️ Summer Vacation scheduled from May 20th to June 30th. School reopens on July 1st.", href: "#notices" },
     { text: "🏆 Thakur Biri Singh Inter College bags first prize in District Science Exhibition 2026!", href: "#notices" }
   ];
+
+  const [notices, setNotices] = useState(defaultNotices);
+
+  useEffect(() => {
+    const fetchTicker = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/public/announcements');
+        const data = await res.json();
+        if (data.success && data.data.length > 0) {
+          const list = data.data.map((item) => ({
+            text: `📣 ${item.title}: ${item.content}`,
+            href: '#notices'
+          }));
+          setNotices(list);
+        }
+      } catch (err) {
+        console.error('Error fetching ticker notices:', err);
+      }
+    };
+    fetchTicker();
+  }, []);
 
   return (
     <div className="w-full bg-slate-100 border-b border-slate-200 flex items-center relative overflow-hidden h-12 z-40">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, Phone, Mail, MapPin, ChevronDown, User, LogIn, Award, Landmark, GraduationCap } from 'lucide-react';
 import SchoolLogo from './SchoolLogo';
 
-const Navbar = () => {
+const Navbar = ({ onOpenResults }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -120,7 +120,11 @@ const Navbar = () => {
                 <span>Teacher Login</span>
               </a>
               <a
-                href="#quick-services"
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onOpenResults();
+                }}
                 className="flex items-center gap-2 px-4 py-2 hover:bg-slate-50 text-slate-700 hover:text-primary font-medium transition-colors text-xs md:text-sm"
               >
                 <User size={16} className="text-primary" />
@@ -191,6 +195,12 @@ const Navbar = () => {
                         <a
                           key={sIdx}
                           href={sub.href}
+                          onClick={(e) => {
+                            if (sub.label === 'Check Board Results' || sub.label === 'Student Portal') {
+                              e.preventDefault();
+                              onOpenResults();
+                            }
+                          }}
                           className="block px-4 py-2 text-xs md:text-sm hover:bg-slate-50 text-slate-600 hover:text-primary font-medium transition-colors"
                         >
                           {sub.label}
@@ -245,7 +255,13 @@ const Navbar = () => {
                         <a
                           key={sIdx}
                           href={sub.href}
-                          onClick={() => setIsOpen(false)}
+                          onClick={(e) => {
+                            setIsOpen(false);
+                            if (sub.label === 'Check Board Results' || sub.label === 'Student Portal') {
+                              e.preventDefault();
+                              onOpenResults();
+                            }
+                          }}
                           className="block py-2 text-xs font-semibold text-slate-600 hover:text-primary"
                         >
                           {sub.label}

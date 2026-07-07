@@ -66,11 +66,16 @@ exports.login = async (req, res, next) => {
 
     // Validate email and password inputs
     if (!email || !password) {
-      return res.status(400).json({ success: false, message: 'Please provide email and password' });
+      return res.status(400).json({ success: false, message: 'Please provide email or username and password' });
     }
 
-    // Check user credentials exist
-    const user = await User.findOne({ email }).select('+password');
+    // Check user credentials exist by email or username
+    const user = await User.findOne({
+      $or: [
+        { email: email.toLowerCase() },
+        { username: email.toLowerCase() },
+      ],
+    }).select('+password');
     if (!user) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }

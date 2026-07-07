@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import NoticeTicker from './components/NoticeTicker';
 import Hero from './components/Hero';
@@ -12,12 +12,15 @@ import Statistics from './components/Statistics';
 import AdmissionBanner from './components/AdmissionBanner';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import ResultPortalModal from './components/ResultPortalModal';
 
 function App() {
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
       {/* Navigation Header */}
-      <Navbar />
+      <Navbar onOpenResults={() => setIsResultModalOpen(true)} />
       
       {/* Scrollable Notice ticker */}
       <NoticeTicker />
@@ -27,7 +30,7 @@ function App() {
         <Hero />
         
         {/* Quick services cards */}
-        <QuickServices />
+        <QuickServices onOpenResults={() => setIsResultModalOpen(true)} />
         
         {/* Split screen About section */}
         <AboutSchool />
@@ -56,6 +59,12 @@ function App() {
       
       {/* Footer bar */}
       <Footer />
+
+      {/* Public Marks Verification Portal Overlay */}
+      <ResultPortalModal
+        isOpen={isResultModalOpen}
+        onClose={() => setIsResultModalOpen(false)}
+      />
     </div>
   );
 }

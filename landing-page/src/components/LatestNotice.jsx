@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, FileDown, Bell, Award, BookOpen, Sparkles } from 'lucide-react';
 
 const LatestNotice = () => {
   const [activeTab, setActiveTab] = useState('news');
+  const [notices, setNotices] = useState(null);
 
   const categories = [
     { id: 'news', label: 'Latest News', icon: <Bell size={16} /> },
@@ -113,6 +114,52 @@ const LatestNotice = () => {
     ]
   };
 
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/public/announcements');
+        const data = await res.json();
+        if (data.success && data.data.length > 0) {
+          const grouped = {
+            news: [],
+            circulars: [],
+            exams: [],
+            events: [],
+          };
+          data.data.forEach((item) => {
+            const formatted = {
+              date: new Date(item.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+              title: item.title,
+              isNew: (new Date() - new Date(item.date)) < (5 * 24 * 60 * 60 * 1000),
+              desc: item.content,
+            };
+            
+            if (item.title.toLowerCase().includes('exam') || item.title.toLowerCase().includes('result') || item.title.toLowerCase().includes('date sheet')) {
+              grouped.exams.push(formatted);
+            } else if (item.title.toLowerCase().includes('celebration') || item.title.toLowerCase().includes('event') || item.title.toLowerCase().includes('day')) {
+              grouped.events.push(formatted);
+            } else if (item.type === 'Notice') {
+              grouped.circulars.push(formatted);
+            } else {
+              grouped.news.push(formatted);
+            }
+          });
+          
+          Object.keys(grouped).forEach((tab) => {
+            if (grouped[tab].length === 0) {
+              grouped[tab] = noticesData[tab];
+            }
+          });
+          setNotices(grouped);
+        }
+      } catch (err) {
+        console.error('Error fetching notices:', err);
+      }
+    };
+
+    fetchNotices();
+  }, []);
+
   return (
     <section id="notices" className="py-16 md:py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -165,7 +212,7 @@ const LatestNotice = () => {
 
             {/* Notice Board List Panel */}
             <div className="space-y-4 animate-in fade-in duration-300">
-              {noticesData[activeTab].map((notice, idx) => (
+              {(notices || noticesData)[activeTab].map((notice, idx) => (
                 <div
                   key={idx}
                   className="bg-slate-50 hover:bg-white border border-slate-100 hover:border-slate-200 p-5 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm hover:shadow-premium transition-all duration-300"
