@@ -134,21 +134,19 @@ const LatestNotice = () => {
               desc: item.content,
             };
             
-            if (item.title.toLowerCase().includes('exam') || item.title.toLowerCase().includes('result') || item.title.toLowerCase().includes('date sheet')) {
-              grouped.exams.push(formatted);
-            } else if (item.title.toLowerCase().includes('celebration') || item.title.toLowerCase().includes('event') || item.title.toLowerCase().includes('day')) {
-              grouped.events.push(formatted);
-            } else if (item.type === 'Notice') {
+            if (item.type === 'Notice') {
               grouped.circulars.push(formatted);
+            } else if (item.title.toLowerCase().includes('exam') || item.title.toLowerCase().includes('result') || item.title.toLowerCase().includes('date sheet')) {
+              grouped.exams.push(formatted);
+            } else if (item.title.toLowerCase().includes('celebration') || item.title.toLowerCase().includes('event') || item.title.toLowerCase().includes('sports') || item.title.toLowerCase().includes('annual day')) {
+              grouped.events.push(formatted);
             } else {
               grouped.news.push(formatted);
             }
           });
           
           Object.keys(grouped).forEach((tab) => {
-            if (grouped[tab].length === 0) {
-              grouped[tab] = noticesData[tab];
-            }
+            grouped[tab] = [...grouped[tab], ...noticesData[tab]];
           });
           setNotices(grouped);
         }
@@ -241,6 +239,12 @@ const LatestNotice = () => {
                       <h3 className="font-heading font-bold text-slate-800 text-sm md:text-base mt-1.5 leading-snug group-hover:text-primary transition-colors">
                         {notice.title}
                       </h3>
+
+                      {notice.desc && (
+                        <p className="text-slate-500 text-xs md:text-sm mt-1.5 leading-relaxed whitespace-pre-line">
+                          {notice.desc}
+                        </p>
+                      )}
 
                       {notice.time && (
                         <p className="text-xs text-slate-500 font-medium mt-1">
