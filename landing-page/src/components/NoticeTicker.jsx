@@ -15,7 +15,7 @@ const NoticeTicker = () => {
   useEffect(() => {
     const fetchTicker = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/public/announcements');
+        const res = await fetch('/api/public/announcements');
         const data = await res.json();
         if (data.success && data.data.length > 0) {
           const list = data.data.map((item) => ({

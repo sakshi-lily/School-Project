@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserPlus, Award, FileSpreadsheet, FileBadge, CalendarDays, DownloadCloud, BookOpen, Contact, LogIn, UserCheck } from 'lucide-react';
+import { UserPlus, Award, FileSpreadsheet, CalendarDays, BookOpen, Contact } from 'lucide-react';
 
 const QuickServices = ({ onOpenResults }) => {
   const services = [
@@ -25,25 +25,11 @@ const QuickServices = ({ onOpenResults }) => {
       color: "bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white"
     },
     {
-      icon: <FileBadge size={28} />,
-      title: "Certificates",
-      desc: "Request transfer certificate, character certificate, or transcripts online.",
-      link: "#",
-      color: "bg-purple-50 text-purple-600 hover:bg-purple-600 hover:text-white"
-    },
-    {
       icon: <CalendarDays size={28} />,
       title: "Academic Calendar",
       desc: "View holidays, schedule events, term papers, and annual celebrations.",
       link: "#",
       color: "bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white"
-    },
-    {
-      icon: <DownloadCloud size={28} />,
-      title: "Downloads",
-      desc: "Access school brochures, board updates, fees structure, and flyers.",
-      link: "#",
-      color: "bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white"
     },
     {
       icon: <BookOpen size={28} />,
@@ -58,20 +44,6 @@ const QuickServices = ({ onOpenResults }) => {
       desc: "Contact information of school administration, faculty, and departments.",
       link: "#school-directory",
       color: "bg-cyan-50 text-cyan-600 hover:bg-cyan-600 hover:text-white"
-    },
-    {
-      icon: <LogIn size={28} />,
-      title: "Student Login",
-      desc: "Access student grades, attendance tracker, and timetables.",
-      link: "#",
-      color: "bg-sky-50 text-sky-600 hover:bg-sky-600 hover:text-white"
-    },
-    {
-      icon: <UserCheck size={28} />,
-      title: "Teacher Login",
-      desc: "Enter academic records, student details, and upload notices.",
-      link: "http://localhost:5175",
-      color: "bg-slate-50 text-slate-700 hover:bg-primary hover:text-white"
     }
   ];
 
@@ -92,7 +64,7 @@ const QuickServices = ({ onOpenResults }) => {
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {services.map((svc, idx) => (
             <a
               key={idx}

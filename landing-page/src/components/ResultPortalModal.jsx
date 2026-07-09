@@ -9,7 +9,7 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const API_URL = 'http://localhost:5000/api/public';
+  const API_URL = '/api/public';
 
   useEffect(() => {
     if (isOpen) {
