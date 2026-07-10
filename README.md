@@ -80,7 +80,9 @@ Use these roll numbers and details to test the public result checking portal:
 4. The verified Academic Statement of Marks will load showing:
    - Student details (Name, Class, Roll Number).
    - Breakdown of marks obtained per subject, total marks, percentage, grade, and Pass/Fail status.
-   - Click the **Print** button at the top of the statement to print or save a PDF copy.
+   - Click the **Print Marksheet (PDF)** button at the top right of the screen (highlighted in emerald green).
+   - Choose **Save as PDF** or select your connected printer.
+   - Set the orientation to **Portrait** and margins to **Default** to ensure it prints as a clean, single-page document.
 
 ### 4. Check Notice Board / Academic Calendar
 - **Notice Board**: Scroll to the notices section. Click category tabs (Latest News, Circulars, Exam Updates, Events) to view official circulars.
