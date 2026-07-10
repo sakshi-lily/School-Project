@@ -75,7 +75,7 @@ Use these roll numbers and details to test the public result checking portal:
    - **Student Roll Number**: e.g., `26105342`
    - **Academic Year**: Select `2026-2027` from the dropdown list.
    - **Date of Birth**: Enter the student's date of birth in `YYYY-MM-DD` format (e.g., `2010-04-15`).
-   - **Security Captcha**: Type the random letters displayed next to the text field.
+   - **Security Captcha**: Type the random letters displayed next to the text field. (Note: Captchas are case-sensitive; click the refresh icon next to the captcha image to generate a new one if it is difficult to read.)
 3. Click **Search Results**.
 4. The verified Academic Statement of Marks will load showing:
    - Student details (Name, Class, Roll Number).
