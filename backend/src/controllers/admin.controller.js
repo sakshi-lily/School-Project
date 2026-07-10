@@ -705,3 +705,119 @@ exports.deleteCalendarEvent = async (req, res, next) => {
   }
 };
 
+// ==========================================
+// ADMIT CARD MANAGEMENT
+// ==========================================
+const AdmitCard = require('../models/AdmitCard');
+
+exports.getAllAdmitCards = async (req, res, next) => {
+  try {
+    const cards = await AdmitCard.find().sort({ createdAt: -1 });
+    res.status(200).json({ success: true, count: cards.length, data: cards });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.createAdmitCard = async (req, res, next) => {
+  try {
+    const { studentName, rollNumber, class: className, academicYear, dateOfBirth, fatherName, motherName, examCenter, datesheet } = req.body;
+
+    const admitCard = await AdmitCard.findOneAndUpdate(
+      { rollNumber: rollNumber.trim(), academicYear: academicYear.trim() },
+      {
+        studentName: studentName.trim(),
+        class: className.trim(),
+        dateOfBirth: dateOfBirth.trim(),
+        fatherName: fatherName ? fatherName.trim() : 'N/A',
+        motherName: motherName ? motherName.trim() : 'N/A',
+        examCenter: examCenter ? examCenter.trim() : undefined,
+        datesheet,
+        status: 'Published'
+      },
+      { new: true, upsert: true }
+    );
+
+    await createAuditLog('UPSERT_ADMIT_CARD', req.user._id, `Uploaded admit card for Roll: ${rollNumber}`, req);
+    res.status(200).json({ success: true, data: admitCard });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteAdmitCard = async (req, res, next) => {
+  try {
+    const card = await AdmitCard.findByIdAndDelete(req.params.id);
+    if (!card) {
+      return res.status(404).json({ success: false, message: 'Admit Card not found' });
+    }
+    await createAuditLog('DELETE_ADMIT_CARD', req.user._id, `Deleted admit card for student: ${card.studentName} (Roll: ${card.rollNumber})`, req);
+    res.status(200).json({ success: true, message: 'Admit Card deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ==========================================
+// SYLLABUS MANAGEMENT
+// ==========================================
+const Syllabus = require('../models/Syllabus');
+
+exports.getAllSyllabus = async (req, res, next) => {
+  try {
+    const syllabusList = await Syllabus.find().sort({ createdAt: -1 });
+    res.status(200).json({ success: true, count: syllabusList.length, data: syllabusList });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.createSyllabus = async (req, res, next) => {
+  try {
+    const { title, class: className, subject, academicYear } = req.body;
+    
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'Syllabus PDF file is required' });
+    }
+
+    // Save public url path
+    const pdfUrl = `/uploads/syllabus/${req.file.filename}`;
+
+    const syllabus = await Syllabus.create({
+      title: title.trim(),
+      class: className.trim(),
+      subject: subject.trim(),
+      academicYear: academicYear.trim(),
+      pdfUrl
+    });
+
+    await createAuditLog('CREATE_SYLLABUS', req.user._id, `Created syllabus: ${title} for Class ${className}`, req);
+    res.status(201).json({ success: true, data: syllabus });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteSyllabus = async (req, res, next) => {
+  try {
+    const syllabus = await Syllabus.findByIdAndDelete(req.params.id);
+    if (!syllabus) {
+      return res.status(404).json({ success: false, message: 'Syllabus not found' });
+    }
+    
+    // Attempt to delete physical file if needed, but not strictly necessary for local dev
+    const fs = require('fs');
+    const path = require('path');
+    const filePath = path.join(__dirname, '../../', syllabus.pdfUrl);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    await createAuditLog('DELETE_SYLLABUS', req.user._id, `Deleted syllabus: ${syllabus.title}`, req);
+    res.status(200).json({ success: true, message: 'Syllabus deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
