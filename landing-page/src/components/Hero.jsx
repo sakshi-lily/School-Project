@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, GraduationCap, ClipboardList, Award, ArrowRight } from 'lucide-react';
 
-const Hero = () => {
+const Hero = ({ onOpenResults }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
@@ -90,29 +90,23 @@ const Hero = () => {
           {/* Action CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
             <a
-              href="#admission-banner"
-              className="w-full sm:w-auto bg-primary hover:bg-primary-light text-white font-bold px-6 py-3.5 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg flex items-center justify-center gap-2 text-sm md:text-base border border-primary-light/20"
-            >
-              <GraduationCap size={18} />
-              <span>Apply Now</span>
-              <ArrowRight size={16} />
-            </a>
-
-            <a
-              href="#quick-services"
-              className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3.5 rounded-xl transition-all duration-300 backdrop-blur-md border border-white/20 shadow-lg flex items-center justify-center gap-2 text-sm md:text-base"
+              href="#notices"
+              className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-3.5 rounded-xl transition-all duration-300 backdrop-blur-md border border-white/20 shadow-lg flex items-center justify-center gap-2 text-sm md:text-base"
             >
               <ClipboardList size={18} className="text-secondary" />
-              <span>Student Registration</span>
+              <span>Notice Board</span>
             </a>
 
-            <a
-              href="#quick-services"
-              className="w-full sm:w-auto bg-secondary hover:bg-secondary-light text-primary font-extrabold px-6 py-3.5 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg flex items-center justify-center gap-2 text-sm md:text-base"
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                onOpenResults();
+              }}
+              className="w-full sm:w-auto bg-secondary hover:bg-secondary-light text-primary font-extrabold px-8 py-3.5 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg flex items-center justify-center gap-2 text-sm md:text-base border-0 cursor-pointer"
             >
               <Award size={18} />
               <span>Check Result</span>
-            </a>
+            </button>
           </div>
         </div>
       </div>

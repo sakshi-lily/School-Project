@@ -16,21 +16,43 @@ const Contact = () => {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('sending');
 
-    // Simulate API request
-    setTimeout(() => {
-      setStatus('success');
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
+    try {
+      const response = await fetch('http://localhost:5000/api/public/inquiries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          studentName: 'General',
+          parentName: formData.name,
+          parentEmail: formData.email,
+          parentPhone: formData.phone || 'N/A',
+          classGrade: `General Inquiry: ${formData.subject}`,
+          academicYear: 'N/A',
+          message: formData.message,
+        }),
       });
-    }, 1500);
+
+      const data = await response.json();
+      if (data.success) {
+        setStatus('success');
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+      } else {
+        setStatus('error');
+      }
+    } catch (err) {
+      setStatus('error');
+    }
   };
 
   return (
@@ -214,6 +236,13 @@ const Contact = () => {
                       placeholder="Write your details or questions here..."
                     />
                   </div>
+
+                  {status === 'error' && (
+                    <div className="flex items-center gap-2 p-3 bg-rose-50 border border-rose-100 rounded-xl text-rose-600 text-xs font-semibold">
+                      <AlertCircle size={16} />
+                      <span>Failed to submit. Please try again.</span>
+                    </div>
+                  )}
 
                   <button
                     type="submit"

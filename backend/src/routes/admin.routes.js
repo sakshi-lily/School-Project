@@ -24,6 +24,13 @@ const {
   updateAnnouncement,
   deleteAnnouncement,
   getAuditLogs,
+  getInquiries,
+  updateInquiryStatus,
+  deleteInquiry,
+  getCalendarEvents,
+  createCalendarEvent,
+  updateCalendarEvent,
+  deleteCalendarEvent,
 } = require('../controllers/admin.controller');
 const { protect, authorize } = require('../middleware/auth.middleware');
 
@@ -70,5 +77,16 @@ router.delete('/announcements/:id', deleteAnnouncement);
 
 // Security logs & admin trail
 router.get('/logs', getAuditLogs);
+
+// Admission Inquiries
+router.get('/inquiries', getInquiries);
+router.patch('/inquiries/:id/status', updateInquiryStatus);
+router.delete('/inquiries/:id', deleteInquiry);
+
+// Academic Calendar Events
+router.get('/calendar', getCalendarEvents);
+router.post('/calendar', createCalendarEvent);
+router.put('/calendar/:id', updateCalendarEvent);
+router.delete('/calendar/:id', deleteCalendarEvent);
 
 module.exports = router;

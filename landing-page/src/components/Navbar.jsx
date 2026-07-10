@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, Phone, Mail, MapPin, ChevronDown, User, LogIn, Award, Landmark, GraduationCap } from 'lucide-react';
 import SchoolLogo from './SchoolLogo';
 
-const Navbar = ({ onOpenResults }) => {
+const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -30,38 +30,9 @@ const Navbar = ({ onOpenResults }) => {
         { label: 'Principal Message', href: '#principal-message' },
       ]
     },
-    {
-      label: 'Administration',
-      href: '#administration',
-      dropdown: [
-        { label: 'Management Committee', href: '#about' },
-        { label: 'Principal Desk', href: '#principal-message' },
-        { label: 'Office Staff', href: '#school-directory' },
-      ]
-    },
-    {
-      label: 'Academics',
-      href: '#academics',
-      dropdown: [
-        { label: 'Curriculum & Streams', href: '#why-choose-us' },
-        { label: 'Academic Calendar', href: '#quick-services' },
-        { label: 'Admissions 2026-27', href: '#admission-banner' },
-      ]
-    },
-    { label: 'Faculty & Staff', href: '#why-choose-us' },
-    {
-      label: 'Student Corner',
-      href: '#student-corner',
-      dropdown: [
-        { label: 'Online Registration', href: '#quick-services' },
-        { label: 'Check Board Results', href: '#quick-services' },
-        { label: 'Syllabus & Curriculum', href: '#quick-services' },
-        { label: 'Downloads & Circulars', href: '#quick-services' },
-      ]
-    },
     { label: 'Gallery', href: '#gallery' },
     { label: 'Notice Board', href: '#notices' },
-    { label: 'Downloads', href: '#quick-services' },
+    { label: 'Academic Calendar', href: '#calendar' },
     { label: 'Contact Us', href: '#contact' }
   ];
 
@@ -86,7 +57,11 @@ const Navbar = ({ onOpenResults }) => {
 
         <div className="flex items-center gap-3">
           <a
-            href="#admission-banner"
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              onOpenAdmission();
+            }}
             className="bg-secondary hover:bg-secondary-light text-primary font-bold px-3.5 py-1.5 rounded-full transition-all duration-300 transform hover:scale-105 flex items-center gap-1 shadow-sm text-xs"
           >
             <GraduationCap size={14} />
@@ -118,17 +93,6 @@ const Navbar = ({ onOpenResults }) => {
               >
                 <LogIn size={16} className="text-primary" />
                 <span>Teacher Login</span>
-              </a>
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onOpenResults();
-                }}
-                className="flex items-center gap-2 px-4 py-2 hover:bg-slate-50 text-slate-700 hover:text-primary font-medium transition-colors text-xs md:text-sm"
-              >
-                <User size={16} className="text-primary" />
-                <span>Student Portal</span>
               </a>
             </div>
           </div>
@@ -180,6 +144,12 @@ const Navbar = ({ onOpenResults }) => {
                 >
                   <a
                     href={item.href}
+                    onClick={(e) => {
+                      if (item.label === 'Academic Calendar') {
+                        e.preventDefault();
+                        onOpenCalendar();
+                      }
+                    }}
                     className={`flex items-center gap-1 px-3 py-2 text-xs xl:text-sm font-semibold rounded-lg transition-all duration-200 ${isScrolled
                         ? 'text-slate-700 hover:text-primary hover:bg-slate-100/70'
                         : 'text-white/90 hover:text-white hover:bg-white/10'
@@ -234,7 +204,13 @@ const Navbar = ({ onOpenResults }) => {
                   <div className="flex justify-between items-center">
                     <a
                       href={item.href}
-                      onClick={() => setIsOpen(false)}
+                      onClick={(e) => {
+                        setIsOpen(false);
+                        if (item.label === 'Academic Calendar') {
+                          e.preventDefault();
+                          onOpenCalendar();
+                        }
+                      }}
                       className="block py-2 text-sm font-bold text-slate-700 hover:text-primary"
                     >
                       {item.label}

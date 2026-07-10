@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
+import SchoolLogo from '../components/SchoolLogo';
 import { 
   BookOpen, 
   Users, 
@@ -47,6 +48,10 @@ const Dashboard = () => {
 
   // Print view state
   const [printingResult, setPrintingResult] = useState(null);
+
+  // CSV Upload modal states
+  const [showCsvModal, setShowCsvModal] = useState(false);
+  const [csvUploadProgress, setCsvUploadProgress] = useState(null);
 
   // Notices Form state
   const [showNoticeForm, setShowNoticeForm] = useState(false);
@@ -225,6 +230,116 @@ const Dashboard = () => {
     }
   };
 
+  const handleCsvUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      try {
+        const text = evt.target.result;
+        const lines = text.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+        if (lines.length < 2) {
+          alert("CSV file must contain a header and at least one data row.");
+          return;
+        }
+
+        const headers = lines[0].split(',').map(h => h.trim().replace(/^["']|["']$/g, ''));
+        const requiredHeaders = ['rollNumber', 'studentName', 'class', 'academicYear', 'term'];
+        for (const req of requiredHeaders) {
+          if (!headers.includes(req)) {
+            alert(`Missing required column header: ${req}`);
+            return;
+          }
+        }
+
+        const subjectHeaders = headers.filter(h => !requiredHeaders.includes(h));
+        const parsedRows = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          const values = lines[i].split(',').map(v => v.trim().replace(/^["']|["']$/g, ''));
+          if (values.length < requiredHeaders.length) continue;
+
+          const rowData = {};
+          headers.forEach((header, index) => {
+            rowData[header] = values[index] || '';
+          });
+
+          const subjectMarks = [];
+          subjectHeaders.forEach(subject => {
+            const marksVal = rowData[subject];
+            if (marksVal !== undefined && marksVal !== '') {
+              subjectMarks.push({
+                subject,
+                marksObtained: parseInt(marksVal || 0, 10),
+                maxMarks: 100
+              });
+            }
+          });
+
+          parsedRows.push({
+            studentName: rowData.studentName,
+            rollNumber: rowData.rollNumber,
+            class: rowData.class,
+            academicYear: rowData.academicYear,
+            term: rowData.term,
+            subjectMarks,
+            status: 'Published'
+          });
+        }
+
+        if (parsedRows.length === 0) {
+          alert("No valid data rows found in CSV.");
+          return;
+        }
+
+        setCsvUploadProgress({
+          current: 0,
+          total: parsedRows.length,
+          successCount: 0,
+          errorCount: 0,
+          details: []
+        });
+
+        let success = 0;
+        let errors = 0;
+        const details = [];
+
+        for (let i = 0; i < parsedRows.length; i++) {
+          const row = parsedRows[i];
+          try {
+            const res = await api.post('/teacher/results', row);
+            if (res.data.success) {
+              success++;
+              details.push({ status: 'success', message: `Roll Number ${row.rollNumber}: Successfully saved.` });
+            } else {
+              errors++;
+              details.push({ status: 'error', message: `Roll Number ${row.rollNumber}: ${res.data.message || 'Unknown error'}` });
+            }
+          } catch (err) {
+            errors++;
+            details.push({ status: 'error', message: `Roll Number ${row.rollNumber}: ${err.response?.data?.message || err.message}` });
+          }
+
+          setCsvUploadProgress(prev => ({
+            ...prev,
+            current: i + 1,
+            successCount: success,
+            errorCount: errors,
+            details: [...details]
+          }));
+        }
+
+        fetchResults();
+        fetchDashboardData();
+      } catch (err) {
+        console.error("Error reading CSV:", err);
+        alert("Failed to parse CSV file.");
+      }
+    };
+    reader.readAsText(file);
+  };
+
   // ==========================================
   // NOTICE BOARD HANDLERS
   // ==========================================
@@ -267,11 +382,8 @@ const Dashboard = () => {
     <div className="app-container">
       {/* Sidebar Navigation */}
       <div className="sidebar">
-        <div className="logo-container">
-          <div style={{ padding: '8px', borderRadius: '8px', background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))', color: 'white', display: 'flex' }}>
-            <BookOpen size={24} />
-          </div>
-          <span className="logo-text">EduSphere</span>
+        <div style={{ marginBottom: '2.5rem' }}>
+          <SchoolLogo size={42} showText={true} textColor="#ffffff" subTextColor="var(--text-secondary)" />
         </div>
 
         <div className="nav-links">
@@ -399,11 +511,82 @@ const Dashboard = () => {
               <div className="table-container">
                 <div className="table-header">
                   <h3>Student Result Cards</h3>
-                  <button className="table-action-btn" onClick={() => { setEditingResult(null); setSelectedClass(''); setSelectedStudent(null); setResultFormData({ rollNumber: '', academicYear: '2026-2027', term: 'Half-Yearly', status: 'Unpublished' }); setSubjectMarksInput([]); setShowResultForm(!showResultForm); }} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <PlusCircle size={18} />
-                    <span>Post Student Marks</span>
-                  </button>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <button 
+                      className="table-action-btn" 
+                      onClick={() => { setShowCsvModal(true); setCsvUploadProgress(null); }} 
+                      style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'var(--color-accent)' }}
+                    >
+                      <PlusCircle size={18} />
+                      <span>Upload CSV Results</span>
+                    </button>
+                    <button className="table-action-btn" onClick={() => { setEditingResult(null); setSelectedClass(''); setSelectedStudent(null); setResultFormData({ rollNumber: '', academicYear: '2026-2027', term: 'Half-Yearly', status: 'Unpublished' }); setSubjectMarksInput([]); setShowResultForm(!showResultForm); }} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <PlusCircle size={18} />
+                      <span>Post Student Marks</span>
+                    </button>
+                  </div>
                 </div>
+
+                {showCsvModal && (
+                  <div style={{ padding: '2rem', borderBottom: '1px solid var(--color-border)', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '8px', marginBottom: '1.5rem' }}>
+                    <h4 style={{ marginBottom: '1rem', color: 'var(--color-primary)' }}>Bulk Upload Examination Results via CSV</h4>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', lineHeight: '1.5' }}>
+                      Please select a CSV file. The file should have columns matching: <br />
+                      <code>rollNumber, studentName, class, academicYear, term, Mathematics, Science, English, ...</code> <br />
+                      (You can add any custom subject columns. Marks will be saved as scores out of 100).
+                    </p>
+                    
+                    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginBottom: '1.5rem' }}>
+                      <input 
+                        type="file" 
+                        accept=".csv" 
+                        onChange={handleCsvUpload} 
+                        style={{ 
+                          padding: '10px', 
+                          border: '1px dashed var(--color-border)', 
+                          borderRadius: '4px', 
+                          backgroundColor: 'var(--color-bg)', 
+                          color: 'white',
+                          cursor: 'pointer' 
+                        }} 
+                      />
+                      <button 
+                        type="button" 
+                        className="form-input" 
+                        style={{ width: 'auto', cursor: 'pointer', padding: '8px 16px' }} 
+                        onClick={() => { setShowCsvModal(false); setCsvUploadProgress(null); }}
+                      >
+                        Close Window
+                      </button>
+                    </div>
+
+                    {csvUploadProgress && (
+                      <div style={{ marginTop: '1.5rem', borderTop: '1px solid var(--color-border)', paddingTop: '1.5rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+                          <span>Processing Row: {csvUploadProgress.current} of {csvUploadProgress.total}</span>
+                          <span>Success: {csvUploadProgress.successCount} | Failed: {csvUploadProgress.errorCount}</span>
+                        </div>
+                        <div style={{ width: '100%', backgroundColor: 'var(--color-border)', height: '8px', borderRadius: '4px', overflow: 'hidden', marginBottom: '1rem' }}>
+                          <div 
+                            style={{ 
+                              width: `${(csvUploadProgress.current / csvUploadProgress.total) * 100}%`, 
+                              backgroundColor: 'var(--color-success)', 
+                              height: '100%',
+                              transition: 'width 0.2s ease-in-out' 
+                            }} 
+                          />
+                        </div>
+                        <div style={{ maxHeight: '150px', overflowY: 'auto', backgroundColor: 'rgba(0,0,0,0.2)', padding: '10px', borderRadius: '4px', fontSize: '0.8rem' }}>
+                          {csvUploadProgress.details.map((detail, index) => (
+                            <div key={index} style={{ color: detail.status === 'success' ? 'var(--color-success)' : 'var(--color-danger)', marginBottom: '4px' }}>
+                              • {detail.message}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Score upload form */}
                 {showResultForm && (

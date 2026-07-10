@@ -28,6 +28,11 @@ const StudentSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
     },
+    dateOfBirth: {
+      type: String,
+      required: [true, 'Please provide date of birth'],
+      default: '2010-01-01',
+    },
     status: {
       type: String,
       enum: ['Active', 'Suspended'],

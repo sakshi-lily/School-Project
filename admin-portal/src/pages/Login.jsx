@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { ShieldAlert, LogIn, Loader2 } from 'lucide-react';
+import SchoolLogo from '../components/SchoolLogo';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -21,12 +22,12 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-card">
-        <div className="login-header">
-          <div style={{ display: 'inline-flex', padding: '12px', borderRadius: '12px', background: 'rgba(99,102,241,0.1)', color: '#6366f1', marginBottom: '16px' }}>
-            <ShieldAlert size={32} />
+        <div className="login-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '2rem' }}>
+          <div style={{ marginBottom: '16px' }}>
+            <SchoolLogo size={90} showText={false} />
           </div>
-          <h2>Admin Console</h2>
-          <p>Sign in to manage the school system</p>
+          <h2 style={{ fontSize: '1.4rem', lineHeight: '1.3', marginBottom: '4px' }}>THAKUR BIRI SINGH INTER COLLEGE</h2>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Admin Control Center</p>
         </div>
 
         {error && (

@@ -5,6 +5,8 @@ const Student = require('../models/Student');
 const Result = require('../models/Result');
 const Announcement = require('../models/Announcement');
 const AuditLog = require('../models/AuditLog');
+const Inquiry = require('../models/Inquiry');
+const CalendarEvent = require('../models/CalendarEvent');
 
 // Helper to log administrative actions
 const createAuditLog = async (action, performedBy, details, req) => {
@@ -356,13 +358,13 @@ exports.getStudents = async (req, res, next) => {
 
 exports.createStudent = async (req, res, next) => {
   try {
-    const { name, rollNumber, class: className, academicYear, parentEmail } = req.body;
+    const { name, rollNumber, class: className, academicYear, parentEmail, dateOfBirth } = req.body;
     const existing = await Student.findOne({ rollNumber });
     if (existing) {
       return res.status(400).json({ success: false, message: `Roll Number '${rollNumber}' is already registered` });
     }
 
-    const student = await Student.create({ name, rollNumber, class: className, academicYear, parentEmail });
+    const student = await Student.create({ name, rollNumber, class: className, academicYear, parentEmail, dateOfBirth });
     await createAuditLog('CREATE_STUDENT', req.user._id, `Registered student ${name} (Roll No: ${rollNumber})`, req);
     res.status(201).json({ success: true, data: student });
   } catch (error) {
@@ -372,10 +374,10 @@ exports.createStudent = async (req, res, next) => {
 
 exports.updateStudent = async (req, res, next) => {
   try {
-    const { name, rollNumber, class: className, academicYear, parentEmail, status } = req.body;
+    const { name, rollNumber, class: className, academicYear, parentEmail, status, dateOfBirth } = req.body;
     const student = await Student.findByIdAndUpdate(
       req.params.id,
-      { name, rollNumber, class: className, academicYear, parentEmail, status },
+      { name, rollNumber, class: className, academicYear, parentEmail, status, dateOfBirth },
       { new: true, runValidators: true }
     );
     if (!student) {
@@ -586,3 +588,120 @@ exports.getAuditLogs = async (req, res, next) => {
     next(error);
   }
 };
+
+// ==========================================
+// ADMISSION INQUIRIES
+// ==========================================
+
+exports.getInquiries = async (req, res, next) => {
+  try {
+    const inquiries = await Inquiry.find().sort({ createdAt: -1 });
+    res.status(200).json({ success: true, data: inquiries });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateInquiryStatus = async (req, res, next) => {
+  try {
+    const { status } = req.body;
+    if (!['Pending', 'Reviewed', 'Contacted'].includes(status)) {
+      return res.status(400).json({ success: false, message: 'Invalid inquiry status' });
+    }
+
+    const inquiry = await Inquiry.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+
+    if (!inquiry) {
+      return res.status(404).json({ success: false, message: 'Inquiry not found' });
+    }
+
+    await createAuditLog('UPDATE_INQUIRY', req.user._id, `Updated inquiry status for ${inquiry.studentName} to ${status}`, req);
+    res.status(200).json({ success: true, data: inquiry });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteInquiry = async (req, res, next) => {
+  try {
+    const inquiry = await Inquiry.findByIdAndDelete(req.params.id);
+    if (!inquiry) {
+      return res.status(404).json({ success: false, message: 'Inquiry not found' });
+    }
+
+    await createAuditLog('DELETE_INQUIRY', req.user._id, `Deleted admission inquiry for ${inquiry.studentName}`, req);
+    res.status(200).json({ success: true, message: 'Inquiry deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ==========================================
+// ACADEMIC CALENDAR EVENTS
+// ==========================================
+
+exports.getCalendarEvents = async (req, res, next) => {
+  try {
+    const events = await CalendarEvent.find().sort({ date: 1 });
+    res.status(200).json({ success: true, data: events });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.createCalendarEvent = async (req, res, next) => {
+  try {
+    const { title, date, type, description, academicYear } = req.body;
+    const event = await CalendarEvent.create({
+      title,
+      date,
+      type,
+      description,
+      academicYear,
+    });
+
+    await createAuditLog('CREATE_CALENDAR_EVENT', req.user._id, `Created calendar event: ${title}`, req);
+    res.status(201).json({ success: true, data: event });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateCalendarEvent = async (req, res, next) => {
+  try {
+    const { title, date, type, description, academicYear } = req.body;
+    const event = await CalendarEvent.findByIdAndUpdate(
+      req.params.id,
+      { title, date, type, description, academicYear },
+      { new: true }
+    );
+
+    if (!event) {
+      return res.status(404).json({ success: false, message: 'Calendar event not found' });
+    }
+
+    await createAuditLog('UPDATE_CALENDAR_EVENT', req.user._id, `Updated calendar event: ${title}`, req);
+    res.status(200).json({ success: true, data: event });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteCalendarEvent = async (req, res, next) => {
+  try {
+    const event = await CalendarEvent.findByIdAndDelete(req.params.id);
+    if (!event) {
+      return res.status(404).json({ success: false, message: 'Calendar event not found' });
+    }
+
+    await createAuditLog('DELETE_CALENDAR_EVENT', req.user._id, `Deleted calendar event: ${event.title}`, req);
+    res.status(200).json({ success: true, message: 'Calendar event deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
+import SchoolLogo from '../components/SchoolLogo';
 import { 
   GraduationCap, 
   Users, 
@@ -42,6 +43,14 @@ const Dashboard = () => {
   const [results, setResults] = useState([]);
   const [auditLogs, setAuditLogs] = useState([]);
   
+  const [inquiries, setInquiries] = useState([]);
+  const [calendarEvents, setCalendarEvents] = useState([]);
+  const [showCalendarForm, setShowCalendarForm] = useState(false);
+  const [editingCalendarEvent, setEditingCalendarEvent] = useState(null);
+  const [calendarFormData, setCalendarFormData] = useState({
+    title: '', date: '', type: 'Holiday', description: '', academicYear: '2026-2027'
+  });
+  
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
 
@@ -55,7 +64,7 @@ const Dashboard = () => {
   const [showStudentForm, setShowStudentForm] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);
   const [studentFormData, setStudentFormData] = useState({
-    name: '', rollNumber: '', class: '', academicYear: '2026-2027', parentEmail: '', status: 'Active'
+    name: '', rollNumber: '', class: '', academicYear: '2026-2027', parentEmail: '', status: 'Active', dateOfBirth: '2010-01-01'
   });
 
   const [showClassForm, setShowClassForm] = useState(false);
@@ -73,6 +82,10 @@ const Dashboard = () => {
   // Password reset state
   const [resettingTeacherId, setResettingTeacherId] = useState(null);
   const [newPasswordValue, setNewPasswordValue] = useState('');
+
+  // CSV Upload modal states
+  const [showCsvModal, setShowCsvModal] = useState(false);
+  const [csvUploadProgress, setCsvUploadProgress] = useState(null);
 
   const triggerNotification = (type, message) => {
     setNotification({ type, message });
@@ -142,6 +155,24 @@ const Dashboard = () => {
     }
   };
 
+  const fetchInquiries = async () => {
+    try {
+      const res = await api.get('/admin/inquiries');
+      if (res.data.success) setInquiries(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchCalendarEvents = async () => {
+    try {
+      const res = await api.get('/admin/calendar');
+      if (res.data.success) setCalendarEvents(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const loadAllData = async () => {
     setLoading(true);
     await Promise.all([
@@ -151,7 +182,9 @@ const Dashboard = () => {
       fetchClasses(),
       fetchAnnouncements(),
       fetchResults(),
-      fetchAuditLogs()
+      fetchAuditLogs(),
+      fetchInquiries(),
+      fetchCalendarEvents()
     ]);
     setLoading(false);
   };
@@ -261,7 +294,7 @@ const Dashboard = () => {
         triggerNotification('success', editingStudent ? 'Student details updated' : 'Student registered successfully!');
         setShowStudentForm(false);
         setEditingStudent(null);
-        setStudentFormData({ name: '', rollNumber: '', class: '', academicYear: '2026-2027', parentEmail: '', status: 'Active' });
+        setStudentFormData({ name: '', rollNumber: '', class: '', academicYear: '2026-2027', parentEmail: '', status: 'Active', dateOfBirth: '2010-01-01' });
         fetchStudents();
         fetchStats();
         fetchAuditLogs();
@@ -284,6 +317,117 @@ const Dashboard = () => {
     } catch (err) {
       triggerNotification('error', 'Failed to delete student');
     }
+  };
+
+  const handleCsvUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      try {
+        const text = evt.target.result;
+        const lines = text.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+        if (lines.length < 2) {
+          alert("CSV file must contain a header and at least one data row.");
+          return;
+        }
+
+        const headers = lines[0].split(',').map(h => h.trim().replace(/^["']|["']$/g, ''));
+        const requiredHeaders = ['rollNumber', 'studentName', 'class', 'academicYear', 'term'];
+        for (const req of requiredHeaders) {
+          if (!headers.includes(req)) {
+            alert(`Missing required column header: ${req}`);
+            return;
+          }
+        }
+
+        const subjectHeaders = headers.filter(h => !requiredHeaders.includes(h));
+        const parsedRows = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          const values = lines[i].split(',').map(v => v.trim().replace(/^["']|["']$/g, ''));
+          if (values.length < requiredHeaders.length) continue;
+
+          const rowData = {};
+          headers.forEach((header, index) => {
+            rowData[header] = values[index] || '';
+          });
+
+          const subjectMarks = [];
+          subjectHeaders.forEach(subject => {
+            const marksVal = rowData[subject];
+            if (marksVal !== undefined && marksVal !== '') {
+              subjectMarks.push({
+                subject,
+                marksObtained: parseInt(marksVal || 0, 10),
+                maxMarks: 100
+              });
+            }
+          });
+
+          parsedRows.push({
+            studentName: rowData.studentName,
+            rollNumber: rowData.rollNumber,
+            class: rowData.class,
+            academicYear: rowData.academicYear,
+            term: rowData.term,
+            subjectMarks,
+            status: 'Published'
+          });
+        }
+
+        if (parsedRows.length === 0) {
+          alert("No valid data rows found in CSV.");
+          return;
+        }
+
+        setCsvUploadProgress({
+          current: 0,
+          total: parsedRows.length,
+          successCount: 0,
+          errorCount: 0,
+          details: []
+        });
+
+        let success = 0;
+        let errors = 0;
+        const details = [];
+
+        for (let i = 0; i < parsedRows.length; i++) {
+          const row = parsedRows[i];
+          try {
+            const res = await api.post('/admin/results', row);
+            if (res.data.success) {
+              success++;
+              details.push({ status: 'success', message: `Roll Number ${row.rollNumber}: Successfully saved.` });
+            } else {
+              errors++;
+              details.push({ status: 'error', message: `Roll Number ${row.rollNumber}: ${res.data.message || 'Unknown error'}` });
+            }
+          } catch (err) {
+            errors++;
+            details.push({ status: 'error', message: `Roll Number ${row.rollNumber}: ${err.response?.data?.message || err.message}` });
+          }
+
+          setCsvUploadProgress(prev => ({
+            ...prev,
+            current: i + 1,
+            successCount: success,
+            errorCount: errors,
+            details: [...details]
+          }));
+        }
+
+        fetchResults();
+        fetchStats();
+        fetchAuditLogs();
+      } catch (err) {
+        console.error("Error reading CSV:", err);
+        alert("Failed to parse CSV file.");
+      }
+    };
+    reader.readAsText(file);
   };
 
   // ==========================================
@@ -406,15 +550,76 @@ const Dashboard = () => {
     }
   };
 
+  const handleInquiryStatusChange = async (id, status) => {
+    try {
+      const res = await api.patch(`/admin/inquiries/${id}/status`, { status });
+      if (res.data.success) {
+        triggerNotification('success', `Inquiry status updated to ${status}`);
+        fetchInquiries();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to update inquiry status');
+    }
+  };
+
+  const handleDeleteInquiry = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this inquiry?')) return;
+    try {
+      const res = await api.delete(`/admin/inquiries/${id}`);
+      if (res.data.success) {
+        triggerNotification('success', 'Inquiry deleted successfully');
+        fetchInquiries();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to delete inquiry');
+    }
+  };
+
+  const handleCalendarEventSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      let res;
+      if (editingCalendarEvent) {
+        res = await api.put(`/admin/calendar/${editingCalendarEvent._id}`, calendarFormData);
+      } else {
+        res = await api.post('/admin/calendar', calendarFormData);
+      }
+
+      if (res.data.success) {
+        triggerNotification('success', editingCalendarEvent ? 'Calendar event updated successfully!' : 'Calendar event created successfully!');
+        setShowCalendarForm(false);
+        setEditingCalendarEvent(null);
+        setCalendarFormData({ title: '', date: '', type: 'Holiday', description: '', academicYear: '2026-2027' });
+        fetchCalendarEvents();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to save calendar event');
+    }
+  };
+
+  const handleDeleteCalendarEvent = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this calendar event?')) return;
+    try {
+      const res = await api.delete(`/admin/calendar/${id}`);
+      if (res.data.success) {
+        triggerNotification('success', 'Calendar event deleted successfully');
+        fetchCalendarEvents();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to delete calendar event');
+    }
+  };
+
   return (
     <div className="app-container">
       {/* Sidebar Navigation */}
       <div className="sidebar">
-        <div className="logo-container">
-          <div style={{ padding: '8px', borderRadius: '8px', background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))', color: 'white', display: 'flex' }}>
-            <GraduationCap size={24} />
-          </div>
-          <span className="logo-text">EduSphere</span>
+        <div style={{ marginBottom: '2.5rem' }}>
+          <SchoolLogo size={42} showText={true} textColor="#ffffff" subTextColor="var(--text-secondary)" />
         </div>
 
         <div className="nav-links">
@@ -442,6 +647,14 @@ const Dashboard = () => {
             <Megaphone size={20} />
             <span>Notices Desk</span>
           </div>
+          <div className={`nav-item ${activeTab === 'inquiries' ? 'active' : ''}`} onClick={() => setActiveTab('inquiries')}>
+            <Mail size={20} />
+            <span>Inquiries</span>
+          </div>
+          <div className={`nav-item ${activeTab === 'calendar' ? 'active' : ''}`} onClick={() => setActiveTab('calendar')}>
+            <Calendar size={20} />
+            <span>Calendar</span>
+          </div>
           <div className={`nav-item ${activeTab === 'logs' ? 'active' : ''}`} onClick={() => setActiveTab('logs')}>
             <BookOpen size={20} />
             <span>Audit Trail</span>
@@ -466,6 +679,8 @@ const Dashboard = () => {
               {activeTab === 'classes' && 'Academic Classes'}
               {activeTab === 'results' && 'Results Publishing'}
               {activeTab === 'notices' && 'Circular Board'}
+              {activeTab === 'inquiries' && 'Admission & General Inquiries'}
+              {activeTab === 'calendar' && 'Academic Calendar Scheduling'}
               {activeTab === 'logs' && 'Audit Logs Trails'}
             </h1>
             <p style={{ color: 'var(--text-secondary)' }}>Welcome back, Administrative Owner</p>
@@ -728,7 +943,7 @@ const Dashboard = () => {
               <div className="table-container">
                 <div className="table-header">
                   <h3>Enrolled Students</h3>
-                  <button className="table-action-btn" onClick={() => { setEditingStudent(null); setStudentFormData({ name: '', rollNumber: '', class: '', academicYear: '2026-2027', parentEmail: '', status: 'Active' }); setShowStudentForm(!showStudentForm); }} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <button className="table-action-btn" onClick={() => { setEditingStudent(null); setStudentFormData({ name: '', rollNumber: '', class: '', academicYear: '2026-2027', parentEmail: '', status: 'Active', dateOfBirth: '2010-01-01' }); setShowStudentForm(!showStudentForm); }} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <PlusCircle size={18} />
                     <span>Register Student</span>
                   </button>
@@ -755,6 +970,10 @@ const Dashboard = () => {
                         <input type="text" className="form-input" value={studentFormData.academicYear} onChange={(e) => setStudentFormData({...studentFormData, academicYear: e.target.value})} required />
                       </div>
                       <div className="form-group">
+                        <label className="form-label">Date of Birth</label>
+                        <input type="date" className="form-input" style={{ backgroundColor: 'var(--color-bg)', color: 'white' }} value={studentFormData.dateOfBirth} onChange={(e) => setStudentFormData({...studentFormData, dateOfBirth: e.target.value})} required />
+                      </div>
+                      <div className="form-group">
                         <label className="form-label">Parent / Contact Email</label>
                         <input type="email" className="form-input" value={studentFormData.parentEmail} onChange={(e) => setStudentFormData({...studentFormData, parentEmail: e.target.value})} />
                       </div>
@@ -778,6 +997,7 @@ const Dashboard = () => {
                     <tr>
                       <th>Roll Number</th>
                       <th>Student Name</th>
+                      <th>Date of Birth</th>
                       <th>Assigned Class</th>
                       <th>Academic Year</th>
                       <th>Parent Email</th>
@@ -790,6 +1010,7 @@ const Dashboard = () => {
                       <tr key={student._id}>
                         <td style={{ fontWeight: 'bold' }}>{student.rollNumber}</td>
                         <td>{student.name}</td>
+                        <td>{student.dateOfBirth ? new Date(student.dateOfBirth).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}</td>
                         <td>{student.class}</td>
                         <td>{student.academicYear}</td>
                         <td>{student.parentEmail || 'N/A'}</td>
@@ -802,16 +1023,17 @@ const Dashboard = () => {
                           <div style={{ display: 'flex', gap: '8px' }}>
                             <button 
                               onClick={() => {
-                                setEditingStudent(student);
-                                setStudentFormData({
-                                  name: student.name,
-                                  rollNumber: student.rollNumber,
-                                  class: student.class,
-                                  academicYear: student.academicYear,
-                                  parentEmail: student.parentEmail || '',
-                                  status: student.status
-                                });
-                                setShowStudentForm(true);
+                                  setEditingStudent(student);
+                                  setStudentFormData({
+                                    name: student.name,
+                                    rollNumber: student.rollNumber,
+                                    class: student.class,
+                                    academicYear: student.academicYear,
+                                    parentEmail: student.parentEmail || '',
+                                    status: student.status,
+                                    dateOfBirth: student.dateOfBirth ? student.dateOfBirth.slice(0, 10) : '2010-01-01'
+                                  });
+                                  setShowStudentForm(true);
                               }}
                               style={{ border: 'none', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer' }}
                             >
@@ -931,7 +1153,76 @@ const Dashboard = () => {
               <div className="table-container">
                 <div className="table-header">
                   <h3>All Examination Marksheets</h3>
+                  <button 
+                    className="table-action-btn" 
+                    onClick={() => { setShowCsvModal(true); setCsvUploadProgress(null); }} 
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'var(--color-primary)', border: 'none', color: 'white', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}
+                  >
+                    <PlusCircle size={18} />
+                    <span>Upload CSV Results</span>
+                  </button>
                 </div>
+
+                {showCsvModal && (
+                  <div style={{ padding: '2rem', borderBottom: '1px solid var(--color-border)', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '8px', marginBottom: '1.5rem' }}>
+                    <h4 style={{ marginBottom: '1rem', color: 'var(--color-primary)' }}>Bulk Upload Examination Results via CSV</h4>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', lineHeight: '1.5' }}>
+                      Please select a CSV file. The file should have columns matching: <br />
+                      <code>rollNumber, studentName, class, academicYear, term, Mathematics, Science, English, ...</code> <br />
+                      (You can add any custom subject columns. Marks will be saved as scores out of 100).
+                    </p>
+                    
+                    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginBottom: '1.5rem' }}>
+                      <input 
+                        type="file" 
+                        accept=".csv" 
+                        onChange={handleCsvUpload} 
+                        style={{ 
+                          padding: '10px', 
+                          border: '1px dashed var(--color-border)', 
+                          borderRadius: '4px', 
+                          backgroundColor: 'var(--color-bg)', 
+                          color: 'white',
+                          cursor: 'pointer' 
+                        }} 
+                      />
+                      <button 
+                        type="button" 
+                        className="form-input" 
+                        style={{ width: 'auto', cursor: 'pointer', padding: '8px 16px' }} 
+                        onClick={() => { setShowCsvModal(false); setCsvUploadProgress(null); }}
+                      >
+                        Close Window
+                      </button>
+                    </div>
+
+                    {csvUploadProgress && (
+                      <div style={{ marginTop: '1.5rem', borderTop: '1px solid var(--color-border)', paddingTop: '1.5rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+                          <span>Processing Row: {csvUploadProgress.current} of {csvUploadProgress.total}</span>
+                          <span>Success: {csvUploadProgress.successCount} | Failed: {csvUploadProgress.errorCount}</span>
+                        </div>
+                        <div style={{ width: '100%', backgroundColor: 'var(--color-border)', height: '8px', borderRadius: '4px', overflow: 'hidden', marginBottom: '1rem' }}>
+                          <div 
+                            style={{ 
+                              width: `${(csvUploadProgress.current / csvUploadProgress.total) * 100}%`, 
+                              backgroundColor: 'var(--color-success)', 
+                              height: '100%',
+                              transition: 'width 0.2s ease-in-out' 
+                            }} 
+                          />
+                        </div>
+                        <div style={{ maxHeight: '150px', overflowY: 'auto', backgroundColor: 'rgba(0,0,0,0.2)', padding: '10px', borderRadius: '4px', fontSize: '0.8rem' }}>
+                          {csvUploadProgress.details.map((detail, index) => (
+                            <div key={index} style={{ color: detail.status === 'success' ? 'var(--color-success)' : 'var(--color-danger)', marginBottom: '4px' }}>
+                              • {detail.message}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <table className="data-table">
                   <thead>
@@ -1076,6 +1367,249 @@ const Dashboard = () => {
                             </button>
                             <button 
                               onClick={() => handleDeleteNotice(notice._id)}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--color-danger)', cursor: 'pointer' }}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* INQUIRIES TAB */}
+            {activeTab === 'inquiries' && (
+              <div className="table-container">
+                <div className="table-header">
+                  <h3>Received Inquiries & Contact Forms</h3>
+                </div>
+
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Type / Grade</th>
+                      <th>Sender Details</th>
+                      <th>Student Name</th>
+                      <th>Academic Year</th>
+                      <th>Message / Details</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {inquiries.map((inq) => {
+                      const isGeneral = inq.academicYear === 'N/A' || !inq.academicYear;
+                      return (
+                        <tr key={inq._id}>
+                          <td>
+                            <span style={{ 
+                              fontSize: '0.8rem', 
+                              fontWeight: 'bold', 
+                              padding: '2px 6px', 
+                              borderRadius: '4px', 
+                              backgroundColor: isGeneral ? 'rgba(6,182,212,0.1)' : 'rgba(16,185,129,0.1)',
+                              color: isGeneral ? 'var(--color-accent)' : 'var(--color-success)'
+                            }}>
+                              {isGeneral ? 'Contact Us' : `Grade ${inq.classGrade}`}
+                            </span>
+                          </td>
+                          <td>
+                            <div style={{ fontWeight: '600' }}>{inq.parentName}</div>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{inq.parentEmail}</div>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{inq.parentPhone}</div>
+                          </td>
+                          <td>{isGeneral ? 'N/A' : inq.studentName}</td>
+                          <td>{isGeneral ? 'N/A' : inq.academicYear}</td>
+                          <td style={{ maxWidth: '300px', whiteSpace: 'normal', fontSize: '0.85rem' }}>
+                            {inq.message}
+                          </td>
+                          <td>
+                            <select 
+                              value={inq.status} 
+                              onChange={(e) => handleInquiryStatusChange(inq._id, e.target.value)}
+                              className="form-input"
+                              style={{ 
+                                margin: 0, 
+                                padding: '4px 8px', 
+                                width: 'auto', 
+                                fontSize: '0.8rem', 
+                                backgroundColor: 'var(--color-bg)', 
+                                color: 'white',
+                                borderColor: inq.status === 'Pending' ? 'var(--color-warning)' : inq.status === 'Reviewed' ? 'var(--color-accent)' : 'var(--color-success)'
+                              }}
+                            >
+                              <option value="Pending">Pending</option>
+                              <option value="Reviewed">Reviewed</option>
+                              <option value="Contacted">Contacted</option>
+                            </select>
+                          </td>
+                          <td>
+                            <button 
+                              onClick={() => handleDeleteInquiry(inq._id)}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--color-danger)', cursor: 'pointer' }}
+                              title="Delete inquiry"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* CALENDAR TAB */}
+            {activeTab === 'calendar' && (
+              <div className="table-container">
+                <div className="table-header">
+                  <h3>Academic Calendar Events</h3>
+                  <button 
+                    className="table-action-btn" 
+                    onClick={() => { 
+                      setEditingCalendarEvent(null); 
+                      setCalendarFormData({ title: '', date: '', type: 'Holiday', description: '', academicYear: '2026-2027' }); 
+                      setShowCalendarForm(!showCalendarForm); 
+                    }} 
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                  >
+                    <PlusCircle size={18} />
+                    <span>Create Event</span>
+                  </button>
+                </div>
+
+                {showCalendarForm && (
+                  <div style={{ padding: '2rem', borderBottom: '1px solid var(--color-border)', backgroundColor: 'rgba(255,255,255,0.01)' }}>
+                    <h4 style={{ marginBottom: '1.5rem', color: 'var(--color-primary)' }}>
+                      {editingCalendarEvent ? 'Edit Calendar Event' : 'Create Calendar Event'}
+                    </h4>
+                    <form onSubmit={handleCalendarEventSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                      <div className="form-group">
+                        <label className="form-label">Event Title</label>
+                        <input 
+                          type="text" 
+                          className="form-input" 
+                          value={calendarFormData.title} 
+                          onChange={(e) => setCalendarFormData({...calendarFormData, title: e.target.value})} 
+                          required 
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Date</label>
+                        <input 
+                          type="date" 
+                          className="form-input" 
+                          style={{ backgroundColor: 'var(--color-bg)', color: 'white' }}
+                          value={calendarFormData.date ? calendarFormData.date.slice(0, 10) : ''} 
+                          onChange={(e) => setCalendarFormData({...calendarFormData, date: e.target.value})} 
+                          required 
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Type</label>
+                        <select 
+                          className="form-input" 
+                          style={{ backgroundColor: 'var(--color-bg)', color: 'white' }}
+                          value={calendarFormData.type} 
+                          onChange={(e) => setCalendarFormData({...calendarFormData, type: e.target.value})}
+                        >
+                          <option value="Holiday">Holiday</option>
+                          <option value="Exam">Exam</option>
+                          <option value="Event">Event</option>
+                          <option value="Meeting">Meeting</option>
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Academic Year</label>
+                        <input 
+                          type="text" 
+                          className="form-input" 
+                          value={calendarFormData.academicYear} 
+                          onChange={(e) => setCalendarFormData({...calendarFormData, academicYear: e.target.value})} 
+                          required 
+                        />
+                      </div>
+                      <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                        <label className="form-label">Description</label>
+                        <textarea 
+                          className="form-input" 
+                          rows="3" 
+                          style={{ resize: 'none' }}
+                          value={calendarFormData.description} 
+                          onChange={(e) => setCalendarFormData({...calendarFormData, description: e.target.value})} 
+                        />
+                      </div>
+                      <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem', justifyItems: 'flex-end', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                        <button type="button" className="form-input" style={{ width: 'auto', cursor: 'pointer' }} onClick={() => setShowCalendarForm(false)}>Cancel</button>
+                        <button type="submit" className="btn-primary" style={{ width: 'auto', padding: '0.85rem 2rem' }}>
+                          {editingCalendarEvent ? 'Update Event' : 'Save Event'}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Date</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                      <th>Academic Year</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {calendarEvents.map((evt) => (
+                      <tr key={evt._id}>
+                        <td style={{ fontWeight: '600' }}>{evt.title}</td>
+                        <td>{new Date(evt.date).toLocaleDateString()}</td>
+                        <td>
+                          <span style={{ 
+                            fontSize: '0.8rem', 
+                            padding: '2px 6px', 
+                            borderRadius: '4px', 
+                            backgroundColor: 
+                              evt.type === 'Holiday' ? 'rgba(239,68,68,0.1)' : 
+                              evt.type === 'Exam' ? 'rgba(245,158,11,0.1)' : 
+                              evt.type === 'Event' ? 'rgba(16,185,129,0.1)' : 
+                              'rgba(59,130,246,0.1)',
+                            color: 
+                              evt.type === 'Holiday' ? 'var(--color-danger)' : 
+                              evt.type === 'Exam' ? 'var(--color-warning)' : 
+                              evt.type === 'Event' ? 'var(--color-success)' : 
+                              'var(--color-primary)'
+                          }}>
+                            {evt.type}
+                          </span>
+                        </td>
+                        <td style={{ fontSize: '0.85rem' }}>{evt.description}</td>
+                        <td>{evt.academicYear}</td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button 
+                              onClick={() => {
+                                setEditingCalendarEvent(evt);
+                                setCalendarFormData({
+                                  title: evt.title,
+                                  date: evt.date,
+                                  type: evt.type,
+                                  description: evt.description || '',
+                                  academicYear: evt.academicYear
+                                });
+                                setShowCalendarForm(true);
+                              }}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer' }}
+                            >
+                              <Edit2 size={16} />
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteCalendarEvent(evt._id)}
                               style={{ border: 'none', background: 'transparent', color: 'var(--color-danger)', cursor: 'pointer' }}
                             >
                               <Trash2 size={16} />

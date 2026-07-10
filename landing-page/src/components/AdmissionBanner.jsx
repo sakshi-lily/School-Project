@@ -1,7 +1,7 @@
 import React from 'react';
 import { GraduationCap, FileText, Calendar, ShieldCheck, ArrowUpRight } from 'lucide-react';
 
-const AdmissionBanner = () => {
+const AdmissionBanner = ({ onOpenAdmission }) => {
   return (
     <section id="admission-banner" className="py-16 md:py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -50,7 +50,11 @@ const AdmissionBanner = () => {
             {/* Column 2: CTA Buttons */}
             <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col items-center justify-center gap-4 w-full">
               <a
-                href="#quick-services"
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onOpenAdmission();
+                }}
                 className="w-full bg-secondary hover:bg-secondary-light text-primary font-heading font-extrabold px-8 py-4 rounded-2xl transition-all duration-300 shadow-xl flex items-center justify-center gap-2 transform hover:-translate-y-0.5"
               >
                 <GraduationCap size={20} />
