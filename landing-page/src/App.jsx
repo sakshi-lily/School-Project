@@ -15,11 +15,15 @@ import Footer from './components/Footer';
 import ResultPortalModal from './components/ResultPortalModal';
 import AdmissionInquiryModal from './components/AdmissionInquiryModal';
 import AcademicCalendarModal from './components/AcademicCalendarModal';
+import AdmitCardModal from './components/AdmitCardModal';
+import SyllabusModal from './components/SyllabusModal';
 
 function App() {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
   const [isAdmissionOpen, setIsAdmissionOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isAdmitCardOpen, setIsAdmitCardOpen] = useState(false);
+  const [isSyllabusOpen, setIsSyllabusOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
@@ -42,6 +46,8 @@ function App() {
           <QuickServices 
             onOpenResults={() => setIsResultModalOpen(true)} 
             onOpenCalendar={() => setIsCalendarOpen(true)}
+            onOpenAdmitCard={() => setIsAdmitCardOpen(true)}
+            onOpenSyllabus={() => setIsSyllabusOpen(true)}
           />
           
           {/* Split screen About section */}
@@ -89,6 +95,18 @@ function App() {
       <AcademicCalendarModal
         isOpen={isCalendarOpen}
         onClose={() => setIsCalendarOpen(false)}
+      />
+
+      {/* Admit Card Search Modal */}
+      <AdmitCardModal
+        isOpen={isAdmitCardOpen}
+        onClose={() => setIsAdmitCardOpen(false)}
+      />
+
+      {/* Syllabus View/Filter Modal */}
+      <SyllabusModal
+        isOpen={isSyllabusOpen}
+        onClose={() => setIsSyllabusOpen(false)}
       />
     </div>
   );

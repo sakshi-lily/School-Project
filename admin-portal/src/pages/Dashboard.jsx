@@ -87,6 +87,17 @@ const Dashboard = () => {
   const [showCsvModal, setShowCsvModal] = useState(false);
   const [csvUploadProgress, setCsvUploadProgress] = useState(null);
 
+  // Admit Cards and Syllabus states
+  const [admitCards, setAdmitCards] = useState([]);
+  const [syllabusList, setSyllabusList] = useState([]);
+  const [showAdmitCardCsvModal, setShowAdmitCardCsvModal] = useState(false);
+  const [admitCardCsvProgress, setAdmitCardCsvProgress] = useState(null);
+  const [showSyllabusForm, setShowSyllabusForm] = useState(false);
+  const [syllabusFormData, setSyllabusFormData] = useState({
+    title: '', class: '', subject: '', academicYear: '2026-2027'
+  });
+  const [syllabusFile, setSyllabusFile] = useState(null);
+
   const triggerNotification = (type, message) => {
     setNotification({ type, message });
     setTimeout(() => setNotification(null), 5000);
@@ -173,6 +184,24 @@ const Dashboard = () => {
     }
   };
 
+  const fetchAdmitCards = async () => {
+    try {
+      const res = await api.get('/admin/admit-cards');
+      if (res.data.success) setAdmitCards(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchSyllabusList = async () => {
+    try {
+      const res = await api.get('/admin/syllabus');
+      if (res.data.success) setSyllabusList(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const loadAllData = async () => {
     setLoading(true);
     await Promise.all([
@@ -184,7 +213,9 @@ const Dashboard = () => {
       fetchResults(),
       fetchAuditLogs(),
       fetchInquiries(),
-      fetchCalendarEvents()
+      fetchCalendarEvents(),
+      fetchAdmitCards(),
+      fetchSyllabusList()
     ]);
     setLoading(false);
   };
@@ -430,6 +461,195 @@ const Dashboard = () => {
     reader.readAsText(file);
   };
 
+  const handleAdmitCardCsvUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      try {
+        const text = evt.target.result;
+        const lines = text.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+        if (lines.length < 2) {
+          alert("CSV file must contain a header and at least one data row.");
+          return;
+        }
+
+        const headers = lines[0].split(',').map(h => h.trim().replace(/^["']|["']$/g, ''));
+        const requiredHeaders = ['rollNumber', 'studentName', 'class', 'academicYear', 'dateOfBirth'];
+        for (const req of requiredHeaders) {
+          if (!headers.includes(req)) {
+            alert(`Missing required column header: ${req}`);
+            return;
+          }
+        }
+
+        const parsedRows = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          const values = lines[i].split(',').map(v => v.trim().replace(/^["']|["']$/g, ''));
+          if (values.length < requiredHeaders.length) continue;
+
+          const rowData = {};
+          headers.forEach((header, index) => {
+            rowData[header] = values[index] || '';
+          });
+
+          // Parse datesheet which is a semicolon separated list of: "Subject: Date Time" or "Subject: Date"
+          // E.g. "English: 2026-03-02 09:00 AM; Mathematics: 2026-03-04 09:00 AM"
+          const datesheet = [];
+          if (rowData.datesheet) {
+            const parts = rowData.datesheet.split(';').map(p => p.trim()).filter(Boolean);
+            parts.forEach(part => {
+              const colonIndex = part.indexOf(':');
+              if (colonIndex !== -1) {
+                const subject = part.substring(0, colonIndex).trim();
+                const dateTimeStr = part.substring(colonIndex + 1).trim();
+                // split by space to separate date and time if possible
+                const spaceIndex = dateTimeStr.indexOf(' ');
+                let date = dateTimeStr;
+                let time = '09:00 AM';
+                if (spaceIndex !== -1) {
+                  date = dateTimeStr.substring(0, spaceIndex).trim();
+                  time = dateTimeStr.substring(spaceIndex + 1).trim();
+                }
+                datesheet.push({ subject, date, time });
+              }
+            });
+          }
+
+          parsedRows.push({
+            studentName: rowData.studentName,
+            rollNumber: rowData.rollNumber,
+            class: rowData.class,
+            academicYear: rowData.academicYear,
+            dateOfBirth: rowData.dateOfBirth,
+            fatherName: rowData.fatherName || 'N/A',
+            motherName: rowData.motherName || 'N/A',
+            examCenter: rowData.examCenter || 'Thakur Biri Singh Inter College, Tundla',
+            datesheet,
+            status: 'Published'
+          });
+        }
+
+        if (parsedRows.length === 0) {
+          alert("No valid data rows found in CSV.");
+          return;
+        }
+
+        setAdmitCardCsvProgress({
+          current: 0,
+          total: parsedRows.length,
+          successCount: 0,
+          errorCount: 0,
+          details: []
+        });
+
+        let success = 0;
+        let errors = 0;
+        const details = [];
+
+        for (let i = 0; i < parsedRows.length; i++) {
+          const row = parsedRows[i];
+          try {
+            const res = await api.post('/admin/admit-cards', row);
+            if (res.data.success) {
+              success++;
+              details.push({ status: 'success', message: `Roll Number ${row.rollNumber}: Successfully saved.` });
+            } else {
+              errors++;
+              details.push({ status: 'error', message: `Roll Number ${row.rollNumber}: ${res.data.message || 'Unknown error'}` });
+            }
+          } catch (err) {
+            errors++;
+            details.push({ status: 'error', message: `Roll Number ${row.rollNumber}: ${err.response?.data?.message || err.message}` });
+          }
+
+          setAdmitCardCsvProgress(prev => ({
+            ...prev,
+            current: i + 1,
+            successCount: success,
+            errorCount: errors,
+            details: [...details]
+          }));
+        }
+
+        fetchAdmitCards();
+        fetchStats();
+        fetchAuditLogs();
+      } catch (err) {
+        console.error("Error reading CSV:", err);
+        alert("Failed to parse CSV file.");
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const handleDeleteAdmitCard = async (id) => {
+    if (!window.confirm('Delete admit card permanently?')) return;
+    try {
+      const res = await api.delete(`/admin/admit-cards/${id}`);
+      if (res.data.success) {
+        triggerNotification('success', 'Admit card deleted');
+        fetchAdmitCards();
+        fetchStats();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to delete admit card');
+    }
+  };
+
+  const handleSyllabusSubmit = async (e) => {
+    e.preventDefault();
+    if (!syllabusFile) {
+      triggerNotification('error', 'Please select a syllabus PDF file');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('title', syllabusFormData.title);
+      formData.append('class', syllabusFormData.class);
+      formData.append('subject', syllabusFormData.subject);
+      formData.append('academicYear', syllabusFormData.academicYear);
+      formData.append('pdfFile', syllabusFile);
+
+      const res = await api.post('/admin/syllabus', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      if (res.data.success) {
+        triggerNotification('success', 'Syllabus uploaded successfully!');
+        setShowSyllabusForm(false);
+        setSyllabusFormData({ title: '', class: '', subject: '', academicYear: '2026-2027' });
+        setSyllabusFile(null);
+        fetchSyllabusList();
+        fetchStats();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', err.response?.data?.message || 'Failed to upload syllabus');
+    }
+  };
+
+  const handleDeleteSyllabus = async (id) => {
+    if (!window.confirm('Delete this syllabus configuration?')) return;
+    try {
+      const res = await api.delete(`/admin/syllabus/${id}`);
+      if (res.data.success) {
+        triggerNotification('success', 'Syllabus deleted successfully');
+        fetchSyllabusList();
+        fetchStats();
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      triggerNotification('error', 'Failed to delete syllabus');
+    }
+  };
+
   // ==========================================
   // CLASS HANDLERS
   // ==========================================
@@ -643,6 +863,14 @@ const Dashboard = () => {
             <Award size={20} />
             <span>Results Portal</span>
           </div>
+          <div className={`nav-item ${activeTab === 'admitCards' ? 'active' : ''}`} onClick={() => setActiveTab('admitCards')}>
+            <UserCheck size={20} />
+            <span>Admit Cards</span>
+          </div>
+          <div className={`nav-item ${activeTab === 'syllabus' ? 'active' : ''}`} onClick={() => setActiveTab('syllabus')}>
+            <BookOpen size={20} />
+            <span>Syllabus Desk</span>
+          </div>
           <div className={`nav-item ${activeTab === 'notices' ? 'active' : ''}`} onClick={() => setActiveTab('notices')}>
             <Megaphone size={20} />
             <span>Notices Desk</span>
@@ -678,6 +906,8 @@ const Dashboard = () => {
               {activeTab === 'students' && 'Student Registry'}
               {activeTab === 'classes' && 'Academic Classes'}
               {activeTab === 'results' && 'Results Publishing'}
+              {activeTab === 'admitCards' && 'Admit Card Management'}
+              {activeTab === 'syllabus' && 'Syllabus Management'}
               {activeTab === 'notices' && 'Circular Board'}
               {activeTab === 'inquiries' && 'Admission & General Inquiries'}
               {activeTab === 'calendar' && 'Academic Calendar Scheduling'}
@@ -1274,6 +1504,253 @@ const Dashboard = () => {
                         </td>
                       </tr>
                     ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* ADMIT CARDS TAB */}
+            {activeTab === 'admitCards' && (
+              <div className="table-container">
+                <div className="table-header">
+                  <h3>All Student Examination Admit Cards</h3>
+                  <button 
+                    className="table-action-btn" 
+                    onClick={() => { setShowAdmitCardCsvModal(true); setAdmitCardCsvProgress(null); }} 
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'var(--color-primary)', border: 'none', color: 'white', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}
+                  >
+                    <PlusCircle size={18} />
+                    <span>Upload CSV Admit Cards</span>
+                  </button>
+                </div>
+
+                {showAdmitCardCsvModal && (
+                  <div style={{ padding: '2rem', borderBottom: '1px solid var(--color-border)', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '8px', marginBottom: '1.5rem' }}>
+                    <h4 style={{ marginBottom: '1rem', color: 'var(--color-primary)' }}>Bulk Upload Admit Cards via CSV</h4>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', lineHeight: '1.5' }}>
+                      Please select a CSV file. The file should have columns matching: <br />
+                      <code>rollNumber, studentName, class, academicYear, dateOfBirth, fatherName, motherName, examCenter, datesheet</code> <br />
+                      * Note: <code>datesheet</code> should be a semicolon separated list like: <code>English: 2026-03-02 09:00 AM; Math: 2026-03-04 09:00 AM</code>
+                    </p>
+                    
+                    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginBottom: '1.5rem' }}>
+                      <input 
+                        type="file" 
+                        accept=".csv" 
+                        onChange={handleAdmitCardCsvUpload} 
+                        style={{ 
+                          padding: '10px', 
+                          border: '1px dashed var(--color-border)', 
+                          borderRadius: '4px', 
+                          backgroundColor: 'var(--color-bg)', 
+                          color: 'white',
+                          cursor: 'pointer' 
+                        }} 
+                      />
+                      <button 
+                        type="button" 
+                        className="form-input" 
+                        style={{ width: 'auto', cursor: 'pointer', padding: '8px 16px' }} 
+                        onClick={() => { setShowAdmitCardCsvModal(false); setAdmitCardCsvProgress(null); }}
+                      >
+                        Close Window
+                      </button>
+                    </div>
+
+                    {admitCardCsvProgress && (
+                      <div style={{ marginTop: '1.5rem', borderTop: '1px solid var(--color-border)', paddingTop: '1.5rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+                          <span>Processing Row: {admitCardCsvProgress.current} of {admitCardCsvProgress.total}</span>
+                          <span>Success: {admitCardCsvProgress.successCount} | Failed: {admitCardCsvProgress.errorCount}</span>
+                        </div>
+                        <div style={{ width: '100%', backgroundColor: 'var(--color-border)', height: '8px', borderRadius: '4px', overflow: 'hidden', marginBottom: '1rem' }}>
+                          <div 
+                            style={{ 
+                              width: `${(admitCardCsvProgress.current / admitCardCsvProgress.total) * 100}%`, 
+                              backgroundColor: 'var(--color-success)', 
+                              height: '100%',
+                              transition: 'width 0.2s ease-in-out' 
+                            }} 
+                          />
+                        </div>
+                        <div style={{ maxHeight: '150px', overflowY: 'auto', backgroundColor: 'rgba(0,0,0,0.2)', padding: '10px', borderRadius: '4px', fontSize: '0.8rem' }}>
+                          {admitCardCsvProgress.details.map((detail, index) => (
+                            <div key={index} style={{ color: detail.status === 'success' ? 'var(--color-success)' : 'var(--color-danger)', marginBottom: '4px' }}>
+                              • {detail.message}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Roll Number</th>
+                      <th>Student Name</th>
+                      <th>Class</th>
+                      <th>Academic Year</th>
+                      <th>Date of Birth</th>
+                      <th>Exam Center</th>
+                      <th>Datesheet</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {admitCards.map((card) => (
+                      <tr key={card._id}>
+                        <td style={{ fontWeight: 'bold' }}>{card.rollNumber}</td>
+                        <td>{card.studentName}</td>
+                        <td>{card.class}</td>
+                        <td>{card.academicYear}</td>
+                        <td>{card.dateOfBirth}</td>
+                        <td style={{ fontSize: '0.8rem', maxWidth: '200px' }}>{card.examCenter}</td>
+                        <td>{card.datesheet?.length || 0} exams scheduled</td>
+                        <td>
+                          <button 
+                            onClick={() => handleDeleteAdmitCard(card._id)}
+                            style={{ border: 'none', background: 'transparent', color: 'var(--color-danger)', cursor: 'pointer' }}
+                            title="Delete admit card"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* SYLLABUS TAB */}
+            {activeTab === 'syllabus' && (
+              <div className="table-container">
+                <div className="table-header">
+                  <h3>Academic Syllabus & Resources</h3>
+                  <button 
+                    className="table-action-btn" 
+                    onClick={() => { setShowSyllabusForm(!showSyllabusForm); setSyllabusFile(null); }} 
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'var(--color-primary)', border: 'none', color: 'white', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}
+                  >
+                    <PlusCircle size={18} />
+                    <span>Upload Syllabus PDF</span>
+                  </button>
+                </div>
+
+                {showSyllabusForm && (
+                  <div style={{ padding: '2rem', borderBottom: '1px solid var(--color-border)', backgroundColor: 'rgba(255,255,255,0.01)' }}>
+                    <h4 style={{ marginBottom: '1.5rem', color: 'var(--color-primary)' }}>Upload New Syllabus Document</h4>
+                    <form onSubmit={handleSyllabusSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                      <div className="form-group">
+                        <label className="form-label">Syllabus Title</label>
+                        <input 
+                          type="text" 
+                          className="form-input" 
+                          placeholder="e.g. Grade X Annual Syllabus" 
+                          value={syllabusFormData.title} 
+                          onChange={(e) => setSyllabusFormData({...syllabusFormData, title: e.target.value})} 
+                          required 
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Class / Grade</label>
+                        <select 
+                          className="form-input" 
+                          style={{ backgroundColor: 'var(--color-bg)', color: 'white' }}
+                          value={syllabusFormData.class} 
+                          onChange={(e) => setSyllabusFormData({...syllabusFormData, class: e.target.value})} 
+                          required 
+                        >
+                          <option value="">Select Class</option>
+                          <option value="11">Class 11</option>
+                          <option value="12">Class 12</option>
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Subject</label>
+                        <input 
+                          type="text" 
+                          className="form-input" 
+                          placeholder="e.g. Mathematics" 
+                          value={syllabusFormData.subject} 
+                          onChange={(e) => setSyllabusFormData({...syllabusFormData, subject: e.target.value})} 
+                          required 
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Academic Year</label>
+                        <input 
+                          type="text" 
+                          className="form-input" 
+                          placeholder="e.g. 2026-2027" 
+                          value={syllabusFormData.academicYear} 
+                          onChange={(e) => setSyllabusFormData({...syllabusFormData, academicYear: e.target.value})} 
+                          required 
+                        />
+                      </div>
+                      <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                        <label className="form-label">Syllabus PDF Document</label>
+                        <input 
+                          type="file" 
+                          accept=".pdf" 
+                          className="form-input" 
+                          style={{ padding: '8px', backgroundColor: 'var(--color-bg)', color: 'white' }}
+                          onChange={(e) => setSyllabusFile(e.target.files[0])} 
+                          required 
+                        />
+                      </div>
+                      <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                        <button type="button" className="form-input" style={{ width: 'auto', cursor: 'pointer' }} onClick={() => setShowSyllabusForm(false)}>Cancel</button>
+                        <button type="submit" className="btn-primary" style={{ width: 'auto', padding: '0.85rem 2rem' }}>Upload Document</button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Class</th>
+                      <th>Subject</th>
+                      <th>Academic Year</th>
+                      <th>Document</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {syllabusList.map((syllabus) => {
+                      const backendUrl = api.defaults.baseURL ? api.defaults.baseURL.replace(/\/api$/, '') : 'http://localhost:5000';
+                      return (
+                        <tr key={syllabus._id}>
+                          <td style={{ fontWeight: 'bold' }}>{syllabus.title}</td>
+                          <td>Grade {syllabus.class}</td>
+                          <td>{syllabus.subject}</td>
+                          <td>{syllabus.academicYear}</td>
+                          <td>
+                            <a 
+                              href={`${backendUrl}${syllabus.pdfUrl}`} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              style={{ color: 'var(--color-accent)', textDecoration: 'underline', fontSize: '0.9rem' }}
+                            >
+                              View/Download PDF
+                            </a>
+                          </td>
+                          <td>
+                            <button 
+                              onClick={() => handleDeleteSyllabus(syllabus._id)}
+                              style={{ border: 'none', background: 'transparent', color: 'var(--color-danger)', cursor: 'pointer' }}
+                              title="Delete syllabus"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

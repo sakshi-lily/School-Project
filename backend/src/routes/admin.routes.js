@@ -31,8 +31,44 @@ const {
   createCalendarEvent,
   updateCalendarEvent,
   deleteCalendarEvent,
+  getAllAdmitCards,
+  createAdmitCard,
+  deleteAdmitCard,
+  getAllSyllabus,
+  createSyllabus,
+  deleteSyllabus,
 } = require('../controllers/admin.controller');
 const { protect, authorize } = require('../middleware/auth.middleware');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+// Ensure uploads/syllabus directory exists
+const syllabusDir = path.join(__dirname, '../../uploads/syllabus');
+if (!fs.existsSync(syllabusDir)) {
+  fs.mkdirSync(syllabusDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, syllabusDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, 'syllabus-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'application/pdf') {
+      cb(null, true);
+    } else {
+      cb(new Error('Only PDF files are allowed'), false);
+    }
+  }
+});
 
 const router = express.Router();
 
@@ -68,6 +104,16 @@ router.get('/results', getResults);
 router.post('/results', createResult);
 router.put('/results/:id', updateResult);
 router.delete('/results/:id', deleteResult);
+
+// Admit Cards
+router.get('/admit-cards', getAllAdmitCards);
+router.post('/admit-cards', createAdmitCard);
+router.delete('/admit-cards/:id', deleteAdmitCard);
+
+// Syllabus
+router.get('/syllabus', getAllSyllabus);
+router.post('/syllabus', upload.single('pdfFile'), createSyllabus);
+router.delete('/syllabus/:id', deleteSyllabus);
 
 // Notices and School Bulletins
 router.get('/announcements', getAnnouncements);

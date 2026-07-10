@@ -1,7 +1,7 @@
 import React from 'react';
 import { UserPlus, Award, FileSpreadsheet, CalendarDays, BookOpen, Contact } from 'lucide-react';
 
-const QuickServices = ({ onOpenResults, onOpenCalendar }) => {
+const QuickServices = ({ onOpenResults, onOpenCalendar, onOpenAdmitCard, onOpenSyllabus }) => {
   const services = [
     {
       icon: <Award size={28} />,
@@ -76,6 +76,12 @@ const QuickServices = ({ onOpenResults, onOpenCalendar }) => {
                 } else if (svc.title === "Academic Calendar") {
                   e.preventDefault();
                   if (onOpenCalendar) onOpenCalendar();
+                } else if (svc.title === "Admit Card") {
+                  e.preventDefault();
+                  if (onOpenAdmitCard) onOpenAdmitCard();
+                } else if (svc.title === "Syllabus") {
+                  e.preventDefault();
+                  if (onOpenSyllabus) onOpenSyllabus();
                 }
               }}
               className="group flex flex-col items-center text-center p-8 bg-slate-50 border border-slate-100 rounded-2xl shadow-sm transition-all duration-300 hover:bg-white hover:border-white hover:shadow-premium-hover transform hover:-translate-y-1.5 cursor-pointer"

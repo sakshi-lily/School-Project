@@ -88,6 +88,18 @@ Use these roll numbers and details to test the public result checking portal:
 - **Notice Board**: Scroll to the notices section. Click category tabs (Latest News, Circulars, Exam Updates, Events) to view official circulars.
 - **Academic Calendar**: Click **Academic Calendar** in the navigation menu to open a popup view displaying active school events and holidays.
 
+### 5. Download Admit Cards
+1. Click **Admit Card** in the Quick Services grid.
+2. Enter the student's Roll Number (e.g. `26105342`), select the Academic Year (e.g. `2026-2027`), and enter their Date of Birth (e.g. `2010-04-15`).
+3. Solve the visual security CAPTCHA code and click **Download Admit Card**.
+4. The system securely verifies candidate credentials. If verified, the official Examination Admit Card overlay is rendered showing candidate details, examination center location, and the complete subject schedule (Datesheet).
+5. Click **Print / PDF Download** at the top right of the overlay to print the card. The system is designed to format the print area on a single, clean page.
+
+### 6. Browse Class Syllabus
+1. Click **Syllabus** in the Quick Services grid.
+2. Filter the available list using the Class dropdown (selecting Class 11 or Class 12) or use the search bar to query by subject/title.
+3. Click the **Download PDF Syllabus** button next to the desired subject syllabus to download/view the document.
+
 ---
 
 ## 🛡️ Step-by-Step Guide for Admin Portal (`http://localhost:5174`)
@@ -123,6 +135,21 @@ Use these roll numbers and details to test the public result checking portal:
 - Create school holidays, board exam schedules, and extracurricular activities.
 - Input Title, Event Date, Category (Holiday/Exam/Event), and description.
 - Published events will instantly display in the interactive calendar modal on the public landing page.
+
+### 8. Manage Student Admit Cards (Admit Cards Tab)
+- **Bulk CSV Upload**: Click the **Upload CSV Admit Cards** button, select the CSV file containing student admit card details, and wait for the row-by-row processor to complete.
+- **CSV Headers format**:
+  ```csv
+  rollNumber,studentName,class,academicYear,dateOfBirth,fatherName,motherName,examCenter,datesheet
+  26105342,Aarav Sharma,10-A,2026-2027,2010-04-15,Rajesh Sharma,Meena Sharma,Thakur Biri Singh Inter College Tundla,"English: 2026-03-02 09:00 AM; Mathematics: 2026-03-04 09:00 AM"
+  ```
+- **Delete**: Click the inline trash button to remove a student's admit card.
+
+### 9. Publish Academic Syllabus (Syllabus Desk Tab)
+- **Upload Syllabus PDF**: Click **Upload Syllabus PDF**.
+- **Configure**: Enter the Title, select Class (Class 11 or Class 12), Subject, Academic Session, and choose the PDF file from your device.
+- **Publish**: Click **Upload Document** to store and publish.
+- **Delete**: Click the inline trash button next to the syllabus item to delete the document.
 
 ---
 
