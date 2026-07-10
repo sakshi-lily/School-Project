@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserPlus, Award, FileSpreadsheet, FileBadge, CalendarDays, DownloadCloud, BookOpen, Contact, LogIn, UserCheck } from 'lucide-react';
+import { UserPlus, Award, FileSpreadsheet, CalendarDays, BookOpen, Contact } from 'lucide-react';
 
 const QuickServices = ({ onOpenResults, onOpenCalendar }) => {
   const services = [
@@ -9,6 +9,13 @@ const QuickServices = ({ onOpenResults, onOpenCalendar }) => {
       desc: "Check intermediate & high school board and term-wise results online.",
       link: "#",
       color: "bg-yellow-50 text-secondary-dark hover:bg-secondary hover:text-primary"
+    },
+    {
+      icon: <FileSpreadsheet size={28} />,
+      title: "Admit Card",
+      desc: "Download class examinations, board exam registration and admit cards.",
+      link: "#",
+      color: "bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white"
     },
     {
       icon: <FileSpreadsheet size={28} />,
@@ -22,7 +29,21 @@ const QuickServices = ({ onOpenResults, onOpenCalendar }) => {
       title: "Academic Calendar",
       desc: "View official school calendar including exams, holidays, and school events.",
       link: "#",
-      color: "bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white"
+      color: "bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white"
+    },
+    {
+      icon: <BookOpen size={28} />,
+      title: "Syllabus",
+      desc: "UPMSP prescribed textbook list and subject-wise intermediate syllabus.",
+      link: "#",
+      color: "bg-teal-50 text-teal-600 hover:bg-teal-600 hover:text-white"
+    },
+    {
+      icon: <Contact size={28} />,
+      title: "School Directory",
+      desc: "Contact information of school administration, faculty, and departments.",
+      link: "#school-directory",
+      color: "bg-cyan-50 text-cyan-600 hover:bg-cyan-600 hover:text-white"
     }
   ];
 
@@ -43,7 +64,7 @@ const QuickServices = ({ onOpenResults, onOpenCalendar }) => {
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((svc, idx) => (
             <a
               key={idx}
@@ -51,10 +72,10 @@ const QuickServices = ({ onOpenResults, onOpenCalendar }) => {
               onClick={(e) => {
                 if (svc.title === "Student Result") {
                   e.preventDefault();
-                  onOpenResults();
+                  if (onOpenResults) onOpenResults();
                 } else if (svc.title === "Academic Calendar") {
                   e.preventDefault();
-                  onOpenCalendar();
+                  if (onOpenCalendar) onOpenCalendar();
                 }
               }}
               className="group flex flex-col items-center text-center p-8 bg-slate-50 border border-slate-100 rounded-2xl shadow-sm transition-all duration-300 hover:bg-white hover:border-white hover:shadow-premium-hover transform hover:-translate-y-1.5 cursor-pointer"
