@@ -168,3 +168,79 @@ exports.getCalendarEvents = async (req, res, next) => {
   }
 };
 
+const AdmitCard = require('../models/AdmitCard');
+const Syllabus = require('../models/Syllabus');
+
+// @desc    Search student admit card
+// @route   GET /api/public/admit-card/search
+// @access  Public
+exports.searchAdmitCard = async (req, res, next) => {
+  try {
+    const { rollNumber, academicYear, dateOfBirth } = req.query;
+
+    if (!rollNumber || !academicYear || !dateOfBirth) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide roll number, academic year, and date of birth',
+      });
+    }
+
+    // Verify student profile and Date of Birth
+    const student = await Student.findOne({ rollNumber: rollNumber.trim() });
+    if (!student) {
+      return res.status(404).json({
+        success: false,
+        message: `No student profile found with Roll Number '${rollNumber}'`,
+      });
+    }
+
+    if (student.dateOfBirth !== dateOfBirth.trim()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. Incorrect Date of Birth provided for this Roll Number.',
+      });
+    }
+
+    // Find admit card (must be published)
+    const admitCard = await AdmitCard.findOne({
+      rollNumber: rollNumber.trim(),
+      academicYear: academicYear.trim(),
+      status: 'Published',
+    });
+
+    if (!admitCard) {
+      return res.status(404).json({
+        success: false,
+        message: `No published admit card found for Roll Number '${rollNumber}' in academic session '${academicYear}'`,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: admitCard,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get public syllabus listing
+// @route   GET /api/public/syllabus
+// @access  Public
+exports.getPublicSyllabus = async (req, res, next) => {
+  try {
+    const filter = {};
+    if (req.query.class) {
+      filter.class = req.query.class.trim();
+    }
+    const syllabusList = await Syllabus.find(filter).sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      data: syllabusList,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
