@@ -98,10 +98,9 @@ const Contact = () => {
                   <Phone size={20} />
                 </div>
                 <div>
-                  <h4 className="font-heading font-bold text-slate-800 text-sm md:text-base">Phone Numbers</h4>
+                  <h4 className="font-heading font-bold text-slate-800 text-sm md:text-base">Phone Number</h4>
                   <p className="text-slate-500 text-xs md:text-sm mt-1 leading-relaxed">
-                    Administrative Office: <a href="tel:+915612270000" className="hover:text-primary font-semibold transition-colors">+91 5612 270000</a> <br />
-                    Principal Desk: <a href="tel:+919412345678" className="hover:text-primary font-semibold transition-colors">+91 94123 45678</a>
+                    <a href="tel:+919557244888" className="hover:text-primary font-semibold transition-colors">+91 9557244888</a>
                   </p>
                 </div>
               </div>
@@ -113,8 +112,7 @@ const Contact = () => {
                 <div>
                   <h4 className="font-heading font-bold text-slate-800 text-sm md:text-base">Email Support</h4>
                   <p className="text-slate-500 text-xs md:text-sm mt-1 leading-relaxed">
-                    General Inquiries: <a href="mailto:info@tbsintercollege.edu.in" className="hover:text-primary font-semibold transition-colors">info@tbsintercollege.edu.in</a> <br />
-                    Admissions Help: <a href="mailto:admissions@tbsintercollege.edu.in" className="hover:text-primary font-semibold transition-colors">admissions@tbsintercollege.edu.in</a>
+                    <a href="mailto:th.bsictundla1948@gmail.com" className="hover:text-primary font-semibold transition-colors">th.bsictundla1948@gmail.com</a>
                   </p>
                 </div>
               </div>

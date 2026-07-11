@@ -31,7 +31,7 @@ const Footer = () => {
             </p>
             <div className="flex items-center gap-3 mt-2">
               <span className="text-[10px] bg-white/10 text-slate-300 font-bold px-2.5 py-1 rounded-full">
-                UPMSP Code: 1053
+                UPMSP Code: 1012
               </span>
               <span className="text-[10px] bg-white/10 text-slate-300 font-bold px-2.5 py-1 rounded-full">
                 Estd. 1950

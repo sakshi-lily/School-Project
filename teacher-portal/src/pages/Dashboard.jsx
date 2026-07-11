@@ -689,7 +689,7 @@ const Dashboard = () => {
                       <div style={{ textAlign: 'center', marginBottom: '20px' }}>
                         <h2 style={{ color: '#222', fontSize: '1.5rem', textTransform: 'uppercase' }}>Thakur Biri Singh Inter College</h2>
                         <p style={{ fontSize: '0.85rem', color: '#666' }}>Tundla, Firozabad, U.P., India</p>
-                        <p style={{ fontSize: '0.75rem', color: '#888' }}>UPMSP Code: 1053 | Estd: 1950</p>
+                        <p style={{ fontSize: '0.75rem', color: '#888' }}>UPMSP Code: 1012 | Estd: 1950</p>
                         <div style={{ display: 'inline-block', backgroundColor: '#f0f0f0', padding: '4px 12px', fontSize: '0.8rem', fontWeight: 'bold', marginTop: '10px', textTransform: 'uppercase' }}>
                           {printingResult.term} Examination Report Sheet
                         </div>

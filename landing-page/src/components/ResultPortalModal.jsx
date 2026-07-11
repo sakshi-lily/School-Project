@@ -344,7 +344,7 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
                       Tundla, Firozabad, Uttar Pradesh, India
                     </p>
                     <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
-                      UPMSP Code: 1053 | Estd: 1950
+                      UPMSP Code: 1012 | Estd: 1950
                     </p>
                     <div className="mt-2 bg-slate-100 py-1 px-2.5 inline-block rounded-lg font-heading font-extrabold text-[10px] text-primary uppercase print:bg-slate-250 print:text-black border border-slate-200">
                       ACADEMIC STATEMENT OF MARKS ({result.academicYear})

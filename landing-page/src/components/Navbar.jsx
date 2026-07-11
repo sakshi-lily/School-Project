@@ -47,11 +47,11 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
           </span>
           <span className="flex items-center gap-1.5 hover:text-secondary transition-colors">
             <Mail size={14} className="text-secondary" />
-            <a href="mailto:info@thakurbirisinghintercollege.edu.in">info@tbsintercollege.edu.in</a>
+            <a href="mailto:th.bsictundla1948@gmail.com">th.bsictundla1948@gmail.com</a>
           </span>
           <span className="flex items-center gap-1.5 hover:text-secondary transition-colors">
             <Phone size={14} className="text-secondary" />
-            <a href="tel:+915612270000">+91 5612 270000</a>
+            <a href="tel:+919557244888">+91 9557244888</a>
           </span>
         </div>
 
@@ -106,7 +106,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
           <div className="hidden lg:flex items-center gap-3">
             <div className="text-right">
               <p className="text-xs text-slate-500 font-medium">UPMSP Code</p>
-              <p className="text-sm font-bold text-primary">1053 (TBS Tundla)</p>
+              <p className="text-sm font-bold text-primary">1012 (TBS Tundla)</p>
             </div>
             <div className="h-8 w-px bg-slate-200"></div>
             <div className="text-right">

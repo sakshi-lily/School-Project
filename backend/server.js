@@ -25,7 +25,7 @@ connectDB()
         await Admin.create({
           user: adminUser._id,
           permissions: ['all'],
-          phoneNumber: '+915612270000',
+          phoneNumber: '+919557244888',
           department: 'Administration',
         });
         console.log('✅ Default super admin seeded: admin@school.com / admin123 (username: admin)');

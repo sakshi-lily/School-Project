@@ -38,7 +38,7 @@ const seedDB = async () => {
     await Admin.create({
       user: adminUser._id,
       permissions: ['all'],
-      phoneNumber: '+915612270000',
+      phoneNumber: '+919557244888',
       department: 'Administration',
     });
     console.log('✅ Seeded admin: admin@school.com / admin123');
