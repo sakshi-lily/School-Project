@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, Phone, Mail, MapPin, ChevronDown, User, LogIn, Award, Landmark, GraduationCap } from 'lucide-react';
 import SchoolLogo from './SchoolLogo';
 
@@ -6,6 +6,22 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [isPortalsOpen, setIsPortalsOpen] = useState(false);
+  const portalsRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (portalsRef.current && !portalsRef.current.contains(event.target)) {
+        setIsPortalsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,7 +53,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
   ];
 
   return (
-    <header className="w-full z-50 transition-all duration-300">
+    <header className="relative w-full z-50 transition-all duration-300">
       {/* Top Header Bar */}
       <div className="bg-primary text-white text-xs md:text-sm py-2 px-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-2 border-b border-white/10">
         <div className="flex flex-wrap items-center justify-center gap-4 text-center md:text-left">
@@ -68,33 +84,45 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
             <span>Apply for Admission</span>
           </a>
 
-          <div className="relative group">
-            <button className="bg-white/10 hover:bg-white/20 text-white font-semibold px-3 py-1.5 rounded-full transition-all duration-300 flex items-center gap-1 text-xs">
+          <div 
+            ref={portalsRef}
+            className="relative"
+            onMouseEnter={() => setIsPortalsOpen(true)}
+            onMouseLeave={() => setIsPortalsOpen(false)}
+          >
+            <button 
+              onClick={() => setIsPortalsOpen(!isPortalsOpen)}
+              className="bg-white/10 hover:bg-white/20 text-white font-semibold px-3 py-1.5 rounded-full transition-all duration-300 flex items-center gap-1 text-xs"
+            >
               <User size={14} />
               <span>Portals</span>
-              <ChevronDown size={12} />
+              <ChevronDown size={12} className={`transition-transform duration-200 ${isPortalsOpen ? 'rotate-180' : ''}`} />
             </button>
 
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl py-2 hidden group-hover:block text-slate-800 border border-slate-100 z-50">
-              <a
-                href={import.meta.env.VITE_ADMIN_PORTAL_URL || 'http://localhost:5174'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 hover:bg-slate-50 text-slate-700 hover:text-primary font-medium transition-colors text-xs md:text-sm"
-              >
-                <Landmark size={16} className="text-primary" />
-                <span>Admin Login</span>
-              </a>
-              <a
-                href={import.meta.env.VITE_TEACHER_PORTAL_URL || 'http://localhost:5175'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 hover:bg-slate-50 text-slate-700 hover:text-primary font-medium transition-colors text-xs md:text-sm"
-              >
-                <LogIn size={16} className="text-primary" />
-                <span>Teacher Login</span>
-              </a>
-            </div>
+            {isPortalsOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl py-2 text-slate-800 border border-slate-100 z-50 animate-in fade-in duration-200">
+                <a
+                  href={import.meta.env.VITE_ADMIN_PORTAL_URL || 'http://localhost:5174'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsPortalsOpen(false)}
+                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-50 text-slate-700 hover:text-primary font-medium transition-colors text-xs md:text-sm"
+                >
+                  <Landmark size={16} className="text-primary" />
+                  <span>Admin Login</span>
+                </a>
+                <a
+                  href={import.meta.env.VITE_TEACHER_PORTAL_URL || 'http://localhost:5175'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsPortalsOpen(false)}
+                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-50 text-slate-700 hover:text-primary font-medium transition-colors text-xs md:text-sm"
+                >
+                  <LogIn size={16} className="text-primary" />
+                  <span>Teacher Login</span>
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -118,9 +146,9 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
       )}
 
       {/* Navigation Bar (Becomes Sticky on Scroll) */}
-      <nav className={`w-full transition-all duration-300 ${isScrolled
+      <nav className={`w-full transition-all duration-300 z-50 ${isScrolled
           ? 'fixed top-0 left-0 right-0 glass-nav shadow-md py-3'
-          : 'bg-primary-dark text-white py-3'
+          : 'relative bg-primary-dark text-white py-3'
         }`}>
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center">
           {/* Logo on Sticky Mode */}
