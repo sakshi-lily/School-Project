@@ -7,7 +7,7 @@ const SyllabusModal = ({ isOpen, onClose }) => {
   const [selectedClass, setSelectedClass] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const API_URL = 'http://localhost:5000/api/public';
+  const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/public`;
 
   const fetchSyllabus = async () => {
     setLoading(true);
@@ -106,7 +106,8 @@ const SyllabusModal = ({ isOpen, onClose }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {filteredList.map((syllabus) => {
                 // Strip "/api" from base url if configured in order to point to server base
-                const backendUrl = 'http://localhost:5000';
+                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+                const backendUrl = apiUrl.replace(/\/api$/, '');
                 const fileUrl = `${backendUrl}${syllabus.pdfUrl}`;
 
                 return (

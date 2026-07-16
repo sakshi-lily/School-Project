@@ -16,7 +16,7 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
   const [captchaInput, setCaptchaInput] = useState('');
   const canvasRef = useRef(null);
 
-  const API_URL = 'http://localhost:5000/api/public';
+  const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/public`;
 
   const generateCaptcha = () => {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';

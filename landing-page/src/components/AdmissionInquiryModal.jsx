@@ -14,7 +14,7 @@ const AdmissionInquiryModal = ({ isOpen, onClose }) => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  const API_URL = 'http://localhost:5000/api/public';
+  const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/public`;
 
   useEffect(() => {
     if (isOpen) {

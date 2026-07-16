@@ -7,7 +7,7 @@ const AcademicCalendarModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState('');
   const [filterType, setFilterType] = useState('All');
 
-  const API_URL = 'http://localhost:5000/api/public';
+  const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/public`;
 
   const fetchEvents = async () => {
     setLoading(true);
