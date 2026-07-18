@@ -9,81 +9,80 @@ const SchoolLogo = ({ size = 60, showText = true, textColor = "#ffffff", subText
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Background badge circle */}
-        <circle cx="50" cy="50" r="48" fill="#FDF8E7" stroke="#D4AF37" strokeWidth="1.5" />
-        
-        {/* Inner dotted border */}
-        <circle cx="50" cy="50" r="45" stroke="#8A1515" strokeWidth="0.8" strokeDasharray="2,2" fill="none" opacity="0.6" />
+        {/* Outer Golden Border */}
+        <circle cx="50" cy="50" r="48" fill="#F4B400" />
+        {/* Inner Blue Circle */}
+        <circle cx="50" cy="50" r="44" fill="#0F4C81" />
+        {/* Decorative inner dotted circle */}
+        <circle cx="50" cy="50" r="40" stroke="#F4B400" strokeWidth="1" strokeDasharray="3,3" fill="none" />
 
-        {/* Definitions */}
+        {/* Core Emblem Shape (White Shield/Diamond) */}
+        <path
+          d="M50 20 L75 45 L50 78 L25 45 Z"
+          fill="#FFFFFF"
+          stroke="#F4B400"
+          strokeWidth="1.5"
+        />
+
+        {/* Flaming Torch of Knowledge (Traditional Indian Diya/Jyoti & Torch) */}
+        {/* Torch Handle */}
+        <path
+          d="M50 52 L50 72"
+          stroke="#0F4C81"
+          strokeWidth="4"
+          strokeLinecap="round"
+        />
+        <path
+          d="M48 72 L52 72"
+          stroke="#F4B400"
+          strokeWidth="3"
+          strokeLinecap="round"
+        />
+
+        {/* Torch Cup */}
+        <path
+          d="M44 52 C44 52, 44 46, 50 46 C56 46, 56 52, 56 52 Z"
+          fill="#F4B400"
+          stroke="#0F4C81"
+          strokeWidth="1"
+        />
+
+        {/* Flame */}
+        <path
+          d="M50 30 C53 38, 56 40, 53 45 C51 47, 49 47, 47 45 C44 40, 47 38, 50 30 Z"
+          fill="url(#flameGradientPortal)"
+        />
+
+        {/* Rays of Wisdom */}
+        <line x1="50" y1="28" x2="50" y2="23" stroke="#F4B400" strokeWidth="2" strokeLinecap="round" />
+        <line x1="57" y1="31" x2="61" y2="27" stroke="#F4B400" strokeWidth="2" strokeLinecap="round" />
+        <line x1="43" y1="31" x2="39" y2="27" stroke="#F4B400" strokeWidth="2" strokeLinecap="round" />
+        <line x1="62" y1="37" x2="67" y2="34" stroke="#F4B400" strokeWidth="2" strokeLinecap="round" />
+        <line x1="38" y1="37" x2="33" y2="34" stroke="#F4B400" strokeWidth="2" strokeLinecap="round" />
+
+        {/* Circular text paths */}
         <defs>
-          {/* We define a single ray pointing straight up relative to center (50, 43) */}
-          <polygon id="sunRayPortal" points="50,15 51.5,27 48.5,27" fill="#8A1515" />
-          
-          <linearGradient id="flameOuterGradPortal" x1="50" y1="26" x2="50" y2="52" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#FFF176" />
-            <stop offset="50%" stopColor="#FFB300" />
-            <stop offset="100%" stopColor="#FF8F00" />
-          </linearGradient>
+          <path id="textPathUpperPortal" d="M12 50 A38 38 0 0 1 88 50" />
+          <path id="textPathLowerPortal" d="M88 50 A38 38 0 0 1 12 50" />
 
-          <linearGradient id="flameInnerGradPortal" x1="50" y1="32" x2="50" y2="50" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#FF9800" />
-            <stop offset="100%" stopColor="#D84315" />
+          <linearGradient id="flameGradientPortal" x1="50" y1="30" x2="50" y2="47" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#FF4500" />
+            <stop offset="60%" stopColor="#FF8C00" />
+            <stop offset="100%" stopColor="#F4B400" />
           </linearGradient>
-
-          <path id="logoTextPathPortal" d="M14,62 A38,38 0 1,1 86,62" fill="none" />
-          <path id="logoTextPathLowerPortal" d="M86,62 A38,38 0 0,1 14,62" fill="none" />
         </defs>
 
-        {/* Render the 11 Rays rotated around the sun center (50, 43) */}
-        <use href="#sunRayPortal" transform="rotate(0, 50, 43)" />
-        <use href="#sunRayPortal" transform="rotate(30, 50, 43)" />
-        <use href="#sunRayPortal" transform="rotate(60, 50, 43)" />
-        <use href="#sunRayPortal" transform="rotate(90, 50, 43)" />
-        <use href="#sunRayPortal" transform="rotate(120, 50, 43)" />
-        <use href="#sunRayPortal" transform="rotate(150, 50, 43)" />
-        <use href="#sunRayPortal" transform="rotate(-30, 50, 43)" />
-        <use href="#sunRayPortal" transform="rotate(-60, 50, 43)" />
-        <use href="#sunRayPortal" transform="rotate(-90, 50, 43)" />
-        <use href="#sunRayPortal" transform="rotate(-120, 50, 43)" />
-        <use href="#sunRayPortal" transform="rotate(-150, 50, 43)" />
-
-        {/* Central Sun Circle */}
-        <circle cx="50" cy="43" r="16" fill="#8A1515" />
-
-        {/* Flame (Jyoti) - Outer Layer */}
-        <path
-          d="M50,26 C53,32 54,39 52,49 C51,51 49,51 48,49 C46,43 47,32 50,26 Z"
-          fill="url(#flameOuterGradPortal)"
-        />
-
-        {/* Flame (Jyoti) - Inner Layer */}
-        <path
-          d="M50,32 C51.5,37 52.5,41 51,47 C50.5,48 49.5,48 49,47 C47.5,41 48.5,37 50,32 Z"
-          fill="url(#flameInnerGradPortal)"
-        />
-
-        {/* Pedestal / Torch Base (outlined in maroon, filled with cream background) */}
-        {/* Stem */}
-        <rect x="48.5" y="59" width="3" height="25" rx="1" stroke="#8A1515" strokeWidth="1.2" fill="#FDF8E7" />
-        {/* Top Plate */}
-        <rect x="36" y="61" width="28" height="3" rx="1" stroke="#8A1515" strokeWidth="1.2" fill="#FDF8E7" />
-        {/* Middle Plate */}
-        <rect x="40" y="66" width="20" height="3" rx="1" stroke="#8A1515" strokeWidth="1.2" fill="#FDF8E7" />
-        {/* Bottom Plate */}
-        <rect x="44" y="71" width="12" height="3" rx="1" stroke="#8A1515" strokeWidth="1.2" fill="#FDF8E7" />
-
-        {/* Curved Hindi Text: School Name and Location */}
-        <text fill="#8A1515" fontSize="5.6" fontWeight="bold" fontFamily="system-ui, -apple-system, sans-serif" letterSpacing="0.1">
-          <textPath href="#logoTextPathPortal" startOffset="50%" textAnchor="middle">
-            ठा. बीरी सिंह इण्टर कॉलेज, टूण्डला (फ़िरोज़ाबाद)
+        {/* Upper text: Hindi School Name */}
+        <text fill="#FFFFFF" fontSize="6.5" fontWeight="bold" letterSpacing="0.3">
+          <textPath href="#textPathUpperPortal" startOffset="50%" textAnchor="middle">
+            ठाकुर बीरी सिंह इण्टर कॉलेज
           </textPath>
         </text>
 
-        {/* Optional Founding Year or Star at the Bottom */}
-        <text fill="#8A1515" fontSize="4.8" fontWeight="bold" fontFamily="system-ui, -apple-system, sans-serif" letterSpacing="0.2" opacity="0.8">
-          <textPath href="#logoTextPathLowerPortal" startOffset="50%" textAnchor="middle">
-            ★ स्था. 1950 ★
+        {/* Lower text: Location */}
+        <text fill="#F4B400" fontSize="5.5" fontWeight="semibold" letterSpacing="0.5">
+          <textPath href="#textPathLowerPortal" startOffset="50%" textAnchor="middle">
+            टूण्डला (फ़िरोज़ाबाद) • स्था. 1950
           </textPath>
         </text>
       </svg>
