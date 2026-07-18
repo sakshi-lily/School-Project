@@ -11,7 +11,7 @@ const SchoolLogo = ({ size = 60, showText = true, textColor = "#ffffff", subText
       >
         {/* Background badge circle */}
         <circle cx="50" cy="50" r="48" fill="#FDF8E7" stroke="#D4AF37" strokeWidth="1.5" />
-        
+
         {/* Inner dotted border */}
         <circle cx="50" cy="50" r="45" stroke="#8A1515" strokeWidth="0.8" strokeDasharray="2,2" fill="none" opacity="0.6" />
 
@@ -19,7 +19,7 @@ const SchoolLogo = ({ size = 60, showText = true, textColor = "#ffffff", subText
         <defs>
           {/* We define a single ray pointing straight up relative to center (50, 43) */}
           <polygon id="sunRayPortal" points="50,15 51.5,27 48.5,27" fill="#8A1515" />
-          
+
           <linearGradient id="flameOuterGradPortal" x1="50" y1="26" x2="50" y2="52" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stopColor="#FFF176" />
             <stop offset="50%" stopColor="#FFB300" />
@@ -74,7 +74,7 @@ const SchoolLogo = ({ size = 60, showText = true, textColor = "#ffffff", subText
         <rect x="44" y="71" width="12" height="3" rx="1" stroke="#8A1515" strokeWidth="1.2" fill="#FDF8E7" />
 
         {/* Curved Hindi Text: School Name and Location */}
-        <text fill="#8A1515" fontSize="5.6" fontWeight="bold" fontFamily="system-ui, -apple-system, sans-serif" letterSpacing="0.1">
+        <text fill="#7b1111ff" fontSize="5.6" fontWeight="bold" fontFamily="system-ui, -apple-system, sans-serif" letterSpacing="0.1">
           <textPath href="#logoTextPathPortal" startOffset="50%" textAnchor="middle">
             ठा. बीरी सिंह इण्टर कॉलेज, टूण्डला (फ़िरोज़ाबाद)
           </textPath>
@@ -83,31 +83,30 @@ const SchoolLogo = ({ size = 60, showText = true, textColor = "#ffffff", subText
         {/* Optional Founding Year or Star at the Bottom */}
         <text fill="#8A1515" fontSize="4.8" fontWeight="bold" fontFamily="system-ui, -apple-system, sans-serif" letterSpacing="0.2" opacity="0.8">
           <textPath href="#logoTextPathLowerPortal" startOffset="50%" textAnchor="middle">
-            ★ स्था. 1950 ★
           </textPath>
         </text>
       </svg>
 
       {showText && (
         <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
-          <h1 style={{ 
-            fontSize: '1rem', 
-            fontWeight: '800', 
-            color: textColor, 
-            margin: 0, 
+          <h1 style={{
+            fontSize: '1rem',
+            fontWeight: '800',
+            color: textColor,
+            margin: 0,
             lineHeight: '1.2',
             letterSpacing: '0px',
             fontFamily: 'var(--font-heading)'
           }}>
             THAKUR BIRI SINGH INTER COLLEGE
           </h1>
-          <span style={{ 
-            fontSize: '0.65rem', 
-            fontWeight: '600', 
-            color: subTextColor, 
+          <span style={{
+            fontSize: '0.65rem',
+            fontWeight: '600',
+            color: subTextColor,
             margin: 0,
             marginTop: '2px',
-            letterSpacing: '0.5px' 
+            letterSpacing: '0.5px'
           }}>
             TUNDLA, FIROZABAD (U.P.) • AFFILIATED TO UPMSP
           </span>
