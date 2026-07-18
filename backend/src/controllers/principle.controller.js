@@ -1,4 +1,4 @@
-const User = require('../models/User');
+﻿const User = require('../models/User');
 const Teacher = require('../models/Teacher');
 const Class = require('../models/Class');
 const Student = require('../models/Student');
@@ -8,7 +8,7 @@ const AuditLog = require('../models/AuditLog');
 const Inquiry = require('../models/Inquiry');
 const CalendarEvent = require('../models/CalendarEvent');
 
-// Helper to log administrative actions
+// Helper to log principleistrative actions
 const createAuditLog = async (action, performedBy, details, req) => {
   try {
     const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
@@ -23,16 +23,16 @@ const createAuditLog = async (action, performedBy, details, req) => {
   }
 };
 
-// @desc    Get admin dashboard statistics
-// @route   GET /api/admin/stats
-// @access  Private (Admin only)
+// @desc    Get principle dashboard statistics
+// @route   GET /api/principle/stats
+// @access  Private (Principle only)
 exports.getStats = async (req, res, next) => {
   try {
     const totalTeachers = await Teacher.countDocuments();
     const totalStudents = await Student.countDocuments();
     const totalClasses = await Class.countDocuments();
     const totalResults = await Result.countDocuments({ status: 'Published' });
-    const totalAdmins = await User.countDocuments({ role: 'admin' });
+    const totalPrinciples = await User.countDocuments({ role: 'principle' });
 
     res.status(200).json({
       success: true,
@@ -41,7 +41,7 @@ exports.getStats = async (req, res, next) => {
         totalStudents,
         totalClasses,
         totalResultsPublished: totalResults,
-        totalAdmins,
+        totalPrinciples,
         academicYear: '2026-2027',
       },
     });
@@ -55,8 +55,8 @@ exports.getStats = async (req, res, next) => {
 // ==========================================
 
 // @desc    Get all teachers profiles
-// @route   GET /api/admin/teachers
-// @access  Private (Admin only)
+// @route   GET /api/principle/teachers
+// @access  Private (Principle only)
 exports.getAllTeachers = async (req, res, next) => {
   try {
     const teachers = await Teacher.find().populate('user', 'name email username isActive');
@@ -71,8 +71,8 @@ exports.getAllTeachers = async (req, res, next) => {
 };
 
 // @desc    Add a new teacher
-// @route   POST /api/admin/teachers
-// @access  Private (Admin only)
+// @route   POST /api/principle/teachers
+// @access  Private (Principle only)
 exports.createTeacher = async (req, res, next) => {
   try {
     const { name, email, password, subjects, qualification, experienceYears, classesAssigned } = req.body;
@@ -128,7 +128,7 @@ exports.createTeacher = async (req, res, next) => {
         name: user.name,
         email: user.email,
         username: user.username,
-        password: finalPassword, // Send back so admin can note down details
+        password: finalPassword, // Send back so principle can note down details
         subjects: teacher.subjects,
         qualification: teacher.qualification,
         experienceYears: teacher.experienceYears,
@@ -141,8 +141,8 @@ exports.createTeacher = async (req, res, next) => {
 };
 
 // @desc    Update teacher profile
-// @route   PUT /api/admin/teachers/:id
-// @access  Private (Admin only)
+// @route   PUT /api/principle/teachers/:id
+// @access  Private (Principle only)
 exports.updateTeacher = async (req, res, next) => {
   try {
     const { name, email, subjects, qualification, experienceYears, classesAssigned } = req.body;
@@ -185,8 +185,8 @@ exports.updateTeacher = async (req, res, next) => {
 };
 
 // @desc    Delete teacher profile
-// @route   DELETE /api/admin/teachers/:id
-// @access  Private (Admin only)
+// @route   DELETE /api/principle/teachers/:id
+// @access  Private (Principle only)
 exports.deleteTeacher = async (req, res, next) => {
   try {
     const teacher = await Teacher.findById(req.params.id);
@@ -215,8 +215,8 @@ exports.deleteTeacher = async (req, res, next) => {
 };
 
 // @desc    Toggle suspension/activation of teacher
-// @route   PATCH /api/admin/teachers/:id/status
-// @access  Private (Admin only)
+// @route   PATCH /api/principle/teachers/:id/status
+// @access  Private (Principle only)
 exports.toggleTeacherStatus = async (req, res, next) => {
   try {
     const teacher = await Teacher.findById(req.params.id);
@@ -250,8 +250,8 @@ exports.toggleTeacherStatus = async (req, res, next) => {
 };
 
 // @desc    Reset teacher password
-// @route   POST /api/admin/teachers/:id/reset-password
-// @access  Private (Admin only)
+// @route   POST /api/principle/teachers/:id/reset-password
+// @access  Private (Principle only)
 exports.resetTeacherPassword = async (req, res, next) => {
   try {
     const { newPassword } = req.body;
@@ -404,7 +404,7 @@ exports.deleteStudent = async (req, res, next) => {
 };
 
 // ==========================================
-// RESULTS MANAGEMENT (ADMIN PRIVILEGES)
+// RESULTS MANAGEMENT (PRINCIPLE PRIVILEGES)
 // ==========================================
 
 exports.getResults = async (req, res, next) => {
@@ -819,5 +819,6 @@ exports.deleteSyllabus = async (req, res, next) => {
     next(error);
   }
 };
+
 
 

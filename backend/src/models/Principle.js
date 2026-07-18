@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const AdminSchema = new mongoose.Schema(
+const PrincipleSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -23,4 +23,4 @@ const AdminSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Admin', AdminSchema);
+module.exports = mongoose.model('Principle', PrincipleSchema);

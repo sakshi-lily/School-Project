@@ -10,7 +10,7 @@ const Features = () => {
     },
     {
       icon: <ShieldAlert size={24} />,
-      title: 'Admin Control Center',
+      title: 'Principle Control Center',
       description: 'Enables registration approvals, staff assignments, audit monitoring, and high-level class configurations from a clean control dashboard.'
     },
     {
@@ -39,7 +39,7 @@ const Features = () => {
     <section id="features" className="features-section">
       <div className="section-header">
         <h2>Built for Educational Scale</h2>
-        <p>A multi-portal solution addressing administration, teaching, and data analytics.</p>
+        <p>A multi-portal solution addressing principle management, teaching, and data analytics.</p>
       </div>
 
       <div className="features-grid">

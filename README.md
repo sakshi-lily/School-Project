@@ -1,10 +1,10 @@
-# Thakur Biri Singh Inter College - Portal User Guide
+﻿# Thakur Biri Singh Inter College - Portal User Guide
 
-Welcome to the official School Management System for **Thakur Biri Singh Inter College (Tundla, Firozabad | UP Board)**. This guide provides detailed setup instructions, login credentials, and step-by-step walkthroughs for all features across our administrative, teacher, and public platforms.
+Welcome to the official School Management System for **Thakur Biri Singh Inter College (Tundla, Firozabad | UP Board)**. This guide provides detailed setup instructions, login credentials, and step-by-step walkthroughs for all features across our principleistrative, teacher, and public platforms.
 
 ---
 
-## 🏗️ Project Architecture & Service Ports
+## ðŸ—ï¸ Project Architecture & Service Ports
 
 The project is structured as a monorepo featuring three frontends and a shared backend API.
 
@@ -12,19 +12,19 @@ The project is structured as a monorepo featuring three frontends and a shared b
 | :--- | :--- | :--- |
 | **Backend API** | Shared Node.js/Express database controller | `http://localhost:5000` |
 | **Landing Page** | Public portal for parents, students, and inquiries | `http://localhost:5173` |
-| **Admin Portal** | Management platform for school directors | `http://localhost:5174` |
+| **Principle Portal** | Management platform for school directors | `http://localhost:5174` |
 | **Teacher Portal** | Gradebook and notices desk for educators | `http://localhost:5175` |
 
 ---
 
-## 🔑 Login & Test Credentials
+## ðŸ”‘ Login & Test Credentials
 
 Use the following seeded accounts to log in and test features:
 
-### 1. Admin Portal (`http://localhost:5174`)
-* **Username**: `admin`
-* **Password**: `admin123`
-* *(Alternate Email login: `admin@school.com`)*
+### 1. Principle Portal (`http://localhost:5174`)
+* **Username**: `principle`
+* **Password**: `principle123`
+* *(Alternate Email login: `principle@school.com`)*
 
 ### 2. Teacher Portal (`http://localhost:5175`)
 * **Username**: `teacher`
@@ -51,7 +51,7 @@ Use these roll numbers and details to test the public result checking portal:
 
 ---
 
-## 📘 Step-by-Step Guide for Public Landing Page (`http://localhost:5173`)
+## ðŸ“˜ Step-by-Step Guide for Public Landing Page (`http://localhost:5173`)
 
 ### 1. Submit an Admission Inquiry
 1. Scroll down to the **Admissions Section** or click **Apply Online / Admission Inquiry** in the navigation bar.
@@ -62,12 +62,12 @@ Use these roll numbers and details to test the public result checking portal:
    - Academic Year (`2026-2027`)
    - Class Grade Applied For (e.g. `10` or `12`)
    - Additional details/remarks
-3. Click **Submit Admission Inquiry**. A confirmation alert will appear, and the inquiry will immediately populate in the Admin Dashboard under the "Inquiries" section.
+3. Click **Submit Admission Inquiry**. A confirmation alert will appear, and the inquiry will immediately populate in the Principle Dashboard under the "Inquiries" section.
 
 ### 2. Submit a General Contact Form
 1. Scroll down to the **Contact Us** section.
 2. Fill out your Name, Email, Subject, and Message.
-3. Click **Send Message**. This submissions data propagates directly to the "Inquiries" section in the Admin Dashboard.
+3. Click **Send Message**. This submissions data propagates directly to the "Inquiries" section in the Principle Dashboard.
 
 ### 3. Check Student Board & Term Results
 1. Click **Check Result** in the top navigation bar or the Hero banner button.
@@ -102,7 +102,7 @@ Use these roll numbers and details to test the public result checking portal:
 
 ---
 
-## 🛡️ Step-by-Step Guide for Admin Portal (`http://localhost:5174`)
+## ðŸ›¡ï¸ Step-by-Step Guide for Principle Portal (`http://localhost:5174`)
 
 ### 1. Management Overview (Dashboard Tab)
 - Shows high-level school analytics (Total Teachers, Active Students, Total Classes, Pending Inquiries).
@@ -153,7 +153,7 @@ Use these roll numbers and details to test the public result checking portal:
 
 ---
 
-## 🍎 Step-by-Step Guide for Teacher Portal (`http://localhost:5175`)
+## ðŸŽ Step-by-Step Guide for Teacher Portal (`http://localhost:5175`)
 
 ### 1. Assigned Roster (My Classes Tab)
 - Displays Assigned Subjects and Experience statistics.
@@ -180,3 +180,4 @@ Teachers can enter grade results in two ways:
 ### 3. Educator Announcements (Notices Desk Tab)
 - Teachers can create bulletins that show up on the school dashboard.
 - Select from the dropdown to edit or remove prior posts.
+

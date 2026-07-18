@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const Admin = require('../models/Admin');
+const Principle = require('../models/Principle');
 const Teacher = require('../models/Teacher');
 const jwt = require('jsonwebtoken');
 
@@ -32,8 +32,8 @@ exports.register = async (req, res, next) => {
     });
 
     // Create corresponding profile depending on role
-    if (role === 'admin') {
-      await Admin.create({ user: user._id });
+    if (role === 'principle') {
+      await Principle.create({ user: user._id });
     } else if (role === 'teacher') {
       await Teacher.create({
         user: user._id,
@@ -114,8 +114,8 @@ exports.getMe = async (req, res, next) => {
     const user = await User.findById(req.user.id);
     let profileData = null;
 
-    if (user.role === 'admin') {
-      profileData = await Admin.findOne({ user: user._id });
+    if (user.role === 'principle') {
+      profileData = await Principle.findOne({ user: user._id });
     } else if (user.role === 'teacher') {
       profileData = await Teacher.findOne({ user: user._id });
     }

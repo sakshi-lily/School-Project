@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+﻿import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
 import SchoolLogo from '../components/SchoolLogo';
@@ -32,7 +32,7 @@ const Dashboard = () => {
     totalStudents: 0, 
     totalClasses: 0, 
     totalResultsPublished: 0, 
-    totalAdmins: 0, 
+    totalPrinciples: 0, 
     academicYear: '2026-2027' 
   });
   
@@ -105,7 +105,7 @@ const Dashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const statsRes = await api.get('/admin/stats');
+      const statsRes = await api.get('/principle/stats');
       if (statsRes.data.success) setStats(statsRes.data.stats);
     } catch (err) {
       console.error(err);
@@ -114,7 +114,7 @@ const Dashboard = () => {
 
   const fetchTeachers = async () => {
     try {
-      const res = await api.get('/admin/teachers');
+      const res = await api.get('/principle/teachers');
       if (res.data.success) setTeachers(res.data.data);
     } catch (err) {
       console.error(err);
@@ -123,7 +123,7 @@ const Dashboard = () => {
 
   const fetchStudents = async () => {
     try {
-      const res = await api.get('/admin/students');
+      const res = await api.get('/principle/students');
       if (res.data.success) setStudents(res.data.data);
     } catch (err) {
       console.error(err);
@@ -132,7 +132,7 @@ const Dashboard = () => {
 
   const fetchClasses = async () => {
     try {
-      const res = await api.get('/admin/classes');
+      const res = await api.get('/principle/classes');
       if (res.data.success) setClasses(res.data.data);
     } catch (err) {
       console.error(err);
@@ -141,7 +141,7 @@ const Dashboard = () => {
 
   const fetchAnnouncements = async () => {
     try {
-      const res = await api.get('/admin/announcements');
+      const res = await api.get('/principle/announcements');
       if (res.data.success) setAnnouncements(res.data.data);
     } catch (err) {
       console.error(err);
@@ -150,7 +150,7 @@ const Dashboard = () => {
 
   const fetchResults = async () => {
     try {
-      const res = await api.get('/admin/results');
+      const res = await api.get('/principle/results');
       if (res.data.success) setResults(res.data.data);
     } catch (err) {
       console.error(err);
@@ -159,7 +159,7 @@ const Dashboard = () => {
 
   const fetchAuditLogs = async () => {
     try {
-      const res = await api.get('/admin/logs');
+      const res = await api.get('/principle/logs');
       if (res.data.success) setAuditLogs(res.data.data);
     } catch (err) {
       console.error(err);
@@ -168,7 +168,7 @@ const Dashboard = () => {
 
   const fetchInquiries = async () => {
     try {
-      const res = await api.get('/admin/inquiries');
+      const res = await api.get('/principle/inquiries');
       if (res.data.success) setInquiries(res.data.data);
     } catch (err) {
       console.error(err);
@@ -177,7 +177,7 @@ const Dashboard = () => {
 
   const fetchCalendarEvents = async () => {
     try {
-      const res = await api.get('/admin/calendar');
+      const res = await api.get('/principle/calendar');
       if (res.data.success) setCalendarEvents(res.data.data);
     } catch (err) {
       console.error(err);
@@ -186,7 +186,7 @@ const Dashboard = () => {
 
   const fetchAdmitCards = async () => {
     try {
-      const res = await api.get('/admin/admit-cards');
+      const res = await api.get('/principle/admit-cards');
       if (res.data.success) setAdmitCards(res.data.data);
     } catch (err) {
       console.error(err);
@@ -195,7 +195,7 @@ const Dashboard = () => {
 
   const fetchSyllabusList = async () => {
     try {
-      const res = await api.get('/admin/syllabus');
+      const res = await api.get('/principle/syllabus');
       if (res.data.success) setSyllabusList(res.data.data);
     } catch (err) {
       console.error(err);
@@ -239,9 +239,9 @@ const Dashboard = () => {
 
       let res;
       if (editingTeacher) {
-        res = await api.put(`/admin/teachers/${editingTeacher._id}`, payload);
+        res = await api.put(`/principle/teachers/${editingTeacher._id}`, payload);
       } else {
-        res = await api.post('/admin/teachers', payload);
+        res = await api.post('/principle/teachers', payload);
       }
 
       if (res.data.success) {
@@ -266,7 +266,7 @@ const Dashboard = () => {
 
   const handleToggleTeacherStatus = async (id) => {
     try {
-      const res = await api.patch(`/admin/teachers/${id}/status`);
+      const res = await api.patch(`/principle/teachers/${id}/status`);
       if (res.data.success) {
         triggerNotification('success', res.data.message);
         fetchTeachers();
@@ -281,7 +281,7 @@ const Dashboard = () => {
     e.preventDefault();
     if (!newPasswordValue) return;
     try {
-      const res = await api.post(`/admin/teachers/${resettingTeacherId}/reset-password`, { newPassword: newPasswordValue });
+      const res = await api.post(`/principle/teachers/${resettingTeacherId}/reset-password`, { newPassword: newPasswordValue });
       if (res.data.success) {
         triggerNotification('success', 'Teacher password reset successfully!');
         setResettingTeacherId(null);
@@ -296,7 +296,7 @@ const Dashboard = () => {
   const handleDeleteTeacher = async (id) => {
     if (!window.confirm('Are you sure you want to permanently delete this teacher account? All logs and records will be deleted.')) return;
     try {
-      const res = await api.delete(`/admin/teachers/${id}`);
+      const res = await api.delete(`/principle/teachers/${id}`);
       if (res.data.success) {
         triggerNotification('success', 'Teacher account deleted successfully.');
         fetchTeachers();
@@ -316,9 +316,9 @@ const Dashboard = () => {
     try {
       let res;
       if (editingStudent) {
-        res = await api.put(`/admin/students/${editingStudent._id}`, studentFormData);
+        res = await api.put(`/principle/students/${editingStudent._id}`, studentFormData);
       } else {
-        res = await api.post('/admin/students', studentFormData);
+        res = await api.post('/principle/students', studentFormData);
       }
 
       if (res.data.success) {
@@ -338,7 +338,7 @@ const Dashboard = () => {
   const handleDeleteStudent = async (id) => {
     if (!window.confirm('Delete student record permanently?')) return;
     try {
-      const res = await api.delete(`/admin/students/${id}`);
+      const res = await api.delete(`/principle/students/${id}`);
       if (res.data.success) {
         triggerNotification('success', 'Student record deleted');
         fetchStudents();
@@ -428,7 +428,7 @@ const Dashboard = () => {
         for (let i = 0; i < parsedRows.length; i++) {
           const row = parsedRows[i];
           try {
-            const res = await api.post('/admin/results', row);
+            const res = await api.post('/principle/results', row);
             if (res.data.success) {
               success++;
               details.push({ status: 'success', message: `Roll Number ${row.rollNumber}: Successfully saved.` });
@@ -552,7 +552,7 @@ const Dashboard = () => {
         for (let i = 0; i < parsedRows.length; i++) {
           const row = parsedRows[i];
           try {
-            const res = await api.post('/admin/admit-cards', row);
+            const res = await api.post('/principle/admit-cards', row);
             if (res.data.success) {
               success++;
               details.push({ status: 'success', message: `Roll Number ${row.rollNumber}: Successfully saved.` });
@@ -588,7 +588,7 @@ const Dashboard = () => {
   const handleDeleteAdmitCard = async (id) => {
     if (!window.confirm('Delete admit card permanently?')) return;
     try {
-      const res = await api.delete(`/admin/admit-cards/${id}`);
+      const res = await api.delete(`/principle/admit-cards/${id}`);
       if (res.data.success) {
         triggerNotification('success', 'Admit card deleted');
         fetchAdmitCards();
@@ -615,7 +615,7 @@ const Dashboard = () => {
       formData.append('academicYear', syllabusFormData.academicYear);
       formData.append('pdfFile', syllabusFile);
 
-      const res = await api.post('/admin/syllabus', formData, {
+      const res = await api.post('/principle/syllabus', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -638,7 +638,7 @@ const Dashboard = () => {
   const handleDeleteSyllabus = async (id) => {
     if (!window.confirm('Delete this syllabus configuration?')) return;
     try {
-      const res = await api.delete(`/admin/syllabus/${id}`);
+      const res = await api.delete(`/principle/syllabus/${id}`);
       if (res.data.success) {
         triggerNotification('success', 'Syllabus deleted successfully');
         fetchSyllabusList();
@@ -663,9 +663,9 @@ const Dashboard = () => {
 
       let res;
       if (editingClass) {
-        res = await api.put(`/admin/classes/${editingClass._id}`, payload);
+        res = await api.put(`/principle/classes/${editingClass._id}`, payload);
       } else {
-        res = await api.post('/admin/classes', payload);
+        res = await api.post('/principle/classes', payload);
       }
 
       if (res.data.success) {
@@ -685,7 +685,7 @@ const Dashboard = () => {
   const handleDeleteClass = async (id) => {
     if (!window.confirm('Delete class configuration?')) return;
     try {
-      const res = await api.delete(`/admin/classes/${id}`);
+      const res = await api.delete(`/principle/classes/${id}`);
       if (res.data.success) {
         triggerNotification('success', 'Class configuration deleted');
         fetchClasses();
@@ -705,9 +705,9 @@ const Dashboard = () => {
     try {
       let res;
       if (editingNotice) {
-        res = await api.put(`/admin/announcements/${editingNotice._id}`, noticeFormData);
+        res = await api.put(`/principle/announcements/${editingNotice._id}`, noticeFormData);
       } else {
-        res = await api.post('/admin/announcements', noticeFormData);
+        res = await api.post('/principle/announcements', noticeFormData);
       }
 
       if (res.data.success) {
@@ -726,7 +726,7 @@ const Dashboard = () => {
   const handleDeleteNotice = async (id) => {
     if (!window.confirm('Delete this announcement permanently?')) return;
     try {
-      const res = await api.delete(`/admin/announcements/${id}`);
+      const res = await api.delete(`/principle/announcements/${id}`);
       if (res.data.success) {
         triggerNotification('success', 'Announcement deleted');
         fetchAnnouncements();
@@ -743,7 +743,7 @@ const Dashboard = () => {
   const handleToggleResultStatus = async (resultCard) => {
     try {
       const newStatus = resultCard.status === 'Published' ? 'Unpublished' : 'Published';
-      const res = await api.put(`/admin/results/${resultCard._id}`, { status: newStatus });
+      const res = await api.put(`/principle/results/${resultCard._id}`, { status: newStatus });
       if (res.data.success) {
         triggerNotification('success', `Result set to ${newStatus}`);
         fetchResults();
@@ -758,7 +758,7 @@ const Dashboard = () => {
   const handleDeleteResult = async (id) => {
     if (!window.confirm('Delete result sheet permanently?')) return;
     try {
-      const res = await api.delete(`/admin/results/${id}`);
+      const res = await api.delete(`/principle/results/${id}`);
       if (res.data.success) {
         triggerNotification('success', 'Result sheet deleted');
         fetchResults();
@@ -772,7 +772,7 @@ const Dashboard = () => {
 
   const handleInquiryStatusChange = async (id, status) => {
     try {
-      const res = await api.patch(`/admin/inquiries/${id}/status`, { status });
+      const res = await api.patch(`/principle/inquiries/${id}/status`, { status });
       if (res.data.success) {
         triggerNotification('success', `Inquiry status updated to ${status}`);
         fetchInquiries();
@@ -786,7 +786,7 @@ const Dashboard = () => {
   const handleDeleteInquiry = async (id) => {
     if (!window.confirm('Are you sure you want to delete this inquiry?')) return;
     try {
-      const res = await api.delete(`/admin/inquiries/${id}`);
+      const res = await api.delete(`/principle/inquiries/${id}`);
       if (res.data.success) {
         triggerNotification('success', 'Inquiry deleted successfully');
         fetchInquiries();
@@ -802,9 +802,9 @@ const Dashboard = () => {
     try {
       let res;
       if (editingCalendarEvent) {
-        res = await api.put(`/admin/calendar/${editingCalendarEvent._id}`, calendarFormData);
+        res = await api.put(`/principle/calendar/${editingCalendarEvent._id}`, calendarFormData);
       } else {
-        res = await api.post('/admin/calendar', calendarFormData);
+        res = await api.post('/principle/calendar', calendarFormData);
       }
 
       if (res.data.success) {
@@ -823,7 +823,7 @@ const Dashboard = () => {
   const handleDeleteCalendarEvent = async (id) => {
     if (!window.confirm('Are you sure you want to delete this calendar event?')) return;
     try {
-      const res = await api.delete(`/admin/calendar/${id}`);
+      const res = await api.delete(`/principle/calendar/${id}`);
       if (res.data.success) {
         triggerNotification('success', 'Calendar event deleted successfully');
         fetchCalendarEvents();
@@ -913,11 +913,11 @@ const Dashboard = () => {
               {activeTab === 'calendar' && 'Academic Calendar Scheduling'}
               {activeTab === 'logs' && 'Audit Logs Trails'}
             </h1>
-            <p style={{ color: 'var(--text-secondary)' }}>Welcome back, Administrative Owner</p>
+            <p style={{ color: 'var(--text-secondary)' }}>Welcome back, Principleistrative Owner</p>
           </div>
           <div className="user-profile-badge">
             <div className="avatar">A</div>
-            <span style={{ fontSize: '0.9rem', fontWeight: '500' }}>{user?.name || 'Super Admin'}</span>
+            <span style={{ fontSize: '0.9rem', fontWeight: '500' }}>{user?.name || 'Super Principle'}</span>
           </div>
         </div>
 
@@ -980,7 +980,7 @@ const Dashboard = () => {
                         <thead>
                           <tr>
                             <th>Action</th>
-                            <th>Admin</th>
+                            <th>Principle</th>
                             <th>Details</th>
                             <th>Time</th>
                           </tr>
@@ -1445,7 +1445,7 @@ const Dashboard = () => {
                         <div style={{ maxHeight: '150px', overflowY: 'auto', backgroundColor: 'rgba(0,0,0,0.2)', padding: '10px', borderRadius: '4px', fontSize: '0.8rem' }}>
                           {csvUploadProgress.details.map((detail, index) => (
                             <div key={index} style={{ color: detail.status === 'success' ? 'var(--color-success)' : 'var(--color-danger)', marginBottom: '4px' }}>
-                              • {detail.message}
+                              â€¢ {detail.message}
                             </div>
                           ))}
                         </div>
@@ -1576,7 +1576,7 @@ const Dashboard = () => {
                         <div style={{ maxHeight: '150px', overflowY: 'auto', backgroundColor: 'rgba(0,0,0,0.2)', padding: '10px', borderRadius: '4px', fontSize: '0.8rem' }}>
                           {admitCardCsvProgress.details.map((detail, index) => (
                             <div key={index} style={{ color: detail.status === 'success' ? 'var(--color-success)' : 'var(--color-danger)', marginBottom: '4px' }}>
-                              • {detail.message}
+                              â€¢ {detail.message}
                             </div>
                           ))}
                         </div>
@@ -1823,7 +1823,7 @@ const Dashboard = () => {
                             {notice.targetAudience.toUpperCase()}
                           </span>
                         </td>
-                        <td>{notice.author?.name || 'Admin'}</td>
+                        <td>{notice.author?.name || 'Principle'}</td>
                         <td>{new Date(notice.date || notice.createdAt).toLocaleDateString()}</td>
                         <td>
                           <div style={{ display: 'flex', gap: '8px' }}>
@@ -2145,3 +2145,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

@@ -1,0 +1,7 @@
+"File","Line","Text"
+"backend\seed.js","42","department: 'Administration',"
+"backend\seed.js","108","// Left empty so admin or teacher can create announcements/notices"
+"backend\server.js","29","department: 'Administration',"
+"backend\src\models\Principle.js","20","default: 'Administration',"
+"backend\src\routes\principle.routes.js","75","// All administrative endpoints require authentication and ""principle"" role clearance"
+"landing-page\.env","7","VITE_PRINCIPLE_PORTAL_URL=https://schooladmin-sable.vercel.app/login"

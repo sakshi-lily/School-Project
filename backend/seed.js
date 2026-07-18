@@ -4,7 +4,7 @@ const connectDB = require('./src/config/db');
 
 // Models
 const User = require('./src/models/User');
-const Admin = require('./src/models/Admin');
+const Principle = require('./src/models/Principle');
 const Teacher = require('./src/models/Teacher');
 const Student = require('./src/models/Student');
 const Class = require('./src/models/Class');
@@ -18,7 +18,7 @@ const seedDB = async () => {
 
     // Clear existing data
     await User.deleteMany({});
-    await Admin.deleteMany({});
+    await Principle.deleteMany({});
     await Teacher.deleteMany({});
     await Student.deleteMany({});
     await Class.deleteMany({});
@@ -26,22 +26,22 @@ const seedDB = async () => {
     await Result.deleteMany({});
     console.log('✅ Cleared database.');
 
-    // 1. Seed Admin
-    console.log('🌱 Seeding Admin...');
-    const adminUser = await User.create({
-      name: 'Super Admin',
-      email: 'admin@school.com',
-      username: 'admin',
-      password: 'admin123',
-      role: 'admin',
+    // 1. Seed Principle
+    console.log('🌱 Seeding Principle...');
+    const principleUser = await User.create({
+      name: 'Super Principle',
+      email: 'principle@school.com',
+      username: 'principle',
+      password: 'principle123',
+      role: 'principle',
     });
-    await Admin.create({
-      user: adminUser._id,
+    await Principle.create({
+      user: principleUser._id,
       permissions: ['all'],
       phoneNumber: '+919557244888',
       department: 'Administration',
     });
-    console.log('✅ Seeded admin: admin@school.com / admin123');
+    console.log('✅ Seeded principle: principle@school.com / principle123');
 
     // 2. Seed Teacher
     console.log('🌱 Seeding Teacher...');
@@ -105,7 +105,7 @@ const seedDB = async () => {
 
     // 5. Seed Announcements
     console.log('🌱 Seeding Announcements...');
-    // Left empty so admin or teacher can create announcements/notices
+    // Left empty so principle or teacher can create announcements/notices
     console.log('✅ Seeded Announcements (Empty).');
 
     // 6. Seed Results

@@ -37,7 +37,7 @@ const {
   getAllSyllabus,
   createSyllabus,
   deleteSyllabus,
-} = require('../controllers/admin.controller');
+} = require('../controllers/principle.controller');
 const { protect, authorize } = require('../middleware/auth.middleware');
 const multer = require('multer');
 const path = require('path');
@@ -72,9 +72,9 @@ const upload = multer({
 
 const router = express.Router();
 
-// All administrative endpoints require authentication and "admin" role clearance
+// All administrative endpoints require authentication and "principle" role clearance
 router.use(protect);
-router.use(authorize('admin'));
+router.use(authorize('principle'));
 
 // Stats & General Dashboard
 router.get('/stats', getStats);
@@ -121,7 +121,7 @@ router.post('/announcements', createAnnouncement);
 router.put('/announcements/:id', updateAnnouncement);
 router.delete('/announcements/:id', deleteAnnouncement);
 
-// Security logs & admin trail
+// Security logs & principle trail
 router.get('/logs', getAuditLogs);
 
 // Admission Inquiries

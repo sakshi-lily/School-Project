@@ -131,7 +131,7 @@ const Footer = () => {
           <p className="flex items-center gap-1">
             <span>Affiliated to Uttar Pradesh Madhyamik Shiksha Parishad (UPMSP)</span>
             <span>•</span>
-            <a href={import.meta.env.VITE_ADMIN_PORTAL_URL || 'http://localhost:5174'} target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">Admin Area</a>
+            <a href={import.meta.env.VITE_PRINCIPLE_PORTAL_URL || 'http://localhost:5174'} target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">Principle Area</a>
           </p>
         </div>
       </div>

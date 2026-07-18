@@ -27,7 +27,7 @@ const Login = () => {
             <SchoolLogo size={90} showText={false} />
           </div>
           <h2 style={{ fontSize: '1.4rem', lineHeight: '1.3', marginBottom: '4px' }}>THAKUR BIRI SINGH INTER COLLEGE</h2>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Admin Control Center</p>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Principle Control Center</p>
         </div>
 
         {error && (
@@ -42,7 +42,7 @@ const Login = () => {
             <input
               type="text"
               className="form-input"
-              placeholder="admin or admin@school.com"
+              placeholder="principle or principle@school.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

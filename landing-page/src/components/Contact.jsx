@@ -66,7 +66,7 @@ const Contact = () => {
             Get In Touch
           </span>
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mt-4 leading-tight">
-            Contact School Administration
+            Contact School Principle
           </h2>
           <p className="text-slate-500 text-sm md:text-base mt-3">
             Have questions about admissions, fees, or curricula? Drop us a line or visit our campus.
@@ -147,7 +147,7 @@ const Contact = () => {
                   <CheckCircle2 size={48} className="text-emerald-500 mb-3" />
                   <h4 className="font-heading font-bold text-emerald-800 text-lg">Message Sent Successfully!</h4>
                   <p className="text-slate-500 text-xs md:text-sm mt-1 leading-relaxed">
-                    Thank you for reaching out. The school administration has received your query and will get back to you shortly.
+                    Thank you for reaching out. The school principle has received your query and will get back to you shortly.
                   </p>
                   <button
                     onClick={() => setStatus('idle')}

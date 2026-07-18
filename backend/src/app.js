@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const authRoutes = require('./routes/auth.routes');
-const adminRoutes = require('./routes/admin.routes');
+const principleRoutes = require('./routes/principle.routes');
 const teacherRoutes = require('./routes/teacher.routes');
 const publicRoutes = require('./routes/public.routes');
 const errorMiddleware = require('./middleware/error.middleware');
@@ -28,7 +28,7 @@ app.get('/api/health', (req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/api/principle', principleRoutes);
 app.use('/api/teacher', teacherRoutes);
 app.use('/api/public', publicRoutes);
 

@@ -4,14 +4,14 @@ import { AuthProvider, AuthContext } from './context/AuthContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 
-// Route guard for Admin dashboard
+// Route guard for Principle dashboard
 const ProtectedRoute = ({ children }) => {
   const { token, loading } = useContext(AuthContext);
 
   if (loading) {
     return (
       <div style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center', backgroundColor: '#090d16', color: '#9ca3af' }}>
-        Authenticating Admin...
+        Authenticating Principle...
       </div>
     );
   }
@@ -31,7 +31,7 @@ function App() {
           {/* Public Access */}
           <Route path="/login" element={<Login />} />
 
-          {/* Secure Administrative Dashboards */}
+          {/* Secure Principle Dashboards */}
           <Route
             path="/dashboard"
             element={

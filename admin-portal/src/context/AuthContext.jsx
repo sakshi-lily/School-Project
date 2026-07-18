@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('admin_token'));
+  const [token, setToken] = useState(localStorage.getItem('principle_token'));
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -17,10 +17,10 @@ export const AuthProvider = ({ children }) => {
       }
       try {
         const response = await api.get('/auth/me');
-        if (response.data.success && response.data.user.role === 'admin') {
+        if (response.data.success && response.data.user.role === 'principle') {
           setUser(response.data.user);
         } else {
-          // If not admin, logout
+          // If not principle, logout
           logout();
         }
       } catch (err) {
@@ -41,11 +41,11 @@ export const AuthProvider = ({ children }) => {
       const response = await api.post('/auth/login', { email, password });
       const { token: userToken, user: userData } = response.data;
 
-      if (userData.role !== 'admin') {
-        throw new Error('Access denied. Admin portal requires administrator privileges.');
+      if (userData.role !== 'principle') {
+        throw new Error('Access denied. Principle portal requires principle privileges.');
       }
 
-      localStorage.setItem('admin_token', userToken);
+      localStorage.setItem('principle_token', userToken);
       setToken(userToken);
       setUser(userData);
       return true;
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('admin_token');
+    localStorage.removeItem('principle_token');
     setToken(null);
     setUser(null);
   };

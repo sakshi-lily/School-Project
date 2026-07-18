@@ -41,7 +41,7 @@ const QuickServices = ({ onOpenResults, onOpenCalendar, onOpenAdmitCard, onOpenS
     {
       icon: <Contact size={28} />,
       title: "School Directory",
-      desc: "Contact information of school administration, faculty, and departments.",
+      desc: "Contact information of school principle, faculty, and departments.",
       link: "#school-directory",
       color: "bg-cyan-50 text-cyan-600 hover:bg-cyan-600 hover:text-white"
     }
