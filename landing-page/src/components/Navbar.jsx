@@ -87,8 +87,6 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
           <div 
             ref={portalsRef}
             className="relative"
-            onMouseEnter={() => setIsPortalsOpen(true)}
-            onMouseLeave={() => setIsPortalsOpen(false)}
           >
             <button 
               onClick={() => setIsPortalsOpen(!isPortalsOpen)}
@@ -105,21 +103,19 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
                   href={import.meta.env.VITE_PRINCIPLE_PORTAL_URL || 'http://localhost:5174'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => setIsPortalsOpen(false)}
                   className="flex items-center gap-2 px-4 py-2 hover:bg-slate-50 text-slate-700 hover:text-primary font-medium transition-colors text-xs md:text-sm"
                 >
                   <Landmark size={16} className="text-primary" />
-                  <span>Principle Login</span>
+                  <span>Principal Portal</span>
                 </a>
                 <a
                   href={import.meta.env.VITE_TEACHER_PORTAL_URL || 'http://localhost:5175'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => setIsPortalsOpen(false)}
                   className="flex items-center gap-2 px-4 py-2 hover:bg-slate-50 text-slate-700 hover:text-primary font-medium transition-colors text-xs md:text-sm"
                 >
                   <LogIn size={16} className="text-primary" />
-                  <span>Teacher Login</span>
+                  <span>Teacher Portal</span>
                 </a>
               </div>
             )}
@@ -279,19 +275,21 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
               <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-2">
                 <a
                   href={import.meta.env.VITE_PRINCIPLE_PORTAL_URL || 'http://localhost:5174'}
-                  onClick={() => setIsOpen(false)}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 py-2.5 bg-slate-100 hover:bg-slate-200 text-primary font-bold rounded-lg text-sm text-center"
                 >
                   <Landmark size={16} />
-                  <span>Principle Login</span>
+                  <span>Principal Portal</span>
                 </a>
                 <a
                   href={import.meta.env.VITE_TEACHER_PORTAL_URL || 'http://localhost:5175'}
-                  onClick={() => setIsOpen(false)}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 py-2.5 bg-primary hover:bg-primary-dark text-white font-bold rounded-lg text-sm text-center"
                 >
                   <LogIn size={16} />
-                  <span>Teacher Login</span>
+                  <span>Teacher Portal</span>
                 </a>
               </div>
             </div>
