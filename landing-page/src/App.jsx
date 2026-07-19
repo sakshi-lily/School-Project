@@ -7,6 +7,7 @@ import AboutSchool from './components/AboutSchool';
 import PrincipalMessage from './components/PrincipalMessage';
 import WhyChooseUs from './components/WhyChooseUs';
 import LatestNotice from './components/LatestNotice';
+import SchoolDocsSection from './components/SchoolDocsSection';
 import Gallery from './components/Gallery';
 import Statistics from './components/Statistics';
 import AdmissionBanner from './components/AdmissionBanner';
@@ -17,6 +18,7 @@ import AdmissionInquiryModal from './components/AdmissionInquiryModal';
 import AcademicCalendarModal from './components/AcademicCalendarModal';
 import AdmitCardModal from './components/AdmitCardModal';
 import SyllabusModal from './components/SyllabusModal';
+import SchoolDocsModal from './components/SchoolDocsModal';
 
 function App() {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
@@ -24,6 +26,7 @@ function App() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isAdmitCardOpen, setIsAdmitCardOpen] = useState(false);
   const [isSyllabusOpen, setIsSyllabusOpen] = useState(false);
+  const [isDocsOpen, setIsDocsOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
@@ -33,6 +36,7 @@ function App() {
           onOpenResults={() => setIsResultModalOpen(true)} 
           onOpenAdmission={() => setIsAdmissionOpen(true)}
           onOpenCalendar={() => setIsCalendarOpen(true)}
+          onOpenDocs={() => setIsDocsOpen(true)}
         />
         
         {/* Scrollable Notice ticker */}
@@ -48,6 +52,7 @@ function App() {
             onOpenCalendar={() => setIsCalendarOpen(true)}
             onOpenAdmitCard={() => setIsAdmitCardOpen(true)}
             onOpenSyllabus={() => setIsSyllabusOpen(true)}
+            onOpenDocs={() => setIsDocsOpen(true)}
           />
           
           {/* Split screen About section */}
@@ -62,6 +67,9 @@ function App() {
           {/* Tabbed Board Notices */}
           <LatestNotice />
           
+          {/* High-Contrast Official School Documents Section */}
+          <SchoolDocsSection onOpenDocs={() => setIsDocsOpen(true)} />
+
           {/* Filterable image gallery */}
           <Gallery />
           
@@ -107,6 +115,12 @@ function App() {
       <SyllabusModal
         isOpen={isSyllabusOpen}
         onClose={() => setIsSyllabusOpen(false)}
+      />
+
+      {/* Official School Documents Repository Modal */}
+      <SchoolDocsModal
+        isOpen={isDocsOpen}
+        onClose={() => setIsDocsOpen(false)}
       />
     </div>
   );

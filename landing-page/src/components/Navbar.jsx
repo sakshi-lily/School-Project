@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, Phone, Mail, MapPin, ChevronDown, User, LogIn, Award, Landmark, GraduationCap } from 'lucide-react';
 import SchoolLogo from './SchoolLogo';
 
-const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
+const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -46,6 +46,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
         { label: 'Principal Message', href: '#principal-message' },
       ]
     },
+    { label: 'School Docs', href: '#school-docs' },
     { label: 'Gallery', href: '#gallery' },
     { label: 'Notice Board', href: '#notices' },
     { label: 'Academic Calendar', href: '#calendar' },
@@ -171,7 +172,12 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
                     onClick={(e) => {
                       if (item.label === 'Academic Calendar') {
                         e.preventDefault();
-                        onOpenCalendar();
+                        if (onOpenCalendar) onOpenCalendar();
+                      } else if (item.label === 'School Docs') {
+                        if (onOpenDocs) {
+                          e.preventDefault();
+                          onOpenDocs();
+                        }
                       }
                     }}
                     className={`flex items-center gap-1 px-3 py-2 text-xs xl:text-sm font-semibold rounded-lg transition-all duration-200 ${isScrolled
@@ -192,7 +198,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
                           onClick={(e) => {
                             if (sub.label === 'Check Board Results' || sub.label === 'Student Portal') {
                               e.preventDefault();
-                              onOpenResults();
+                              if (onOpenResults) onOpenResults();
                             }
                           }}
                           className="block px-4 py-2 text-xs md:text-sm hover:bg-slate-50 text-slate-600 hover:text-primary font-medium transition-colors"
@@ -232,7 +238,12 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar }) => {
                         setIsOpen(false);
                         if (item.label === 'Academic Calendar') {
                           e.preventDefault();
-                          onOpenCalendar();
+                          if (onOpenCalendar) onOpenCalendar();
+                        } else if (item.label === 'School Docs') {
+                          if (onOpenDocs) {
+                            e.preventDefault();
+                            onOpenDocs();
+                          }
                         }
                       }}
                       className="block py-2 text-sm font-bold text-slate-700 hover:text-primary"

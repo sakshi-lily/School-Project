@@ -1,7 +1,7 @@
 import React from 'react';
-import { UserPlus, Award, FileSpreadsheet, CalendarDays, BookOpen, Contact } from 'lucide-react';
+import { UserPlus, Award, FileSpreadsheet, CalendarDays, BookOpen, Contact, FileText, ShieldCheck } from 'lucide-react';
 
-const QuickServices = ({ onOpenResults, onOpenCalendar, onOpenAdmitCard, onOpenSyllabus }) => {
+const QuickServices = ({ onOpenResults, onOpenCalendar, onOpenAdmitCard, onOpenSyllabus, onOpenDocs }) => {
   const services = [
     {
       icon: <Award size={28} />,
@@ -16,6 +16,13 @@ const QuickServices = ({ onOpenResults, onOpenCalendar, onOpenAdmitCard, onOpenS
       desc: "Download class examinations, board exam registration and admit cards.",
       link: "#",
       color: "bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white"
+    },
+    {
+      icon: <ShieldCheck size={28} />,
+      title: "School Documents",
+      desc: "Download official UPMSP circulars, leave rules, and govt directives.",
+      link: "#school-docs",
+      color: "bg-purple-50 text-purple-600 hover:bg-purple-600 hover:text-white"
     },
     {
       icon: <FileSpreadsheet size={28} />,
@@ -37,13 +44,6 @@ const QuickServices = ({ onOpenResults, onOpenCalendar, onOpenAdmitCard, onOpenS
       desc: "UPMSP prescribed textbook list and subject-wise intermediate syllabus.",
       link: "#",
       color: "bg-teal-50 text-teal-600 hover:bg-teal-600 hover:text-white"
-    },
-    {
-      icon: <Contact size={28} />,
-      title: "School Directory",
-      desc: "Contact information of school principle, faculty, and departments.",
-      link: "#school-directory",
-      color: "bg-cyan-50 text-cyan-600 hover:bg-cyan-600 hover:text-white"
     }
   ];
 
@@ -56,10 +56,10 @@ const QuickServices = ({ onOpenResults, onOpenCalendar, onOpenAdmitCard, onOpenS
             Quick Services
           </span>
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mt-4 leading-tight">
-            Results, Notice Board & Academic Calendar
+            Results, Notice Board & Official School Docs
           </h2>
           <p className="text-slate-500 text-sm md:text-base mt-3">
-            Check your academic marksheet verification, browse official announcements, or view the complete school calendar.
+            Check academic marksheets, download UPMSP leave rules & circulars, or view the complete school calendar.
           </p>
         </div>
 
@@ -82,6 +82,9 @@ const QuickServices = ({ onOpenResults, onOpenCalendar, onOpenAdmitCard, onOpenS
                 } else if (svc.title === "Syllabus") {
                   e.preventDefault();
                   if (onOpenSyllabus) onOpenSyllabus();
+                } else if (svc.title === "School Documents") {
+                  e.preventDefault();
+                  if (onOpenDocs) onOpenDocs();
                 }
               }}
               className="group flex flex-col items-center text-center p-8 bg-slate-50 border border-slate-100 rounded-2xl shadow-sm transition-all duration-300 hover:bg-white hover:border-white hover:shadow-premium-hover transform hover:-translate-y-1.5 cursor-pointer"
@@ -109,3 +112,4 @@ const QuickServices = ({ onOpenResults, onOpenCalendar, onOpenAdmitCard, onOpenS
 };
 
 export default QuickServices;
+
