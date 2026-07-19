@@ -27,14 +27,14 @@ const Footer = () => {
           <div className="lg:col-span-4 flex flex-col gap-4">
             <SchoolLogo className="w-12 h-12" textColor="text-white" />
             <p className="text-xs md:text-sm text-slate-400 mt-2 leading-relaxed">
-              Thakur Biri Singh Inter College is a premium government-aided educational institution in Tundla, Firozabad, dedicated to offering quality education under UPMSP standards since 1950.
+              ठाकुर बीरी सिंह इंटर कॉलेज, टुंडला (फिरोजाबाद) 1950 से यूपीएमएसपी (UPMSP) मानकों के तहत गुणवत्तापूर्ण शिक्षा प्रदान करने के लिए समर्पित एक प्रमुख शासकीय सहायता प्राप्त शैक्षणिक संस्थान है।
             </p>
             <div className="flex items-center gap-3 mt-2">
               <span className="text-[10px] bg-white/10 text-slate-300 font-bold px-2.5 py-1 rounded-full">
-                UPMSP Code: 1012
+                यूपी बोर्ड कोड: 1012
               </span>
               <span className="text-[10px] bg-white/10 text-slate-300 font-bold px-2.5 py-1 rounded-full">
-                Estd. 1950
+                स्थापना: 1950
               </span>
             </div>
           </div>
@@ -42,51 +42,51 @@ const Footer = () => {
           {/* Column 2: Quick Links */}
           <div className="lg:col-span-2">
             <h4 className="font-heading font-bold text-sm text-white uppercase tracking-wider mb-4 border-l-2 border-secondary pl-2">
-              Quick Links
+              त्वरित लिंक
             </h4>
             <ul className="space-y-2.5 text-xs md:text-sm">
-              <li><a href="#home" className="hover:text-secondary transition-colors">Home</a></li>
-              <li><a href="#about" className="hover:text-secondary transition-colors">About Us</a></li>
-              <li><a href="#why-choose-us" className="hover:text-secondary transition-colors">Why Choose Us</a></li>
-              <li><a href="#gallery" className="hover:text-secondary transition-colors">Photo Gallery</a></li>
-              <li><a href="#contact" className="hover:text-secondary transition-colors">Contact Us</a></li>
+              <li><a href="#home" className="hover:text-secondary transition-colors">मुख्य पृष्ठ</a></li>
+              <li><a href="#about" className="hover:text-secondary transition-colors">हमारे बारे में</a></li>
+              <li><a href="#why-choose-us" className="hover:text-secondary transition-colors">हमारी विशेषताएँ</a></li>
+              <li><a href="#gallery" className="hover:text-secondary transition-colors">फ़ोटो गैलरी</a></li>
+              <li><a href="#contact" className="hover:text-secondary transition-colors">संपर्क करें</a></li>
             </ul>
           </div>
 
           {/* Column 3: Student Corner */}
           <div className="lg:col-span-2">
             <h4 className="font-heading font-bold text-sm text-white uppercase tracking-wider mb-4 border-l-2 border-secondary pl-2">
-              Student Corner
+              छात्र कॉर्नर
             </h4>
             <ul className="space-y-2.5 text-xs md:text-sm">
-              <li><a href="#admission-banner" className="hover:text-secondary transition-colors">Admissions 226-27</a></li>
-              <li><a href="#quick-services" className="hover:text-secondary transition-colors">Board Result</a></li>
-              <li><a href="#quick-services" className="hover:text-secondary transition-colors">Admit Cards</a></li>
-              <li><a href="#quick-services" className="hover:text-secondary transition-colors">Downloads</a></li>
-              <li><a href="#quick-services" className="hover:text-secondary transition-colors">Syllabus</a></li>
+              <li><a href="#admission-banner" className="hover:text-secondary transition-colors">प्रवेश 2026-27</a></li>
+              <li><a href="#quick-services" className="hover:text-secondary transition-colors">बोर्ड परिणाम</a></li>
+              <li><a href="#quick-services" className="hover:text-secondary transition-colors">प्रवेश पत्र</a></li>
+              <li><a href="#quick-services" className="hover:text-secondary transition-colors">दस्तावेज़ डाउनलोड</a></li>
+              <li><a href="#quick-services" className="hover:text-secondary transition-colors">पाठ्यक्रम (Syllabus)</a></li>
             </ul>
           </div>
 
           {/* Column 4: Important Portals */}
           <div className="lg:col-span-2">
             <h4 className="font-heading font-bold text-sm text-white uppercase tracking-wider mb-4 border-l-2 border-secondary pl-2">
-              Important Links
+              महत्वपूर्ण लिंक
             </h4>
             <ul className="space-y-2.5 text-xs md:text-sm">
-              <li><a href="https://upmsp.edu.in" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">UPMSP Official</a></li>
-              <li><a href="https://up.gov.in" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">UP Government</a></li>
-              <li><a href="https://scholarship.up.gov.in" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">UP Scholarship</a></li>
-              <li><a href="https://scholarships.gov.in" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">National Scholarship</a></li>
+              <li><a href="https://upmsp.edu.in" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">यूपी बोर्ड (UPMSP) पोर्टल</a></li>
+              <li><a href="https://up.gov.in" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">उत्तर प्रदेश सरकार पोर्टल</a></li>
+              <li><a href="https://scholarship.up.gov.in" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">यूपी छात्रवृत्ति पोर्टल</a></li>
+              <li><a href="https://scholarships.gov.in" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">राष्ट्रीय छात्रवृत्ति पोर्टल</a></li>
             </ul>
           </div>
 
           {/* Column 5: Social Media */}
           <div className="lg:col-span-2 flex flex-col">
             <h4 className="font-heading font-bold text-sm text-white uppercase tracking-wider mb-4 border-l-2 border-secondary pl-2">
-              Connect With Us
+              हमसे जुड़ें
             </h4>
             <p className="text-[11px] md:text-xs text-slate-400 mb-4">
-              Follow our official social profiles to stay updated with campus events.
+              विद्यालय की गतिविधियों एवं सूचनाओं से अपडेट रहने के लिए हमारे सोशल मीडिया से जुड़ें।
             </p>
             <div className="flex gap-3">
               <a
@@ -126,12 +126,12 @@ const Footer = () => {
       <div className="border-t border-slate-800/80 bg-slate-950/60 py-6 px-4 md:px-8 text-center text-[10px] md:text-xs text-slate-500 leading-relaxed">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
           <p>
-            © {new Date().getFullYear()} Thakur Biri Singh Inter College, Tundla (Firozabad). All Rights Reserved.
+            © {new Date().getFullYear()} ठाकुर बीरी सिंह इंटर कॉलेज, टुंडला (फिरोजाबाद)। सर्वाधिकार सुरक्षित।
           </p>
           <p className="flex items-center gap-1">
-            <span>Affiliated to Uttar Pradesh Madhyamik Shiksha Parishad (UPMSP)</span>
+            <span>उत्तर प्रदेश माध्यमिक शिक्षा परिषद (UPMSP) द्वारा मान्यता प्राप्त</span>
             <span>•</span>
-            <a href={import.meta.env.VITE_PRINCIPLE_PORTAL_URL || 'http://localhost:5174'} target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">Principle Area</a>
+            <a href={import.meta.env.VITE_PRINCIPLE_PORTAL_URL || 'http://localhost:5174'} target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">प्राचार्य पोर्टल</a>
           </p>
         </div>
       </div>

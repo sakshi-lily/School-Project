@@ -4,12 +4,12 @@ import studentsImage from './students.png';
 
 const AdmissionBanner = ({ onOpenAdmission }) => {
   const features = [
-    "Experienced Teachers",
-    "Modern Classrooms & Labs",
-    "Science Laboratories & Library",
-    "Computer & Sports Facilities",
-    "Safe & Disciplined Campus",
-    "UPMSP Affiliated"
+    "अनुभवी एवं योग्य शिक्षक",
+    "स्मार्ट कक्षाएं एवं आधुनिक लैब",
+    "विज्ञान प्रयोगशालाएं एवं पुस्तकालय",
+    "कंप्यूटर शिक्षा एवं खेलकूद सुविधाएं",
+    "सुरक्षित एवं अनुशासित वातावरण",
+    "यू.पी. बोर्ड द्वारा मान्यता प्राप्त"
   ];
 
   return (
@@ -32,17 +32,17 @@ const AdmissionBanner = ({ onOpenAdmission }) => {
               {/* Active Badge */}
               <span className="inline-flex items-center gap-2 bg-secondary text-primary font-heading font-extrabold text-xs md:text-sm tracking-wider uppercase px-4 py-2 rounded-full mb-6 shadow-lg border border-secondary-light/30 transition-transform duration-300 hover:scale-105">
                 <Calendar size={14} />
-                <span>🎓 Admissions Open 2026–27</span>
+                <span>🎓 प्रवेश प्रारंभ सत्र 2026–27</span>
               </span>
 
               {/* Heading */}
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold tracking-tight text-white leading-tight">
-                Admissions Open for <span className="text-secondary">Classes VI–XII</span> <span className="font-semibold block sm:inline-block sm:ml-2 text-white/90 font-sans text-2xl md:text-3xl lg:text-4xl">(Boys & Girls)</span>
+                कक्षा 6 से 12 तक प्रवेश प्रारंभ <span className="text-secondary">(बालक एवं बालिकाएं)</span>
               </h2>
 
               {/* Description */}
               <p className="text-slate-200 text-sm md:text-base mt-4 leading-relaxed font-sans font-medium">
-                Admissions are now open for Boys and Girls from Class VI to XII. We provide quality education with experienced teachers, modern classrooms, science laboratories, library, sports facilities, computer education, and a safe, disciplined campus. Join Thakur Biri Singh Inter College and build a bright future.
+                कक्षा 6 से 12 तक छात्र एवं छात्राओं हेतु प्रवेश प्रारंभ हैं। हमारे विद्यालय में योग्य शिक्षकों द्वारा गुणवत्तापूर्ण शिक्षा, आधुनिक कक्षाएं, विज्ञान प्रयोगशालाएं, पुस्तकालय, खेलकूद सुविधाएं एवं कंप्यूटर शिक्षा प्रदान की जाती है। ठाकुर बीरी सिंह इण्टर कॉलेज से जुड़ें और अपने बच्चों के उज्ज्वल भविष्य का निर्माण करें।
               </p>
 
               {/* Feature Highlights Grid */}
@@ -73,7 +73,7 @@ const AdmissionBanner = ({ onOpenAdmission }) => {
                   className="w-full sm:w-auto bg-secondary hover:bg-secondary-light text-primary font-heading font-extrabold px-8 py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-secondary/20 flex items-center justify-center gap-2 transform hover:-translate-y-1 active:translate-y-0 cursor-pointer"
                 >
                   <GraduationCap size={20} />
-                  <span>Apply Online Now</span>
+                  <span>ऑनलाइन प्रवेश पूछताछ</span>
                   <ArrowUpRight size={16} />
                 </a>
 
@@ -82,7 +82,7 @@ const AdmissionBanner = ({ onOpenAdmission }) => {
                   className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-heading font-bold px-8 py-4 rounded-2xl transition-all duration-300 border border-white/20 hover:border-white/40 shadow-lg flex items-center justify-center gap-2 backdrop-blur-sm transform hover:-translate-y-1 active:translate-y-0"
                 >
                   <FileText size={20} className="text-secondary" />
-                  <span>Download Prospectus</span>
+                  <span>विवरण पुस्तिका (Prospectus)</span>
                 </a>
               </div>
 

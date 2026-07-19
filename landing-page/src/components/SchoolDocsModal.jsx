@@ -117,7 +117,7 @@ const SchoolDocsModal = ({ isOpen, onClose }) => {
           <div className="flex items-center gap-3 mb-2">
             <span className="bg-secondary text-primary font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
               <ShieldCheck size={14} />
-              आधिकारिक विद्यालय दस्तावेज़ (Official Docs)
+              आधिकारिक विद्यालय दस्तावेज़
             </span>
           </div>
 
@@ -137,7 +137,7 @@ const SchoolDocsModal = ({ isOpen, onClose }) => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="खोजें (Search document or rules)..."
+                placeholder="दस्तावेज़ या नियम खोजें..."
                 className="w-full pl-10 pr-4 py-2.5 bg-white/10 border border-white/20 text-white placeholder-slate-300 rounded-xl text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:bg-white/20 transition-all"
               />
             </div>
@@ -154,7 +154,7 @@ const SchoolDocsModal = ({ isOpen, onClose }) => {
                       : 'bg-white/10 text-white hover:bg-white/20'
                   }`}
                 >
-                  {cat === 'All' ? 'सभी दस्तावेज़ (All)' : cat === 'Leave Rules' ? 'अवकाश नियमावली' : cat === 'Govt Orders' ? 'शासनादेश' : 'विज्ञप्ति'}
+                  {cat === 'All' ? 'सभी दस्तावेज़' : cat === 'Leave Rules' ? 'अवकाश नियमावली' : cat === 'Govt Orders' ? 'शासनादेश' : 'विज्ञप्ति'}
                 </button>
               ))}
             </div>
@@ -166,7 +166,7 @@ const SchoolDocsModal = ({ isOpen, onClose }) => {
           {filteredDocs.length === 0 ? (
             <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
               <FileText size={48} className="mx-auto text-slate-300 mb-3" />
-              <h3 className="text-lg font-bold text-slate-700">कोई दस्तावेज़ नहीं मिला (No Document Found)</h3>
+              <h3 className="text-lg font-bold text-slate-700">कोई दस्तावेज़ नहीं मिला</h3>
               <p className="text-xs text-slate-500 mt-1">कृपया अपना खोज शब्द या फ़िल्टर बदलकर पुनः प्रयास करें।</p>
             </div>
           ) : (
@@ -214,21 +214,21 @@ const SchoolDocsModal = ({ isOpen, onClose }) => {
                       className="flex-1 py-2 px-3 bg-slate-100 hover:bg-primary hover:text-white text-slate-700 font-bold text-xs rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5 shadow-sm"
                     >
                       <Eye size={14} />
-                      <span>देखें / Preview</span>
+                      <span>देखें</span>
                     </button>
                     <button
                       onClick={() => handleDownload(doc)}
                       className="flex-1 py-2 px-3 bg-secondary hover:bg-secondary-dark text-primary font-bold text-xs rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5 shadow-sm"
                     >
                       <Download size={14} />
-                      <span>डाउनलोड करें (PDF)</span>
+                      <span>डाउनलोड करें ({doc.type})</span>
                     </button>
                     <a
                       href={doc.path}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-colors"
-                      title="Open in new window"
+                      title="नये विंडो में खोलें"
                     >
                       <ExternalLink size={14} />
                     </a>
@@ -246,7 +246,7 @@ const SchoolDocsModal = ({ isOpen, onClose }) => {
             onClick={onClose}
             className="text-primary hover:underline font-bold text-xs"
           >
-            बंद करें (Close)
+            बंद करें
           </button>
         </div>
       </div>
@@ -265,7 +265,7 @@ const SchoolDocsModal = ({ isOpen, onClose }) => {
                 className="bg-secondary text-primary font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 hover:bg-secondary-light transition-all"
               >
                 <Download size={14} />
-                <span>Download File</span>
+                <span>फ़ाइल डाउनलोड करें</span>
               </button>
               <button
                 onClick={() => setPreviewDoc(null)}

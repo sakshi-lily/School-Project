@@ -8,36 +8,45 @@ const AboutSchool = () => {
   const tabsContent = {
     history: {
       icon: <History size={20} className="text-primary" />,
-      title: "History of TBS Inter College",
-      text: "Founded in 1950, Thakur Biri Singh Inter College (originally TBS Inter College) has stood as a beacon of learning in Tundla, Firozabad for over seven decades. Established to bring quality education to the children of rural and semi-urban Uttar Pradesh, the college has nurtured thousands of scholars, civil servants, teachers, and professionals.",
+      title: "टी.बी.एस. इंटर कॉलेज का इतिहास",
+      text: "1950 में स्थापित, ठाकुर बीरी सिंह इंटर कॉलेज (मूल रूप से टीबीएस इंटर कॉलेज) सात दशकों से अधिक समय से टूंडला, फिरोजाबाद में शिक्षा का एक प्रमुख केंद्र रहा है। ग्रामीण और अर्ध-शहरी उत्तर प्रदेश के बच्चों को गुणवत्तापूर्ण शिक्षा प्रदान करने के उद्देश्य से स्थापित इस कॉलेज ने हजारों विद्वानों, सिविल सेवकों, शिक्षकों और पेशेवरों को गढ़ा है।",
       bullets: [
-        "Established in 1950 with a vision of accessible education.",
-        "Recognized by the Uttar Pradesh Madhyamik Shiksha Parishad (UPMSP).",
-        "Evolved from a small classroom school to a sprawling campus with multi-stream academic programs."
+        "सुलभ और गुणवत्तापूर्ण शिक्षा के दृष्टिकोण के साथ 1950 में स्थापित।",
+        "उत्तर प्रदेश माध्यमिक शिक्षा परिषद (UPMSP) द्वारा मान्यता प्राप्त।",
+        "एक छोटे से स्कूल से बहु-विषयक शैक्षणिक कार्यक्रमों वाले विशाल परिसर के रूप में विकसित।"
       ],
-      fullText: "Founded in 1950, Thakur Biri Singh Inter College has stood as a beacon of learning in Tundla, Firozabad for over seven decades. Established to bring quality education to the children of rural and semi-urban Uttar Pradesh, the college has nurtured thousands of scholars, civil servants, teachers, and professionals. Over the years, the institution has continually upgraded its facilities, adding modern science laboratories, computing facilities, and expanding its academic portfolio to include science, commerce, and arts streams at the Intermediate board level. Today, it stands as one of the region's most reputable government-aided educational landmarks, committed to meritocracy, character building, and social upliftment."
+      fullText: "1950 में स्थापित, ठाकुर बीरी सिंह इंटर कॉलेज सात दशकों से अधिक समय से टूंडला, फिरोजाबाद में शिक्षा का एक प्रमुख केंद्र रहा है। ग्रामीण और अर्ध-शहरी उत्तर प्रदेश के बच्चों को गुणवत्तापूर्ण शिक्षा प्रदान करने के उद्देश्य से स्थापित इस कॉलेज ने हजारों विद्वानों, सिविल सेवकों, शिक्षकों और पेशेवरों को गढ़ा है। वर्षों से, संस्थान ने अपनी सुविधाओं को लगातार उन्नत किया है, जिसमें आधुनिक विज्ञान प्रयोगशालाएं, कंप्यूटर सुविधाएं जोड़ना और इंटरमीडिएट स्तर पर विज्ञान, वाणिज्य और कला संकायों को शामिल करने के लिए अपने शैक्षणिक पोर्टफोलियो का विस्तार करना शामिल है। आज, यह क्षेत्र के सबसे प्रतिष्ठित शासकीय सहायता प्राप्त शैक्षणिक स्थलों में से एक है, जो योग्यता, चरित्र निर्माण और सामाजिक उत्थान के लिए प्रतिबद्ध है।"
     },
     vision: {
       icon: <Target size={20} className="text-secondary-dark" />,
-      title: "Our Vision",
-      text: "To be an institution of academic excellence that instills scientific temper, civic responsibility, and moral integrity. We envision a future where students from all backgrounds have the skills, confidence, and leadership values required to contribute positively to national progress.",
+      title: "हमारा दृष्टिकोण",
+      text: "एक ऐसा शैक्षणिक उत्कृष्टता का संस्थान बनना जो वैज्ञानिक दृष्टिकोण, नागरिक जिम्मेदारी और नैतिक अखंडता का संचार करे। हम एक ऐसे भविष्य की कल्पना करते हैं जहां सभी पृष्ठभूमि के छात्रों के पास राष्ट्रीय प्रगति में सकारात्मक योगदान देने के लिए आवश्यक कौशल, आत्मविश्वास और नेतृत्व मूल्य हों।",
       bullets: [
-        "Inculcate holistic learning beyond the board syllabus.",
-        "Ensure equal opportunity for all classes of society.",
-        "Foster standard-driven digital and technological integration."
+        "बोर्ड पाठ्यक्रम से परे समग्र शिक्षा प्रदान करना।",
+        "समाज के सभी वर्गों के लिए समान अवसर सुनिश्चित करना।",
+        "मानक-संचालित डिजिटल और तकनीकी एकीकरण को बढ़ावा देना।"
       ],
-      fullText: "To be an institution of academic excellence that instills scientific temper, civic responsibility, and moral integrity. We envision a future where students from all backgrounds have the skills, confidence, and leadership values required to contribute positively to national progress. We aim to achieve this by modernizing our classrooms, implementing state-of-the-art laboratory practices, and organizing extra-curricular competitions that push students to reach their full potential and represent the district and state on national platforms."
+      fullText: "एक ऐसा शैक्षणिक उत्कृष्टता का संस्थान बनना जो वैज्ञानिक दृष्टिकोण, नागरिक जिम्मेदारी और नैतिक अखंडता का संचार करे। हम एक ऐसे भविष्य की कल्पना करते हैं जहां सभी पृष्ठभूमि के छात्रों के पास राष्ट्रीय प्रगति में सकारात्मक योगदान देने के लिए आवश्यक कौशल, आत्मविश्वास और नेतृत्व मूल्य हों। हमारा उद्देश्य अपनी कक्षाओं का आधुनिकीकरण करके, अत्याधुनिक प्रयोगशाला पद्धतियों को लागू करके और पाठ्येतर प्रतियोगिताओं का आयोजन करके इसे हासिल करना है जो छात्रों को अपनी पूर्ण क्षमता तक पहुंचने और राष्ट्रीय मंचों पर जिले और राज्य का प्रतिनिधित्व करने के लिए प्रेरित करती हैं।"
     },
     mission: {
       icon: <Compass size={20} className="text-emerald-600" />,
-      title: "Our Mission",
-      text: "Our mission is to deliver comprehensive, high-quality secondary and higher secondary education under UPMSP standards. We commit to cultivating critical thinking, self-discipline, respect for cultural diversity, and physical fitness among students.",
+      title: "हमारा लक्ष्य",
+      text: "हमारा लक्ष्य UPMSP मानकों के तहत व्यापक, उच्च गुणवत्ता वाली माध्यमिक और उच्चतर माध्यमिक शिक्षा प्रदान करना है। हम छात्रों में महत्वपूर्ण सोच, आत्म-अनुशासन, सांस्कृतिक विविधता के प्रति सम्मान और शारीरिक फिटनेस को बढ़ावा देने के लिए प्रतिबद्ध हैं।",
       bullets: [
-        "Maintain excellent academic results through experienced teachers.",
-        "Integrate practical lab experiments and smart learning aids.",
-        "Nurture leadership and patriotic service through NCC and NSS programs."
+        "अनुभवी शिक्षकों के माध्यम से उत्कृष्ट शैक्षणिक परिणाम बनाए रखना।",
+        "व्यावहारिक प्रयोगशाला प्रयोगों और स्मार्ट शिक्षण सहायताओं को एकीकृत करना।",
+        "एनसीसी और एनएसएस कार्यक्रमों के माध्यम से नेतृत्व और देशभक्ति सेवा को बढ़ावा देना।"
       ],
-      fullText: "Our mission is to deliver comprehensive, high-quality secondary and higher secondary education under UPMSP standards. We commit to cultivating critical thinking, self-discipline, respect for cultural diversity, and physical fitness among students. Through rigorous coaching, sports training, and community service programs like NSS and NCC, we prepare students for competitive careers while instilling a deep respect for national heritage and civil duty. We work closely with parents and district educational authorities to create a safe, supportive, and highly competitive learning environment."
+      fullText: "हमारा लक्ष्य UPMSP मानकों के तहत व्यापक, उच्च गुणवत्ता वाली माध्यमिक और उच्चतर माध्यमिक शिक्षा प्रदान करना है। हम छात्रों में महत्वपूर्ण सोच, आत्म-अनुशासन, सांस्कृतिक विविधता के प्रति सम्मान और शारीरिक फिटनेस को बढ़ावा देने के लिए प्रतिबद्ध हैं। कठोर कोचिंग, खेल प्रशिक्षण और एनएसएस और एनसीसी जैसे सामुदायिक सेवा कार्यक्रमों के माध्यम से, हम छात्रों को प्रतिस्पर्धी करियर के लिए तैयार करते हैं और साथ ही राष्ट्रीय विरासत और नागरिक कर्तव्य के प्रति गहरा सम्मान जगाते हैं। हम एक सुरक्षित, सहयोगी और अत्यधिक प्रतिस्पर्धी शिक्षण वातावरण बनाने के लिए अभिभावकों और जिला शिक्षा अधिकारियों के साथ मिलकर काम करते हैं।"
+    }
+  };
+
+  const getTabLabel = (tab) => {
+    switch (tab) {
+      case 'history': return 'इतिहास';
+      case 'vision': return 'दृष्टिकोण';
+      case 'mission': return 'लक्ष्य';
+      default: return tab;
     }
   };
 
@@ -57,7 +66,7 @@ const AboutSchool = () => {
 
               <img
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVIcmizT-3O6y4SLXo71oXk1Her_lu-TwNLYbyzTxE94iuiXPI4wlP8WY&s=10" // College building / classroom
-                alt="Thakur Biri Singh Inter College Campus"
+                alt="ठाकुर बीरी सिंह इंटर कॉलेज परिसर"
                 className="w-full h-[350px] md:h-[450px] object-cover"
               />
 
@@ -65,10 +74,10 @@ const AboutSchool = () => {
               <div className="absolute bottom-6 left-6 right-6 z-20 text-white">
                 <span className="text-[10px] md:text-xs tracking-wider uppercase font-semibold text-secondary flex items-center gap-1">
                   <Sparkles size={12} />
-                  <span>Main Campus Building</span>
+                  <span>मुख्य परिसर भवन</span>
                 </span>
                 <h4 className="text-lg md:text-xl font-heading font-extrabold mt-1">
-                  Over 75 Years of Academic Heritage
+                  75 से अधिक वर्षों की शैक्षणिक विरासत
                 </h4>
               </div>
             </div>
@@ -76,20 +85,20 @@ const AboutSchool = () => {
             {/* Float badge */}
             <div className="absolute -top-6 -right-6 bg-secondary text-primary rounded-2xl p-4 shadow-xl border-4 border-slate-50 text-center max-w-[140px] transform rotate-3 hover:rotate-0 transition-transform duration-300 hidden sm:block">
               <span className="block text-3xl font-heading font-extrabold">1950</span>
-              <span className="block text-[10px] font-heading font-bold uppercase tracking-wider text-primary-dark">Estd. Year</span>
+              <span className="block text-[10px] font-heading font-bold uppercase tracking-wider text-primary-dark">स्थापना वर्ष</span>
             </div>
           </div>
 
           {/* Right Column: Tabbed Content */}
           <div className="lg:col-span-7 flex flex-col">
             <span className="text-xs md:text-sm font-heading font-extrabold text-primary tracking-widest uppercase bg-blue-50 px-3 py-1.5 rounded-full w-fit">
-              About Our Institution
+              हमारे संस्थान के बारे में
             </span>
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mt-4 leading-tight">
-              Thakur Biri Singh Inter College
+              ठाकुर बीरी सिंह इंटर कॉलेज
             </h2>
             <p className="text-slate-500 text-sm md:text-base mt-2">
-              Affiliated to the Board of High School and Intermediate Education, U.P. (UPMSP), Tundla.
+              माध्यमिक शिक्षा परिषद, उत्तर प्रदेश (UPMSP) से संबद्ध, टूंडला (फिरोजाबाद)।
             </p>
 
             {/* Tab buttons */}
@@ -106,7 +115,7 @@ const AboutSchool = () => {
                   {tab === 'history' && <History size={16} />}
                   {tab === 'vision' && <Target size={16} />}
                   {tab === 'mission' && <Compass size={16} />}
-                  <span>{tab}</span>
+                  <span>{getTabLabel(tab)}</span>
                 </button>
               ))}
             </div>
@@ -137,7 +146,7 @@ const AboutSchool = () => {
               onClick={() => setShowModal(true)}
               className="mt-8 bg-white hover:bg-slate-100 text-primary font-heading font-bold border border-primary/20 hover:border-primary/40 px-5 py-2.5 rounded-xl text-xs md:text-sm flex items-center justify-center gap-2 w-fit transition-all shadow-sm"
             >
-              <span>Read Full History & Profile</span>
+              <span>पूरा इतिहास और विवरण पढ़ें</span>
               <ChevronRight size={16} />
             </button>
           </div>
@@ -175,7 +184,7 @@ const AboutSchool = () => {
               </p>
 
               <div className="border-t border-slate-100 pt-4">
-                <h4 className="font-heading font-bold text-slate-800 mb-2">Institutional Milestones:</h4>
+                <h4 className="font-heading font-bold text-slate-800 mb-2">संस्थान के प्रमुख मील के पत्थर:</h4>
                 <ul className="space-y-2">
                   {tabsContent[activeTab].bullets.map((bullet, index) => (
                     <li key={index} className="flex items-start gap-2">
@@ -193,7 +202,7 @@ const AboutSchool = () => {
                 onClick={() => setShowModal(false)}
                 className="bg-primary hover:bg-primary-dark text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm transition-colors"
               >
-                Close Window
+                विंडो बंद करें
               </button>
             </div>
           </div>

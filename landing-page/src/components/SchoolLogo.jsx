@@ -98,7 +98,7 @@ const SchoolLogo = ({ size = 60, showText = true, textColor = "#ffffff", subText
             letterSpacing: '0px',
             fontFamily: 'var(--font-heading)'
           }}>
-            THAKUR BIRI SINGH INTER COLLEGE
+            ठाकुर बीरी सिंह इण्टर कॉलेज
           </h1>
           <span style={{
             fontSize: '0.65rem',
@@ -108,7 +108,7 @@ const SchoolLogo = ({ size = 60, showText = true, textColor = "#ffffff", subText
             marginTop: '2px',
             letterSpacing: '0.5px'
           }}>
-            TUNDLA, FIROZABAD (U.P.) • AFFILIATED TO UPMSP
+            टूण्डला, फ़िरोज़ाबाद (उ.प्र.) • यू.पी. बोर्ड सम्बद्ध
           </span>
         </div>
       )}

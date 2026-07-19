@@ -53,8 +53,8 @@ const SyllabusModal = ({ isOpen, onClose }) => {
               <BookOpen size={20} />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-800">Syllabus Desk</h3>
-              <p className="text-xs text-slate-500">Download curriculum plans and class guides</p>
+              <h3 className="text-base font-bold text-slate-800">पाठ्यक्रम एवं विषय विवरण</h3>
+              <p className="text-xs text-slate-500">कक्षा अनुसार पाठ्यक्रम और निर्देशिका डाउनलोड करें</p>
             </div>
           </div>
           <button 
@@ -73,7 +73,7 @@ const SyllabusModal = ({ isOpen, onClose }) => {
               <input 
                 type="text" 
                 className="w-full pl-10 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition text-slate-800"
-                placeholder="Search subject or syllabus name..."
+                placeholder="विषय या पाठ्यक्रम का नाम खोजें..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -87,9 +87,9 @@ const SyllabusModal = ({ isOpen, onClose }) => {
                 value={selectedClass}
                 onChange={(e) => setSelectedClass(e.target.value)}
               >
-                <option value="">All Classes</option>
-                <option value="11">Class 11</option>
-                <option value="12">Class 12</option>
+                <option value="">सभी कक्षाएं</option>
+                <option value="11">कक्षा 11</option>
+                <option value="12">कक्षा 12</option>
               </select>
             </div>
           </div>
@@ -100,7 +100,7 @@ const SyllabusModal = ({ isOpen, onClose }) => {
           {loading ? (
             <div className="flex flex-col items-center justify-center py-12 text-slate-400 gap-3">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500" />
-              <span className="text-sm">Fetching syllabus guides...</span>
+              <span className="text-sm">पाठ्यक्रम निर्देशिका प्राप्त की जा रही है...</span>
             </div>
           ) : filteredList.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -118,7 +118,7 @@ const SyllabusModal = ({ isOpen, onClose }) => {
                     <div>
                       <div className="flex justify-between items-start gap-2 mb-1.5">
                         <span className="text-[10px] font-black text-teal-600 bg-teal-50 px-2 py-0.5 rounded-md uppercase tracking-wider">
-                          Class {syllabus.class}
+                          कक्षा {syllabus.class}
                         </span>
                         <span className="text-[10px] font-bold text-slate-400">
                           {syllabus.academicYear}
@@ -128,7 +128,7 @@ const SyllabusModal = ({ isOpen, onClose }) => {
                         {syllabus.title}
                       </h4>
                       <p className="text-xs text-slate-500">
-                        Subject: <span className="font-semibold text-slate-700">{syllabus.subject}</span>
+                        विषय: <span className="font-semibold text-slate-700">{syllabus.subject}</span>
                       </p>
                     </div>
 
@@ -139,7 +139,7 @@ const SyllabusModal = ({ isOpen, onClose }) => {
                       className="w-full py-2 bg-slate-50 hover:bg-teal-600 hover:text-white text-slate-700 text-xs font-bold rounded-lg transition flex items-center justify-center gap-1.5 border border-slate-100 hover:border-teal-600 shadow-sm"
                     >
                       <Download size={14} />
-                      <span>Download PDF Syllabus</span>
+                      <span>पाठ्यक्रम पीडीफ़ डाउनलोड करें</span>
                     </a>
                   </div>
                 );
@@ -148,8 +148,8 @@ const SyllabusModal = ({ isOpen, onClose }) => {
           ) : (
             <div className="flex flex-col items-center justify-center py-16 text-slate-400">
               <Sparkles size={36} className="text-slate-300 mb-3" />
-              <p className="font-semibold text-sm text-slate-600">No syllabus documents found</p>
-              <p className="text-xs text-slate-400 mt-1">Try selecting another class standard or refining search text</p>
+              <p className="font-semibold text-sm text-slate-600">कोई पाठ्यक्रम दस्तावेज नहीं मिला</p>
+              <p className="text-xs text-slate-400 mt-1">कृपया कोई अन्य कक्षा चुनें या खोज शब्द बदलें</p>
             </div>
           )}
         </div>

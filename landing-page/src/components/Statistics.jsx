@@ -48,48 +48,48 @@ const Statistics = () => {
       icon: <Users size={28} />,
       value: "1250",
       suffix: "+",
-      label: "Active Students",
-      desc: "Enrolled in high school & intermediate",
+      label: "सक्रिय विद्यार्थी",
+      desc: "हाईस्कूल एवं इण्टरमीडिएट में नामांकित",
       color: "bg-blue-500/10 text-primary border-blue-500/20"
     },
     {
       icon: <GraduationCap size={28} />,
       value: "45",
       suffix: "+",
-      label: "Experienced Teachers",
-      desc: "Government certified lecturers",
+      label: "अनुभवी शिक्षक",
+      desc: "शासकीय मान्यता प्राप्त प्रवक्ता व शिक्षक",
       color: "bg-amber-500/10 text-secondary-dark border-amber-500/20"
     },
     {
       icon: <School size={28} />,
       value: "32",
       suffix: "",
-      label: "Classrooms",
-      desc: "Spacious and smart-enabled rooms",
+      label: "शिक्षण कक्षाएं",
+      desc: "विशाल एवं स्मार्ट शिक्षण कक्ष",
       color: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
     },
     {
       icon: <FlaskConical size={28} />,
       value: "6",
       suffix: "",
-      label: "Science Labs",
-      desc: "Modern Physics, Chemistry & Biology setups",
+      label: "विज्ञान प्रयोगशालाएं",
+      desc: "आधुनिक भौतिक, रसायन एवं जीव विज्ञान लैब",
       color: "bg-purple-500/10 text-purple-600 border-purple-500/20"
     },
     {
       icon: <Award size={28} />,
       value: "100",
       suffix: "%",
-      label: "Board Pass Results",
-      desc: "Consistent record in UPMSP boards",
+      label: "बोर्ड परीक्षा परिणाम",
+      desc: "यूपी बोर्ड परीक्षा में उत्कृष्ट प्रदर्शन",
       color: "bg-cyan-500/10 text-cyan-600 border-cyan-500/20"
     },
     {
       icon: <Milestone size={28} />,
       value: "75",
       suffix: "+",
-      label: "Years of Excellence",
-      desc: "Serving the region since 1950",
+      label: "उत्कृष्टता के वर्ष",
+      desc: "1950 से क्षेत्र की सेवा में समर्पित",
       color: "bg-rose-500/10 text-rose-600 border-rose-500/20"
     }
   ];

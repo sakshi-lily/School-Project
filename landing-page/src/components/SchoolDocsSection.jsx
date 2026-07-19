@@ -17,7 +17,7 @@ const SchoolDocsSection = ({ onOpenDocs }) => {
           <div>
             <span className="text-xs md:text-sm font-heading font-extrabold text-secondary tracking-widest uppercase bg-white/10 px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 shadow-sm">
               <ShieldCheck size={16} className="text-secondary" />
-              आधिकारिक विद्यालय दस्तावेज़ (Official Downloads)
+              आधिकारिक विद्यालय दस्तावेज़
             </span>
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-white mt-4 leading-tight">
               शासकीय शासनादेश, सूचना एवं अवकाश नियमावली
@@ -31,7 +31,7 @@ const SchoolDocsSection = ({ onOpenDocs }) => {
             onClick={onOpenDocs}
             className="self-start md:self-auto bg-secondary hover:bg-secondary-light text-primary font-bold px-6 py-3 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-secondary/20 text-xs md:text-sm group"
           >
-            <span>सभी दस्तावेज़ देखें (View All Documents)</span>
+            <span>सभी दस्तावेज़ देखें</span>
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
@@ -81,7 +81,7 @@ const SchoolDocsSection = ({ onOpenDocs }) => {
                   className="flex-1 py-2.5 px-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5"
                 >
                   <Eye size={14} className="text-secondary" />
-                  <span>देखें (View)</span>
+                  <span>देखें</span>
                 </button>
                 <a
                   href={doc.path}
@@ -89,7 +89,7 @@ const SchoolDocsSection = ({ onOpenDocs }) => {
                   className="flex-1 py-2.5 px-3 bg-secondary hover:bg-secondary-light text-primary font-bold text-xs rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5 shadow-md shadow-secondary/10"
                 >
                   <Download size={14} />
-                  <span>डाउनलोड (PDF)</span>
+                  <span>डाउनलोड</span>
                 </a>
               </div>
             </div>
@@ -111,7 +111,7 @@ const SchoolDocsSection = ({ onOpenDocs }) => {
             onClick={onOpenDocs}
             className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-xs transition-all border border-white/10"
           >
-            और दस्तावेज़ खोजें (Search Docs)
+            अन्य दस्तावेज़ खोजें
           </button>
         </div>
 

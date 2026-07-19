@@ -101,12 +101,12 @@ const AdmitCardModal = ({ isOpen, onClose }) => {
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!rollNumber || !academicYear || !dateOfBirth || !captchaInput) {
-      setError('Please fill in Roll Number, Academic Year, Date of Birth, and Captcha.');
+      setError('कृपया अनुक्रमांक, शैक्षणिक वर्ष, जन्म तिथि और कॅप्चा भरें।');
       return;
     }
 
     if (captchaInput.trim().toUpperCase() !== captchaText) {
-      setError('Invalid captcha code entered. Please try again.');
+      setError('अमान्य कॅप्चा कोड दर्ज किया गया। कृपया पुनः प्रयास करें।');
       generateCaptcha();
       return;
     }
@@ -123,11 +123,11 @@ const AdmitCardModal = ({ isOpen, onClose }) => {
         setAdmitCard(data.data);
         setIsAdmitCardDisplayOpen(true);
       } else {
-        setError(data.message || 'No records found.');
+        setError(data.message || 'कोई रिकॉर्ड नहीं मिला।');
         generateCaptcha();
       }
     } catch (err) {
-      setError('Failed to connect to the server. Please try again later.');
+      setError('सर्वर से कनेक्ट करने में विफल। कृपया बाद में पुनः प्रयास करें।');
       generateCaptcha();
     } finally {
       setLoading(false);
@@ -151,8 +151,8 @@ const AdmitCardModal = ({ isOpen, onClose }) => {
               <FileText size={20} />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-800">Admit Card Desk</h3>
-              <p className="text-xs text-slate-500">Download examination admit cards</p>
+              <h3 className="text-base font-bold text-slate-800">प्रवेश पत्र केंद्र (Admit Card Desk)</h3>
+              <p className="text-xs text-slate-500">परीक्षा प्रवेश पत्र डाउनलोड करें</p>
             </div>
           </div>
           <button 
@@ -175,13 +175,13 @@ const AdmitCardModal = ({ isOpen, onClose }) => {
           <form onSubmit={handleSearch} className="space-y-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                Roll Number / Registration No
+                अनुक्रमांक / पंजीकरण संख्या
               </label>
               <div className="relative">
                 <input 
                   type="text" 
                   className="w-full pl-10 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition text-slate-800"
-                  placeholder="e.g. 1024501"
+                  placeholder="उदा. 1024501"
                   value={rollNumber}
                   onChange={(e) => setRollNumber(e.target.value)}
                   required
@@ -193,7 +193,7 @@ const AdmitCardModal = ({ isOpen, onClose }) => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Academic Year
+                  शैक्षणिक वर्ष
                 </label>
                 <select 
                   className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:bg-white outline-none transition text-slate-800"
@@ -207,7 +207,7 @@ const AdmitCardModal = ({ isOpen, onClose }) => {
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Date of Birth
+                  जन्म तिथि
                 </label>
                 <input 
                   type="date" 
@@ -222,7 +222,7 @@ const AdmitCardModal = ({ isOpen, onClose }) => {
             {/* Captcha Section */}
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-3">
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Security Captcha Verification
+                सुरक्षा कॅप्चा सत्यापन (Captcha)
               </label>
               <div className="flex items-center gap-3">
                 <canvas 
@@ -235,13 +235,13 @@ const AdmitCardModal = ({ isOpen, onClose }) => {
                   type="button" 
                   onClick={generateCaptcha}
                   className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-200/50 rounded-lg transition"
-                  title="Generate new captcha code"
+                  title="नया कॅप्चा कोड जनरेट करें"
                 >
                   <RefreshCw size={16} />
                 </button>
                 <input 
                   type="text" 
-                  placeholder="Enter code" 
+                  placeholder="कोड दर्ज करें" 
                   maxLength={6}
                   className="flex-1 px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg uppercase font-mono tracking-widest text-center focus:ring-2 focus:ring-primary/20 outline-none text-slate-800"
                   value={captchaInput}
@@ -257,11 +257,11 @@ const AdmitCardModal = ({ isOpen, onClose }) => {
               className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-bold shadow-sm hover:shadow transition flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading ? (
-                <span>Retrieving Record...</span>
+                <span>रिकॉर्ड खोज रहे हैं...</span>
               ) : (
                 <>
                   <Search size={16} />
-                  <span>Download Admit Card</span>
+                  <span>प्रवेश पत्र डाउनलोड करें</span>
                 </>
               )}
             </button>
@@ -277,15 +277,15 @@ const AdmitCardModal = ({ isOpen, onClose }) => {
             {/* Modal Controls */}
             <div className="flex items-center justify-between px-6 py-4 bg-slate-50 border-b border-slate-200 shrink-0 print:hidden">
               <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest bg-emerald-50 px-2.5 py-1 rounded-full">
-                Document Found & Verified
+                दस्तावेज़ मिला और सत्यापित
               </span>
               <div className="flex items-center gap-2">
                 <button 
                   onClick={handlePrint}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow-sm"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-750 text-white rounded-lg text-xs font-bold transition shadow-sm"
                 >
                   <Printer size={14} />
-                  <span>Print / PDF Download</span>
+                  <span>प्रिंट / पीडीएफ डाउनलोड</span>
                 </button>
                 <button 
                   onClick={() => setIsAdmitCardDisplayOpen(false)}
@@ -305,57 +305,57 @@ const AdmitCardModal = ({ isOpen, onClose }) => {
                   <div className="flex items-center gap-3">
                     <SchoolLogo size={42} showText={false} />
                     <div>
-                      <h2 className="text-lg font-extrabold text-slate-800 leading-tight">THAKUR BIRI SINGH INTER COLLEGE</h2>
-                      <p className="text-[10px] text-slate-500 font-medium">Tundla, Firozabad (UP) - Affiliated to UPMSP</p>
+                      <h2 className="text-lg font-extrabold text-slate-800 leading-tight">ठाकुर बीरी सिंह इंटर कॉलेज</h2>
+                      <p className="text-[10px] text-slate-500 font-medium">टूंडला, फ़िरोज़ाबाद (उ.प्र.) - यूपीएमएसपी से संबद्ध</p>
                     </div>
                   </div>
                   <div className="text-right border-l pl-4 border-slate-200">
-                    <h3 className="text-sm font-black text-slate-800">EXAMINATION ADMIT CARD</h3>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase">ACADEMIC SESSION: {admitCard.academicYear}</p>
+                    <h3 className="text-sm font-black text-slate-800">परीक्षा प्रवेश पत्र</h3>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase">शैक्षणिक सत्र: {admitCard.academicYear}</p>
                   </div>
                 </div>
 
                 {/* Candidate Info Grid */}
                 <div className="grid grid-cols-3 gap-y-3 gap-x-4 mb-5 text-[11px] border-b pb-4 border-slate-200">
                   <div>
-                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">Student Name</span>
+                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">छात्र का नाम</span>
                     <span className="font-bold text-slate-800">{admitCard.studentName}</span>
                   </div>
                   <div>
-                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">Roll Number</span>
+                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">अनुक्रमांक (Roll No)</span>
                     <span className="font-bold text-slate-800 font-mono">{admitCard.rollNumber}</span>
                   </div>
                   <div>
-                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">Class / Standard</span>
-                    <span className="font-bold text-slate-800">Class {admitCard.class}</span>
+                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">कक्षा</span>
+                    <span className="font-bold text-slate-800">कक्षा {admitCard.class}</span>
                   </div>
                   <div>
-                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">Father's Name</span>
+                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">पिता का नाम</span>
                     <span className="font-bold text-slate-800">{admitCard.fatherName}</span>
                   </div>
                   <div>
-                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">Mother's Name</span>
+                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">माता का नाम</span>
                     <span className="font-bold text-slate-800">{admitCard.motherName}</span>
                   </div>
                   <div>
-                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">Date of Birth</span>
+                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">जन्म तिथि</span>
                     <span className="font-bold text-slate-800">{admitCard.dateOfBirth}</span>
                   </div>
                   <div className="col-span-3 border-t pt-2 mt-1">
-                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">Exam Centre Destination</span>
-                    <span className="font-bold text-slate-800">{admitCard.examCenter || 'Thakur Biri Singh Inter College, Tundla'}</span>
+                    <span className="block font-bold text-slate-500 uppercase tracking-wider text-[9px] mb-0.5">परीक्षा केंद्र</span>
+                    <span className="font-bold text-slate-800">{admitCard.examCenter || 'ठाकुर बीरी सिंह इंटर कॉलेज, टूंडला'}</span>
                   </div>
                 </div>
 
                 {/* Exam Datesheet Table */}
                 <div className="mb-6">
-                  <h4 className="text-xs font-bold text-slate-800 mb-2 uppercase tracking-wide">Examination Schedule / Datesheet</h4>
+                  <h4 className="text-xs font-bold text-slate-800 mb-2 uppercase tracking-wide">परीक्षा सारणी / टाइमटेबल</h4>
                   <table className="w-full text-left text-[11px] border border-slate-300">
                     <thead>
                       <tr className="bg-slate-100 border-b border-slate-300">
-                        <th className="p-2 border-r border-slate-300 font-bold text-slate-700">Subject Name</th>
-                        <th className="p-2 border-r border-slate-300 font-bold text-slate-700">Date of Exam</th>
-                        <th className="p-2 font-bold text-slate-700">Exam Timing</th>
+                        <th className="p-2 border-r border-slate-300 font-bold text-slate-700">विषय का नाम</th>
+                        <th className="p-2 border-r border-slate-300 font-bold text-slate-700">परीक्षा तिथि</th>
+                        <th className="p-2 font-bold text-slate-700">परीक्षा समय</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -369,7 +369,7 @@ const AdmitCardModal = ({ isOpen, onClose }) => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={3} className="p-4 text-center text-slate-400 italic">No exams registered for this session</td>
+                          <td colSpan={3} className="p-4 text-center text-slate-400 italic">इस सत्र के लिए कोई परीक्षा पंजीकृत नहीं है</td>
                         </tr>
                       )}
                     </tbody>
@@ -379,14 +379,14 @@ const AdmitCardModal = ({ isOpen, onClose }) => {
                 {/* Instructions & Stamp Footer */}
                 <div className="grid grid-cols-3 gap-4 pt-4 border-t border-slate-300 text-[9px] text-slate-500">
                   <div className="col-span-2 space-y-1">
-                    <span className="block font-bold text-slate-700 uppercase">Important Candidate Rules:</span>
-                    <p>1. Candidate must report to the examination center 30 minutes before schedule.</p>
-                    <p>2. Bringing mobile phones, smartwatches, or calculators inside the hall is strictly prohibited.</p>
-                    <p>3. Do not write or scribble anything on this admit card.</p>
+                    <span className="block font-bold text-slate-700 uppercase">परीक्षार्थियों के लिए आवश्यक नियम:</span>
+                    <p>1. परीक्षार्थी को परीक्षा शुरू होने से 30 मिनट पहले परीक्षा केंद्र पर पहुंचना अनिवार्य है।</p>
+                    <p>2. परीक्षा भवन के अंदर मोबाइल फोन, स्मार्टवॉच या कैलकुलेटर लाना सख्त मना है।</p>
+                    <p>3. इस प्रवेश पत्र पर कुछ भी न लिखें।</p>
                   </div>
                   <div className="flex flex-col items-center justify-end border border-dashed border-slate-300 p-2 rounded text-center">
-                    <div className="h-8 w-12 border-b border-slate-200 mb-1 flex items-center justify-center text-[7px] text-slate-400">Stamp</div>
-                    <span className="font-bold text-slate-700">Principal Signature</span>
+                    <div className="h-8 w-12 border-b border-slate-200 mb-1 flex items-center justify-center text-[7px] text-slate-400">मोहर (Stamp)</div>
+                    <span className="font-bold text-slate-700">प्रधानाचार्य के हस्ताक्षर</span>
                   </div>
                 </div>
 

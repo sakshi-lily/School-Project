@@ -36,21 +36,21 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
   }, []);
 
   const navItems = [
-    { label: 'Home', href: '#home' },
+    { label: 'मुख्य पृष्ठ', href: '#home' },
     {
-      label: 'About Us',
+      label: 'हमारे बारे में',
       href: '#about',
       dropdown: [
-        { label: 'History & Profile', href: '#about' },
-        { label: 'Vision & Mission', href: '#about' },
-        { label: 'Principal Message', href: '#principal-message' },
+        { label: 'इतिहास एवं परिचय', href: '#about' },
+        { label: 'दृष्टिकोण एवं लक्ष्य', href: '#about' },
+        { label: 'प्रधानाचार्य का संदेश', href: '#principal-message' },
       ]
     },
-    { label: 'School Docs', href: '#school-docs' },
-    { label: 'Gallery', href: '#gallery' },
-    { label: 'Notice Board', href: '#notices' },
-    { label: 'Academic Calendar', href: '#calendar' },
-    { label: 'Contact Us', href: '#contact' }
+    { label: 'शासकीय दस्तावेज', href: '#school-docs' },
+    { label: 'गैलरी', href: '#gallery' },
+    { label: 'सूचना पट्ट', href: '#notices' },
+    { label: 'शैक्षणिक कैलेंडर', href: '#calendar' },
+    { label: 'संपर्क करें', href: '#contact' }
   ];
 
   return (
@@ -60,7 +60,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
         <div className="flex flex-wrap items-center justify-center gap-4 text-center md:text-left">
           <span className="flex items-center gap-1.5 hover:text-secondary transition-colors">
             <MapPin size={14} className="text-secondary" />
-            <span>Tundla, Firozabad, U.P., India</span>
+            <span>टूण्डला, फ़िरोज़ाबाद, उ.प्र., भारत</span>
           </span>
           <span className="flex items-center gap-1.5 hover:text-secondary transition-colors">
             <Mail size={14} className="text-secondary" />
@@ -82,7 +82,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
             className="bg-secondary hover:bg-secondary-light text-primary font-bold px-3.5 py-1.5 rounded-full transition-all duration-300 transform hover:scale-105 flex items-center gap-1 shadow-sm text-xs"
           >
             <GraduationCap size={14} />
-            <span>Apply for Admission</span>
+            <span>प्रवेश हेतु आवेदन करें</span>
           </a>
 
           <div 
@@ -94,7 +94,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
               className="bg-white/10 hover:bg-white/20 text-white font-semibold px-3 py-1.5 rounded-full transition-all duration-300 flex items-center gap-1 text-xs"
             >
               <User size={14} />
-              <span>Portals</span>
+              <span>पोर्टल</span>
               <ChevronDown size={12} className={`transition-transform duration-200 ${isPortalsOpen ? 'rotate-180' : ''}`} />
             </button>
 
@@ -107,7 +107,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
                   className="flex items-center gap-2 px-4 py-2 hover:bg-slate-50 text-slate-700 hover:text-primary font-medium transition-colors text-xs md:text-sm"
                 >
                   <Landmark size={16} className="text-primary" />
-                  <span>Principal Portal</span>
+                  <span>प्रधानाचार्य पोर्टल</span>
                 </a>
                 <a
                   href={import.meta.env.VITE_TEACHER_PORTAL_URL || 'http://localhost:5175'}
@@ -116,7 +116,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
                   className="flex items-center gap-2 px-4 py-2 hover:bg-slate-50 text-slate-700 hover:text-primary font-medium transition-colors text-xs md:text-sm"
                 >
                   <LogIn size={16} className="text-primary" />
-                  <span>Teacher Portal</span>
+                  <span>शिक्षक पोर्टल</span>
                 </a>
               </div>
             )}
@@ -130,12 +130,12 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
           <SchoolLogo className="w-12 h-12 md:w-16 md:h-16" textColor="text-primary" />
           <div className="hidden lg:flex items-center gap-3">
             <div className="text-right">
-              <p className="text-xs text-slate-500 font-medium">UPMSP Code</p>
-              <p className="text-sm font-bold text-primary">1012 (TBS Tundla)</p>
+              <p className="text-xs text-slate-500 font-medium">यूपी बोर्ड कोड</p>
+              <p className="text-sm font-bold text-primary">1012 (टी.बी.एस. टूण्डला)</p>
             </div>
             <div className="h-8 w-px bg-slate-200"></div>
             <div className="text-right">
-              <p className="text-xs text-slate-500 font-medium">Establishment Year</p>
+              <p className="text-xs text-slate-500 font-medium">स्थापना वर्ष</p>
               <p className="text-sm font-bold text-primary">1950</p>
             </div>
           </div>
@@ -153,7 +153,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
             <SchoolLogo className="w-10 h-10" showText={true} textColor="text-primary" />
           ) : (
             <div className="lg:hidden">
-              <span className="font-heading font-extrabold text-sm md:text-base text-white tracking-tight">TBS INTER COLLEGE</span>
+              <span className="font-heading font-extrabold text-sm md:text-base text-white tracking-tight">ठाकुर बीरी सिंह इण्टर कॉलेज</span>
             </div>
           )}
 
@@ -170,10 +170,10 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
                   <a
                     href={item.href}
                     onClick={(e) => {
-                      if (item.label === 'Academic Calendar') {
+                      if (item.label === 'शैक्षणिक कैलेंडर') {
                         e.preventDefault();
                         if (onOpenCalendar) onOpenCalendar();
-                      } else if (item.label === 'School Docs') {
+                      } else if (item.label === 'शासकीय दस्तावेज') {
                         if (onOpenDocs) {
                           e.preventDefault();
                           onOpenDocs();
@@ -196,7 +196,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
                           key={sIdx}
                           href={sub.href}
                           onClick={(e) => {
-                            if (sub.label === 'Check Board Results' || sub.label === 'Student Portal') {
+                            if (sub.label === 'परीक्षा परिणाम देखें' || sub.label === 'छात्र पोर्टल') {
                               e.preventDefault();
                               if (onOpenResults) onOpenResults();
                             }
@@ -236,10 +236,10 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
                       href={item.href}
                       onClick={(e) => {
                         setIsOpen(false);
-                        if (item.label === 'Academic Calendar') {
+                        if (item.label === 'शैक्षणिक कैलेंडर') {
                           e.preventDefault();
                           if (onOpenCalendar) onOpenCalendar();
-                        } else if (item.label === 'School Docs') {
+                        } else if (item.label === 'शासकीय दस्तावेज') {
                           if (onOpenDocs) {
                             e.preventDefault();
                             onOpenDocs();
@@ -268,7 +268,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
                           href={sub.href}
                           onClick={(e) => {
                             setIsOpen(false);
-                            if (sub.label === 'Check Board Results' || sub.label === 'Student Portal') {
+                            if (sub.label === 'परीक्षा परिणाम देखें' || sub.label === 'छात्र पोर्टल') {
                               e.preventDefault();
                               onOpenResults();
                             }
@@ -291,7 +291,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
                   className="flex items-center justify-center gap-2 py-2.5 bg-slate-100 hover:bg-slate-200 text-primary font-bold rounded-lg text-sm text-center"
                 >
                   <Landmark size={16} />
-                  <span>Principal Portal</span>
+                  <span>प्रधानाचार्य पोर्टल</span>
                 </a>
                 <a
                   href={import.meta.env.VITE_TEACHER_PORTAL_URL || 'http://localhost:5175'}
@@ -300,7 +300,7 @@ const Navbar = ({ onOpenResults, onOpenAdmission, onOpenCalendar, onOpenDocs }) 
                   className="flex items-center justify-center gap-2 py-2.5 bg-primary hover:bg-primary-dark text-white font-bold rounded-lg text-sm text-center"
                 >
                   <LogIn size={16} />
-                  <span>Teacher Portal</span>
+                  <span>शिक्षक पोर्टल</span>
                 </a>
               </div>
             </div>

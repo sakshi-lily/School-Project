@@ -118,12 +118,12 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!rollNumber || !academicYear || !dateOfBirth || !captchaInput) {
-      setError('Please fill in Roll Number, Academic Year, Date of Birth, and Captcha.');
+      setError('कृपया अनुक्रमांक, शैक्षणिक वर्ष, जन्म तिथि और कॅप्चा भरें।');
       return;
     }
 
     if (captchaInput.trim().toUpperCase() !== captchaText) {
-      setError('Invalid captcha code entered. Please try again.');
+      setError('अमान्य कॅप्चा कोड दर्ज किया गया। कृपया पुनः प्रयास करें।');
       generateCaptcha();
       return;
     }
@@ -140,11 +140,11 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
         setResult(data.data);
         setIsResultDisplayOpen(true);
       } else {
-        setError(data.message || 'No records found.');
+        setError(data.message || 'कोई रिकॉर्ड नहीं मिला।');
         generateCaptcha();
       }
     } catch (err) {
-      setError('Failed to connect to the server. Please try again later.');
+      setError('सर्वर से कनेक्ट करने में विफल। कृपया बाद में पुनः प्रयास करें।');
       generateCaptcha();
     } finally {
       setLoading(false);
@@ -166,7 +166,7 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
         <div className="flex justify-between items-center px-6 py-4 bg-primary text-white border-b border-white/10 print:hidden">
           <div className="flex items-center gap-2">
             <Award size={24} className="text-secondary" />
-            <h2 className="font-heading font-extrabold text-lg">Public Result Verification Portal</h2>
+            <h2 className="font-heading font-extrabold text-lg">सार्वजनिक परिणाम सत्यापन पोर्टल</h2>
           </div>
           <button 
             onClick={onClose}
@@ -181,10 +181,10 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
           <form onSubmit={handleSearch} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">Student Roll Number</label>
+                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">छात्र अनुक्रमांक (Roll Number)</label>
                 <input
                   type="text"
-                  placeholder="e.g. 26105342"
+                  placeholder="उदा. 26105342"
                   value={rollNumber}
                   onChange={(e) => setRollNumber(e.target.value)}
                   className="px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 text-sm font-semibold focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
@@ -193,7 +193,7 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">Date of Birth</label>
+                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">जन्म तिथि</label>
                 <input
                   type="date"
                   value={dateOfBirth}
@@ -204,7 +204,7 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
               </div>
               
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">Academic Year</label>
+                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">शैक्षणिक वर्ष</label>
                 <select
                   value={academicYear}
                   onChange={(e) => setAcademicYear(e.target.value)}
@@ -221,7 +221,7 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
               {/* Security Captcha */}
               <div className="flex flex-col gap-1.5 md:col-span-2">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">Security Captcha</label>
+                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">सुरक्षा कॅप्चा (Captcha)</label>
                 <div className="flex gap-2 items-center">
                   <div className="relative border border-slate-200 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0" style={{ width: '130px', height: '44px' }}>
                     <canvas ref={canvasRef} width="130" height="44" />
@@ -230,13 +230,13 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
                     type="button"
                     onClick={generateCaptcha}
                     className="p-3 bg-white hover:bg-slate-100 border border-slate-200 text-slate-600 rounded-xl transition-all"
-                    title="Reload Captcha"
+                    title="कॅप्चा रीलोड करें"
                   >
                     <RefreshCw size={16} />
                   </button>
                   <input
                     type="text"
-                    placeholder="Enter security code"
+                    placeholder="सुरक्षा कोड दर्ज करें"
                     value={captchaInput}
                     onChange={(e) => setCaptchaInput(e.target.value)}
                     className="flex-1 px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
@@ -253,11 +253,11 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
                   className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg disabled:bg-slate-300 disabled:cursor-not-allowed"
                 >
                   {loading ? (
-                    <span>Searching...</span>
+                    <span>खोज रहे हैं...</span>
                   ) : (
                     <>
                       <Search size={18} />
-                      <span>Search Results</span>
+                      <span>परिणाम खोजें</span>
                     </>
                   )}
                 </button>
@@ -265,7 +265,7 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
             </div>
           </form>
           <p className="text-[11px] text-slate-400 mt-2">
-            * Note: Only the latest 3 academic years are accessible for online public verification.
+            * नोट: ऑनलाइन सार्वजनिक सत्यापन के लिए केवल पिछले 3 शैक्षणिक वर्ष उपलब्ध हैं।
           </p>
         </div>
 
@@ -281,19 +281,19 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
           {!result && !error && (
             <div className="flex flex-col items-center justify-center py-16 text-center text-slate-400 print:hidden">
               <FileText size={48} className="text-slate-300 mb-3" />
-              <p className="font-semibold">Enter Roll Number and select Academic Year above</p>
-              <p className="text-xs text-slate-400">Results will be loaded dynamically</p>
+              <p className="font-semibold">ऊपर अनुक्रमांक दर्ज करें और शैक्षणिक वर्ष चुनें</p>
+              <p className="text-xs text-slate-400">परिणाम स्वचालित रूप से लोड किए जाएंगे</p>
             </div>
           )}
 
           {result && !isResultDisplayOpen && (
             <div className="flex flex-col items-center justify-center py-8 text-center text-emerald-600 print:hidden">
-              <p className="font-bold text-sm">Result loaded successfully!</p>
+              <p className="font-bold text-sm">परिणाम सफलतापूर्वक लोड हुआ!</p>
               <button
                 onClick={() => setIsResultDisplayOpen(true)}
                 className="mt-2 text-xs text-primary underline font-semibold hover:text-primary-dark"
               >
-                View Marksheet Popup
+                अंकपत्र (Marksheet) देखें
               </button>
             </div>
           )}
@@ -309,7 +309,7 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
             <div className="flex justify-between items-center px-6 py-3.5 bg-slate-900 text-white border-b border-slate-800 flex-shrink-0 print:hidden">
               <div className="flex items-center gap-2">
                 <Award size={20} className="text-secondary" />
-                <h3 className="font-heading font-extrabold text-xs md:text-sm tracking-wide uppercase">Academic Statement of Marks</h3>
+                <h3 className="font-heading font-extrabold text-xs md:text-sm tracking-wide uppercase">अकादमिक अंकपत्र (Statement of Marks)</h3>
               </div>
               <div className="flex items-center gap-3">
                 {/* Highlighted Print Button */}
@@ -318,12 +318,12 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
                   className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-750 text-white font-extrabold rounded-xl text-xs md:text-sm transition-all shadow-lg hover:shadow-emerald-600/35 border border-emerald-500 hover:scale-105 active:scale-95 animate-pulse"
                 >
                   <Printer size={16} />
-                  <span>Print Marksheet (PDF)</span>
+                  <span>अंकपत्र प्रिंट करें (PDF)</span>
                 </button>
                 <button 
                   onClick={() => setIsResultDisplayOpen(false)}
                   className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
-                  title="Close Result Popup"
+                  title="परिणाम बंद करें"
                 >
                   <X size={20} />
                 </button>
@@ -338,36 +338,36 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
                   {/* School Header */}
                   <div className="text-center border-b-2 border-slate-300 pb-2 mb-3 print:border-slate-800">
                     <h3 className="font-heading font-extrabold text-lg text-slate-800 tracking-tight uppercase">
-                      THAKUR BIRI SINGH INTER COLLEGE
+                      ठाकुर बीरी सिंह इंटर कॉलेज
                     </h3>
                     <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mt-0.5">
-                      Tundla, Firozabad, Uttar Pradesh, India
+                      टूंडला, फ़िरोज़ाबाद, उत्तर प्रदेश, भारत
                     </p>
                     <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
-                      UPMSP Code: 1012 | Estd: 1950
+                      यूपीएमएसपी कोड: 1012 | स्थापना: 1950
                     </p>
                     <div className="mt-2 bg-slate-100 py-1 px-2.5 inline-block rounded-lg font-heading font-extrabold text-[10px] text-primary uppercase print:bg-slate-250 print:text-black border border-slate-200">
-                      ACADEMIC STATEMENT OF MARKS ({result.academicYear})
+                      अकादमिक अंकपत्र ({result.academicYear})
                     </div>
                   </div>
 
                   {/* Student Info Grid */}
                   <div className="grid grid-cols-2 gap-y-1.5 gap-x-4 text-xs text-slate-700 border-b border-slate-200 pb-2 mb-3 print:grid-cols-2 print:border-slate-800">
                     <div>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase">Student Name:</span>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase">छात्र का नाम:</span>
                       <p className="font-extrabold text-slate-800 text-sm uppercase">{result.studentName}</p>
                     </div>
                     <div>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase">Roll Number:</span>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase">अनुक्रमांक (Roll No):</span>
                       <p className="font-extrabold text-slate-800 text-sm tracking-wider">{result.rollNumber}</p>
                     </div>
                     <div>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase">Class & Section:</span>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase">कक्षा एवं वर्ग:</span>
                       <p className="font-bold text-slate-700 uppercase">{result.class}</p>
                     </div>
                     <div>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase">Examination Term:</span>
-                      <p className="font-bold text-slate-700 uppercase">{result.term} Examination</p>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase">परीक्षा सत्र:</span>
+                      <p className="font-bold text-slate-700 uppercase">{result.term} परीक्षा</p>
                     </div>
                   </div>
 
@@ -375,9 +375,9 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
                   <table className="w-full border-collapse border border-slate-200 text-xs mb-3 print:border-slate-800">
                     <thead>
                       <tr className="bg-slate-50 print:bg-slate-100">
-                        <th className="border border-slate-200 px-3 py-1.5 text-left font-bold text-slate-700 uppercase tracking-wider print:border-slate-800">Subject Name</th>
-                        <th className="border border-slate-200 px-3 py-1.5 text-center font-bold text-slate-700 uppercase tracking-wider w-24 print:border-slate-800">Max Marks</th>
-                        <th className="border border-slate-200 px-3 py-1.5 text-center font-bold text-slate-700 uppercase tracking-wider w-28 print:border-slate-800">Marks Obtained</th>
+                        <th className="border border-slate-200 px-3 py-1.5 text-left font-bold text-slate-700 uppercase tracking-wider print:border-slate-800">विषय का नाम</th>
+                        <th className="border border-slate-200 px-3 py-1.5 text-center font-bold text-slate-700 uppercase tracking-wider w-24 print:border-slate-800">अधिकतम अंक</th>
+                        <th className="border border-slate-200 px-3 py-1.5 text-center font-bold text-slate-700 uppercase tracking-wider w-28 print:border-slate-800">प्राप्तांक</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -397,21 +397,21 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
                   {/* Summary Row */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2 p-2.5 bg-slate-50 border border-slate-100 rounded-xl print:grid-cols-4 print:bg-slate-100 print:border-slate-800">
                     <div className="text-center md:text-left">
-                      <span className="text-[9px] font-bold text-slate-400 uppercase">Grand Total</span>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase">कुल प्राप्तांक</span>
                       <p className="font-extrabold text-slate-800 text-sm md:text-base">{result.totalMarks} / {result.maxTotalMarks}</p>
                     </div>
                     <div className="text-center md:text-left">
-                      <span className="text-[9px] font-bold text-slate-400 uppercase">Percentage</span>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase">प्रतिशत</span>
                       <p className="font-extrabold text-slate-800 text-sm md:text-base">{result.percentage}%</p>
                     </div>
                     <div className="text-center md:text-left">
-                      <span className="text-[9px] font-bold text-slate-400 uppercase">Grade Secured</span>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase">श्रेणी (Grade)</span>
                       <p className="font-extrabold text-slate-800 text-sm md:text-base">{result.grade}</p>
                     </div>
                     <div className="text-center md:text-left">
-                      <span className="text-[9px] font-bold text-slate-400 uppercase">Result Status</span>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase">परिणाम स्थिति</span>
                       <p className={`font-extrabold text-sm md:text-base uppercase ${result.percentage >= 33 ? 'text-emerald-600' : 'text-rose-600'}`}>
-                        {result.percentage >= 33 ? 'PASS' : 'FAIL'}
+                        {result.percentage >= 33 ? 'उत्तीर्ण (PASS)' : 'अनुत्तीर्ण (FAIL)'}
                       </p>
                     </div>
                   </div>
@@ -419,12 +419,12 @@ const ResultPortalModal = ({ isOpen, onClose }) => {
                   {/* Disclaimers / Signatures */}
                   <div className="mt-4 pt-3 border-t border-slate-200 flex justify-between items-end print:border-slate-800">
                     <div className="text-[9px] text-slate-400 max-w-md leading-relaxed">
-                      <p className="font-semibold">* Passing Criteria: Minimum 33% marks required in each subject.</p>
-                      <p className="mt-0.5">Disclaimer: This is an online generated transcript statement. In case of discrepancies, the official hardcopy registry records of TBS Inter College shall be final.</p>
+                      <p className="font-semibold">* उत्तीर्ण मापदंड: प्रत्येक विषय में न्यूनतम 33% अंक आवश्यक हैं।</p>
+                      <p className="mt-0.5">अस्वीकरण: यह एक ऑनलाइन जनरेटेड अंकपत्र है। किसी भी विसंगति के मामले में, टीबीएस इंटर कॉलेज का आधिकारिक रिकॉर्ड अंतिम माना जाएगा।</p>
                     </div>
                     <div className="text-center">
                       <div className="w-32 h-px bg-slate-450 mb-1.5 print:bg-slate-800"></div>
-                      <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Office Registrar</span>
+                      <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">कार्यालय कुलसचिव (Registrar)</span>
                     </div>
                   </div>
                 </div>

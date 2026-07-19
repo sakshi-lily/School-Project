@@ -4,20 +4,20 @@ import { Quote, X } from 'lucide-react';
 const PrincipalMessage = () => {
   const [showModal, setShowModal] = useState(false);
 
-  const fullMessage = `Dear Students, Parents, and Well-wishers,
+  const fullMessage = `प्रिय छात्रों, अभिभावकों और शुभचिंतकों,
 
-It is my privilege to welcome you to Thakur Biri Singh Inter College, Tundla. Since our establishment in 1950, we have stayed committed to creating a high-achieving, disciplined, and nurturing environment for all our students.
+ठाकुर बीरी सिंह इंटर कॉलेज, टूंडला में आपका स्वागत करते हुए मुझे अत्यंत प्रसन्नता हो रही है। 1950 में अपनी स्थापना के बाद से, हम अपने सभी छात्रों के लिए एक उच्च-प्राप्ति, अनुशासित और पोषण युक्त वातावरण बनाने के लिए प्रतिबद्ध रहे हैं।
 
-Education is not just about learning facts; it is about training the mind to think and the heart to feel. Our team of highly experienced teachers works tirelessly to ensure that our students do not just pass UPMSP board examinations with flying colors, but also develop strong moral character, national pride, and the analytical tools needed in the 21st century.
+शिक्षा केवल तथ्यों को सीखना नहीं है; यह मन को सोचने और हृदय को महसूस करने के लिए प्रशिक्षित करने के बारे में है। हमारे अत्यधिक अनुभवी शिक्षकों की टीम यह सुनिश्चित करने के लिए अथक प्रयास करती है कि हमारे छात्र न केवल UPMSP बोर्ड परीक्षाओं में उत्कृष्ट अंक प्राप्त करें, बल्कि उनमें मजबूत नैतिक चरित्र, राष्ट्रीय गौरव और 21वीं सदी में आवश्यक विश्लेषणात्मक कौशल भी विकसित हों।
 
-We have continuously modernized our classrooms and science laboratories to keep pace with changing educational landscapes. Our focus remains on merit, inclusion, and holistic growth through sports, arts, NCC, and NSS initiatives. I invite you all to join hands with us as we guide the next generation towards a bright and purposeful future.
+हमने बदलते शैक्षणिक परिदृश्य के साथ तालमेल बनाए रखने के लिए अपनी कक्षाओं और विज्ञान प्रयोगशालाओं का लगातार आधुनिकीकरण किया है। हमारा ध्यान योग्यता, समावेशिता और खेलों, कला, एनसीसी (NCC) और एनएसएस (NSS) पहलों के माध्यम से समग्र विकास पर बना हुआ है। मैं आप सभी को हमारे साथ हाथ मिलाने के लिए आमंत्रित करता हूँ क्योंकि हम अगली पीढ़ी को एक उज्ज्वल और उद्देश्यपूर्ण भविष्य की ओर मार्गदर्शन करते हैं।
 
-Jai Hind!
+जय हिंद!
 
-Warm regards,
+सादर,
 
-Shri R. M. Pangoria
-Principal, Thakur Biri Singh Inter College`;
+श्री आर. एम. पंगोरिया
+प्रधानाचार्य, ठाकुर बीरी सिंह इंटर कॉलेज`;
 
   return (
     <section id="principal-message" className="py-16 md:py-24 bg-white relative">
@@ -36,19 +36,19 @@ Principal, Thakur Biri Singh Inter College`;
               <div className="relative w-56 h-56 md:w-64 md:h-64 rounded-2xl overflow-hidden border-4 border-white shadow-xl bg-slate-200">
                 <img
                   src="https://chatgpt.com/backend-api/estuary/content?id=file_000000009f1c71fbac5ac3c0a12be09d&ts=495376&p=fs&cid=1&sig=3836db9b00493905c8a50feaad9ecd05d30329ebedca111a60f82b667a2fb902&v=0" // Professional educator photo
-                  alt="Shri R. M. Pangoria - Principal"
+                  alt="श्री आर. एम. पंगोरिया - प्रधानाचार्य"
                   className="w-full h-full object-cover object-top"
                 />
               </div>
               <div className="text-center mt-4">
                 <h3 className="font-heading font-extrabold text-lg md:text-xl text-slate-800">
-                  Shri R. M. Pangoria
+                  श्री आर. एम. पंगोरिया
                 </h3>
                 <p className="text-xs md:text-sm font-semibold text-secondary-dark uppercase tracking-wider mt-0.5">
-                  Principal, Ph.D., M.Ed.
+                  प्रधानाचार्य, पी.एच.डी., एम.एड.
                 </p>
                 <p className="text-[10px] md:text-xs text-slate-400 mt-0.5">
-                  Thakur Biri Singh Inter College
+                  ठाकुर बीरी सिंह इंटर कॉलेज
                 </p>
               </div>
             </div>
@@ -60,26 +60,26 @@ Principal, Thakur Biri Singh Inter College`;
               </div>
 
               <h2 className="text-2xl md:text-3xl font-heading font-extrabold text-slate-900 leading-tight">
-                From the Desk of the Principal
+                प्रधानाचार्य का संदेश
               </h2>
 
               <div className="h-1.5 w-20 bg-secondary rounded-full mt-3 mb-6"></div>
 
               <p className="text-slate-600 text-xs md:text-sm leading-relaxed font-medium italic">
-                "Welcome to Thakur Biri Singh Inter College, Tundla. Since our establishment in 1950, we have stayed committed to creating a high-achieving, disciplined, and nurturing environment for all our students. Education is not just about learning facts; it is about training the mind to think and the heart to feel..."
+                "ठाकुर बीरी सिंह इंटर कॉलेज, टूंडला में आपका स्वागत है। 1950 में अपनी स्थापना के बाद से, हम अपने सभी छात्रों के लिए एक उच्च-प्राप्ति, अनुशासित और पोषण युक्त वातावरण बनाने के लिए प्रतिबद्ध रहे हैं। शिक्षा केवल तथ्यों को सीखना नहीं है; यह मन को सोचने और हृदय को महसूस करने के लिए प्रशिक्षित करने के बारे में है..."
               </p>
 
               {/* Signature */}
               <div className="mt-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
                   <p className="font-heading font-bold text-xs text-slate-500 uppercase tracking-wider">
-                    Official Signature
+                    आधिकारिक हस्ताक्षर
                   </p>
                   <p className="font-serif italic text-2xl text-primary font-bold mt-1.5 opacity-90 select-none">
                     RMPangoria
                   </p>
                   <p className="text-xs text-slate-500 font-semibold mt-1">
-                    Shri R. M. Pangoria
+                    श्री आर. एम. पंगोरिया
                   </p>
                 </div>
 
@@ -87,7 +87,7 @@ Principal, Thakur Biri Singh Inter College`;
                   onClick={() => setShowModal(true)}
                   className="bg-primary hover:bg-primary-dark text-white font-heading font-bold px-5 py-2.5 rounded-xl text-xs md:text-sm transition-colors shadow-md flex items-center justify-center gap-1.5 w-fit"
                 >
-                  <span>Read Full Message</span>
+                  <span>पूरा संदेश पढ़ें</span>
                 </button>
               </div>
             </div>
@@ -103,7 +103,7 @@ Principal, Thakur Biri Singh Inter College`;
             {/* Modal Header */}
             <div className="bg-primary text-white p-6 flex justify-between items-center">
               <h3 className="font-heading font-bold text-lg text-white">
-                Principal's Full Address
+                प्रधानाचार्य का पूर्ण संदेश
               </h3>
               <button
                 onClick={() => setShowModal(false)}
@@ -124,7 +124,7 @@ Principal, Thakur Biri Singh Inter College`;
                 onClick={() => setShowModal(false)}
                 className="bg-primary hover:bg-primary-dark text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm transition-colors"
               >
-                Close Message
+                संदेश बंद करें
               </button>
             </div>
           </div>

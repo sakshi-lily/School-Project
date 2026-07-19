@@ -63,13 +63,13 @@ const Contact = () => {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-xs md:text-sm font-heading font-extrabold text-primary tracking-widest uppercase bg-blue-50 px-3 py-1.5 rounded-full">
-            Get In Touch
+            संपर्क करें
           </span>
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mt-4 leading-tight">
-            Contact School Principle
+            विद्यालय प्राचार्य से संपर्क करें
           </h2>
           <p className="text-slate-500 text-sm md:text-base mt-3">
-            Have questions about admissions, fees, or curricula? Drop us a line or visit our campus.
+            प्रवेश, शुल्क या पाठ्यक्रम से संबंधित प्रश्न हैं? हमें संदेश भेजें या विद्यालय परिसर आएं।
           </p>
         </div>
 
@@ -85,11 +85,11 @@ const Contact = () => {
                   <MapPin size={20} />
                 </div>
                 <div>
-                  <h4 className="font-heading font-bold text-slate-800 text-sm md:text-base">Campus Address</h4>
+                  <h4 className="font-heading font-bold text-slate-800 text-sm md:text-base">विद्यालय परिसर का पता</h4>
                   <p className="text-slate-500 text-xs md:text-sm mt-1 leading-relaxed">
-                    Thakur Biri Singh Inter College, <br />
-                    Tundla, Firozabad, <br />
-                    Uttar Pradesh, PIN - 283204, India
+                    ठाकुर बीरी सिंह इंटर कॉलेज, <br />
+                    टुंडला, फिरोजाबाद, <br />
+                    उत्तर प्रदेश, पिन - 283204, भारत
                   </p>
                 </div>
               </div>
@@ -99,7 +99,7 @@ const Contact = () => {
                   <Phone size={20} />
                 </div>
                 <div>
-                  <h4 className="font-heading font-bold text-slate-800 text-sm md:text-base">Phone Number</h4>
+                  <h4 className="font-heading font-bold text-slate-800 text-sm md:text-base">फोन नंबर</h4>
                   <p className="text-slate-500 text-xs md:text-sm mt-1 leading-relaxed">
                     <a href="tel:+919557244888" className="hover:text-primary font-semibold transition-colors">+91 9557244888</a>
                   </p>
@@ -111,7 +111,7 @@ const Contact = () => {
                   <Mail size={20} />
                 </div>
                 <div>
-                  <h4 className="font-heading font-bold text-slate-800 text-sm md:text-base">Email Support</h4>
+                  <h4 className="font-heading font-bold text-slate-800 text-sm md:text-base">ईमेल सहायता</h4>
                   <p className="text-slate-500 text-xs md:text-sm mt-1 leading-relaxed">
                     <a href="mailto:th.bsictundla1948@gmail.com" className="hover:text-primary font-semibold transition-colors">th.bsictundla1948@gmail.com</a>
                   </p>
@@ -139,21 +139,21 @@ const Contact = () => {
           <div className="lg:col-span-7">
             <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm">
               <h3 className="font-heading font-extrabold text-xl text-slate-800 mb-6">
-                Send an Inquiry Message
+                पूछताछ संदेश भेजें
               </h3>
 
               {status === 'success' ? (
                 <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex flex-col items-center text-center animate-in fade-in duration-300">
                   <CheckCircle2 size={48} className="text-emerald-500 mb-3" />
-                  <h4 className="font-heading font-bold text-emerald-800 text-lg">Message Sent Successfully!</h4>
+                  <h4 className="font-heading font-bold text-emerald-800 text-lg">संदेश सफलतापूर्वक भेजा गया!</h4>
                   <p className="text-slate-500 text-xs md:text-sm mt-1 leading-relaxed">
-                    Thank you for reaching out. The school principle has received your query and will get back to you shortly.
+                    संपर्क करने के लिए धन्यवाद। विद्यालय प्राचार्य को आपकी पूछताछ प्राप्त हो गई है और वह शीघ्र ही आपसे संपर्क करेंगे।
                   </p>
                   <button
                     onClick={() => setStatus('idle')}
                     className="mt-6 bg-primary hover:bg-primary-dark text-white font-bold px-5 py-2.5 rounded-xl text-xs md:text-sm transition-colors"
                   >
-                    Send Another Message
+                    दूसरा संदेश भेजें
                   </button>
                 </div>
               ) : (
@@ -161,7 +161,7 @@ const Contact = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1.5">
                       <label htmlFor="name" className="text-xs font-bold text-slate-500 uppercase tracking-wide">
-                        Full Name <span className="text-rose-500">*</span>
+                        पूरा नाम <span className="text-rose-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -170,13 +170,13 @@ const Contact = () => {
                         value={formData.name}
                         onChange={handleChange}
                         className="border border-slate-200 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-xs md:text-sm outline-none transition-all"
-                        placeholder="Shri Kumar"
+                        placeholder="उदा. श्री कुमार"
                       />
                     </div>
 
                     <div className="flex flex-col gap-1.5">
                       <label htmlFor="email" className="text-xs font-bold text-slate-500 uppercase tracking-wide">
-                        Email Address <span className="text-rose-500">*</span>
+                        ईमेल पता <span className="text-rose-500">*</span>
                       </label>
                       <input
                         type="email"
@@ -193,7 +193,7 @@ const Contact = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1.5">
                       <label htmlFor="phone" className="text-xs font-bold text-slate-500 uppercase tracking-wide">
-                        Phone Number
+                        फोन नंबर
                       </label>
                       <input
                         type="tel"
@@ -207,7 +207,7 @@ const Contact = () => {
 
                     <div className="flex flex-col gap-1.5">
                       <label htmlFor="subject" className="text-xs font-bold text-slate-500 uppercase tracking-wide">
-                        Subject <span className="text-rose-500">*</span>
+                        विषय <span className="text-rose-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -216,14 +216,14 @@ const Contact = () => {
                         value={formData.subject}
                         onChange={handleChange}
                         className="border border-slate-200 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-xs md:text-sm outline-none transition-all"
-                        placeholder="Admission query / documents"
+                        placeholder="प्रवेश पूछताछ / दस्तावेज़"
                       />
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="message" className="text-xs font-bold text-slate-500 uppercase tracking-wide">
-                      Your Message <span className="text-rose-500">*</span>
+                      आपका संदेश <span className="text-rose-500">*</span>
                     </label>
                     <textarea
                       id="message"
@@ -232,14 +232,14 @@ const Contact = () => {
                       value={formData.message}
                       onChange={handleChange}
                       className="border border-slate-200 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-xs md:text-sm outline-none transition-all resize-none"
-                      placeholder="Write your details or questions here..."
+                      placeholder="अपना विवरण या प्रश्न यहाँ लिखें..."
                     />
                   </div>
 
                   {status === 'error' && (
                     <div className="flex items-center gap-2 p-3 bg-rose-50 border border-rose-100 rounded-xl text-rose-600 text-xs font-semibold">
                       <AlertCircle size={16} />
-                      <span>Failed to submit. Please try again.</span>
+                      <span>संदेश भेजने में विफल। कृपया पुनः प्रयास करें।</span>
                     </div>
                   )}
 
@@ -248,7 +248,7 @@ const Contact = () => {
                     disabled={status === 'sending'}
                     className="bg-primary hover:bg-primary-dark text-white font-heading font-extrabold px-6 py-3.5 rounded-xl transition-all duration-300 shadow-md flex items-center justify-center gap-2 text-xs md:text-sm w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <span>{status === 'sending' ? 'Sending Message...' : 'Submit Inquiry'}</span>
+                    <span>{status === 'sending' ? 'संदेश भेजा जा रहा है...' : 'पूछताछ भेजें'}</span>
                     <Send size={16} />
                   </button>
                 </form>

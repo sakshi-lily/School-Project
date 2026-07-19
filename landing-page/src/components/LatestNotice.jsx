@@ -6,10 +6,10 @@ const LatestNotice = () => {
   const [notices, setNotices] = useState(null);
 
   const categories = [
-    { id: 'news', label: 'Latest News', icon: <Bell size={16} /> },
-    { id: 'circulars', label: 'Circulars & Orders', icon: <BookOpen size={16} /> },
-    { id: 'exams', label: 'Exam Updates', icon: <Award size={16} /> },
-    { id: 'events', label: 'Upcoming Events', icon: <Sparkles size={16} /> },
+    { id: 'news', label: 'नवीनतम समाचार', icon: <Bell size={16} /> },
+    { id: 'circulars', label: 'शासकीय आदेश व सूचनाएं', icon: <BookOpen size={16} /> },
+    { id: 'exams', label: 'परीक्षा अपडेट', icon: <Award size={16} /> },
+    { id: 'events', label: 'भावी कार्यक्रम', icon: <Sparkles size={16} /> },
   ];
 
   const noticesData = {
@@ -33,7 +33,7 @@ const LatestNotice = () => {
           };
           data.data.forEach((item) => {
             const formatted = {
-              date: new Date(item.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+              date: new Date(item.date).toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
               title: item.title,
               isNew: (new Date() - new Date(item.date)) < (5 * 24 * 60 * 60 * 1000),
               desc: item.content,
@@ -71,13 +71,13 @@ const LatestNotice = () => {
           {/* Left Column: Tickers / Fast Bulletin */}
           <div className="lg:col-span-4 flex flex-col justify-start">
             <span className="text-xs md:text-sm font-heading font-extrabold text-primary tracking-widest uppercase bg-blue-50 px-3 py-1.5 rounded-full w-fit">
-              Information Desk
+              सूचना केंद्र
             </span>
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mt-4 leading-tight">
-              Notice Board & Exam Updates
+              सूचना पट्ट एवं परीक्षा अपडेट
             </h2>
             <p className="text-slate-500 text-sm md:text-base mt-3 leading-relaxed">
-              Stay informed with official circulars, board schedules, examinations, and day-to-day announcements. Use the categories on the right to filter.
+              अधिसूचनाओं, बोर्ड परीक्षा समय सारणी, शासकीय आदेशों तथा दैनिक घोषणाओं की जानकारी प्राप्त करें। दिए गए विकल्पों से फ़िल्टर करें।
             </p>
           </div>
 
@@ -124,7 +124,7 @@ const LatestNotice = () => {
 
                           {notice.isNew && (
                             <span className="bg-rose-50 text-rose-600 border border-rose-100 font-heading font-extrabold text-[9px] px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
-                              New
+                              नया
                             </span>
                           )}
                         </div>
@@ -141,7 +141,7 @@ const LatestNotice = () => {
 
                         {notice.time && (
                           <p className="text-xs text-slate-500 font-medium mt-1">
-                            🕒 Time: <span className="text-slate-700 font-semibold">{notice.time}</span> | Location: <span className="text-slate-700 font-semibold">{notice.location}</span>
+                            🕒 समय: <span className="text-slate-700 font-semibold">{notice.time}</span> | स्थान: <span className="text-slate-700 font-semibold">{notice.location}</span>
                           </p>
                         )}
                       </div>
@@ -154,7 +154,7 @@ const LatestNotice = () => {
                         className="flex items-center justify-center gap-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold px-4 py-2.5 rounded-xl text-xs transition-colors shrink-0 md:self-center"
                       >
                         <FileDown size={14} className="text-primary" />
-                        <span>Download</span>
+                        <span>डाउनलोड</span>
                         <span className="text-[9px] text-slate-400">({notice.type} • {notice.fileSize})</span>
                       </a>
                     )}
@@ -163,7 +163,7 @@ const LatestNotice = () => {
               ) : (
                 <div className="text-center py-12 px-4 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
                   <Bell className="mx-auto text-slate-300 mb-2" size={32} />
-                  <p className="text-slate-500 font-medium text-sm">No notices or updates in this category.</p>
+                  <p className="text-slate-500 font-medium text-sm">इस श्रेणी में वर्तमान में कोई सूचना उपलब्ध नहीं है।</p>
                 </div>
               )}
             </div>
