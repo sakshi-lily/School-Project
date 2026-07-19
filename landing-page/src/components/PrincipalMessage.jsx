@@ -35,7 +35,7 @@ const PrincipalMessage = () => {
             <div className="lg:col-span-4 flex flex-col items-center">
               <div className="relative w-56 h-56 md:w-64 md:h-64 rounded-2xl overflow-hidden border-4 border-white shadow-xl bg-slate-200">
                 <img
-                  src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=600&auto=format&fit=crop" // Professional educator photo
+                  src="https://chatgpt.com/backend-api/estuary/content?id=file_000000009f1c71fbac5ac3c0a12be09d&ts=495376&p=fs&cid=1&sig=3836db9b00493905c8a50feaad9ecd05d30329ebedca111a60f82b667a2fb902&v=0" // Professional educator photo
                   alt="श्री आर. एम. पंगोरिया - प्रधानाचार्य"
                   className="w-full h-full object-cover object-top"
                 />

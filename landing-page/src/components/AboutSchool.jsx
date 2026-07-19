@@ -65,9 +65,9 @@ const AboutSchool = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent z-10" />
 
               <img
-                src="https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1200&auto=format&fit=crop" // College building / classroom
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVIcmizT-3O6y4SLXo71oXk1Her_lu-TwNLYbyzTxE94iuiXPI4wlP8WY&s=10" // College building / classroom
                 alt="ठाकुर बीरी सिंह इंटर कॉलेज परिसर"
-                className="w-full h-full object-cover"
+                className="w-full h-[350px] md:h-[450px] object-cover"
               />
 
               {/* Image Caption */}

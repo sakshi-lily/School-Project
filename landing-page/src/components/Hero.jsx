@@ -6,21 +6,22 @@ const Hero = ({ onOpenResults }) => {
 
   const slides = [
     {
-      image: "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1200&auto=format&fit=crop", // Premium campus/school building
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVIcmizT-3O6y4SLXo71oXk1Her_lu-TwNLYbyzTxE94iuiXPI4wlP8WY&s=10", // Premium campus/school building
       title: "ठाकुर बीरी सिंह इण्टर कॉलेज में आपका स्वागत है",
       subtitle: "गुणवत्तापूर्ण शिक्षा और सुदृढ़ संस्कारों द्वारा विद्यार्थियों का सर्वांगीण विकास",
       badge: "प्रवेश प्रारंभ सत्र 2026-27",
       highlight: "टूण्डला, फ़िरोज़ाबाद"
     },
     {
-      image: "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1200&auto=format&fit=crop", // Patriotic assembly/students
+      // Image representing patriotic school celebrations (Indian flag, outdoor assembly)
+      image: "https://scontent.fdel65-2.fna.fbcdn.net/v/t39.30808-6/480731230_1048374940430762_8577611832605610885_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1536&ctp=s960x960&_nc_cat=101&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=zHsREcVew-IQ7kNvwGypZqg&_nc_oc=Adr67XflGHCzPfuySj72kMW0c9C7HGi_xedGW6NaPv5spiDaEvlD5B0VfmYQtioCLfRmHNStcnVhFRK8RjwUK_0v&_nc_zt=23&_nc_ht=scontent.fdel65-2.fna&_nc_gid=plLt0pZVovT_yXN7ne9TAw&_nc_ss=7b289&oh=00_AQB4r5zHxrGPVkhnUWGeJHi9WvA6e-a36ST0DbcDHPVejQ&oe=6A5190B3", // Proud students / group activity
       title: "देशभक्त एवं जिम्मेदार नागरिकों का निर्माण",
       subtitle: "राष्ट्रीय मूल्यों, चरित्र निर्माण एवं उत्कृष्ट शिक्षा को बढ़ावा",
       badge: "स्थापना 1950 • विश्वास का प्रतीक",
       highlight: "यू.पी. बोर्ड द्वारा मान्यता प्राप्त"
     },
     {
-      image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop", // Modern laboratory / smart classroom setup
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcWEa93m4aoEu2hGy43XUEtP3oIj4_bH19Y4BMjtxQWA&s=10", // Modern laboratory / smart classroom setup
       title: "स्मार्ट कक्षाएं एवं आधुनिक प्रयोगशालाएं",
       subtitle: "प्रौद्योगिकी और नवाचार के माध्यम से व्यावहारिक ज्ञान का विकास",
       badge: "उत्कृष्ट अवसंरचना एवं सुविधाएं",
